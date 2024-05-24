@@ -6,6 +6,10 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Database\Eloquent\Relations\HasOne;
+
+
 
 class User extends Authenticatable
 {
@@ -20,6 +24,9 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'type',
+        'blocked',
+        'photo_filename',
     ];
 
     /**
@@ -43,5 +50,20 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    public function getPhotoFullUrlAttribute()
+    {
+        if ($this->photo_url && Storage::exists("public/photos/{$this->photo_url}")) {
+            return asset("storage/photos/{$this->photo_url}");
+        } else {
+            // To be changed eventually
+            return asset("storage/photos/anonymous.png");
+        }
+    }
+
+    public function customer(): HasOne //? maybe take it out
+    {
+        return $this->hasOne(Customer::class);
     }
 }
