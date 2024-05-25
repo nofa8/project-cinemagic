@@ -13,7 +13,11 @@ class Genre extends Model
     protected $fillable = [
         'name',
     ];
+    protected $primaryKey = 'code';
+    public $incrementing = false;
+    protected $keyType = 'string';
 
+    public $timestamps = false;
 
     public function movies(): BelongsToMany
     {

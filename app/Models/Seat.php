@@ -16,6 +16,7 @@ class Seat extends Model
         'row',
         'seat_number',
     ];
+    public $timestamps = false;
 
     public function tickets(): BelongsToMany
     {

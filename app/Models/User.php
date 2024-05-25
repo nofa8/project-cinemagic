@@ -38,7 +38,7 @@ class User extends Authenticatable
         'password',
         'remember_token',
     ];
-
+    
     /**
      * Get the attributes that should be cast.
      *
@@ -54,8 +54,8 @@ class User extends Authenticatable
 
     public function getPhotoFullUrlAttribute()
     {
-        if ($this->photo_url && Storage::exists("public/photos/{$this->photo_url}")) {
-            return asset("storage/photos/{$this->photo_url}");
+        if ($this->photo_filename && Storage::exists("public/photos/{$this->photo_filename}")) {
+            return asset("storage/photos/{$this->photo_filename}");
         } else {
             // To be changed eventually
             return asset("storage/photos/anonymous.png");

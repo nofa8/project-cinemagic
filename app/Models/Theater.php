@@ -4,7 +4,6 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Theater extends Model
@@ -15,6 +14,7 @@ class Theater extends Model
         'name',
         'photo_filename',
     ];
+    public $timestamps = false;
 
     public function screenings(): BelongsToMany
     {
