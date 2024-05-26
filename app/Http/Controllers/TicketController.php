@@ -124,7 +124,7 @@ class TicketController extends Controller
                     $totalTickets <= 0 => "",
                     $totalTickets == 1 => "ticket has been bought",
                 };
-                $justification = $customersStr 
+                $justification = $customersStr
                     ? "$customersStr"
                     : "$customersStr";
                 $alertMsg = "ticket <a href='$url'><u>{$ticket->id}</u></a> ({$ticket->price}) cannot be deleted because $justification.";
