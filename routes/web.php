@@ -24,12 +24,12 @@ use Illuminate\Support\Facades\Route;
 
 Route::view('/', 'home')->name('home');
 
-Route::get('Movies/showcase', [MovieController::class, 'showCase'])
-    ->name('Movies.showcase')
+Route::get('movies/showcase', [MovieController::class, 'showCase'])
+    ->name('movies.showcase')
     ->can('viewShowCase', Movie::class);
 
-Route::get('Movies/{Movie}/curriculum', [MovieController::class, 'showCurriculum'])
-    ->name('Movies.curriculum')
+Route::get('movies/{movie}/curriculum', [MovieController::class, 'showCurriculum'])
+    ->name('movies.curriculum')
     ->can('viewCurriculum', Movie::class);
 
 
@@ -54,44 +54,44 @@ Route::middleware('auth', 'verified')->group(function () {
 
     Route::view('/dashboard', 'dashboard')->name('dashboard');
 
-    Route::delete('Movies/{Movie}/image', [MovieController::class, 'destroyImage'])
-        ->name('Movies.image.destroy')
+    Route::delete('movies/{movie}/image', [MovieController::class, 'destroyImage'])
+        ->name('movies.image.destroy')
         ->can('update', Movie::class);
 
     //Movie resource routes are protected by MoviePolicy on the controller
     // The route 'show' is public (for anonymous user)
-    Route::resource('Movies', MovieController::class)->except(['show']);
+    Route::resource('movies', MovieController::class)->except(['show']);
 
     //Department resource routes are protected by DepartmentPolicy on the controller
     Route::resource('departments', GenreController::class);
 
-    Route::get('Screenings/my', [ScreeningController::class, 'myScreenings'])
-        ->name('Screenings.my')
+    Route::get('screenings/my', [ScreeningController::class, 'myScreenings'])
+        ->name('screenings.my')
         ->can('viewMy', Screening::class);
 
     //Screening resource routes are protected by ScreeningPolicy on the controller
     //Screenings index and show are public
-    Route::resource('Screenings', ScreeningController::class)->except(['index', 'show']);
+    Route::resource('screenings', ScreeningController::class)->except(['index', 'show']);
 
-    Route::get('Customers/my', [CustomerController::class, 'myCustomers'])
-        ->name('Customers.my')
+    Route::get('customers/my', [CustomerController::class, 'myCustomers'])
+        ->name('customers.my')
         ->can('viewMy', Customer::class);
 
-    Route::delete('Customers/{Customer}/photo', [CustomerController::class, 'destroyPhoto'])
-        ->name('Customers.photo.destroy')
+    Route::delete('customers/{Customer}/photo', [CustomerController::class, 'destroyPhoto'])
+        ->name('customers.photo.destroy')
         ->can('update', 'Customer');
 
     //Customer resource routes are protected by CustomerPolicy on the controller
-    Route::resource('Customers', CustomerController::class);
+    Route::resource('customers', CustomerController::class);
 
-    Route::get('Customers/my', [CustomerController::class, 'myCustomers'])
-        ->name('Customers.my')
+    Route::get('customers/my', [CustomerController::class, 'myCustomers'])
+        ->name('customers.my')
         ->can('viewMy', Customer::class);
-    Route::delete('Customers/{Customer}/photo', [CustomerController::class, 'destroyPhoto'])
-        ->name('Customers.photo.destroy')
-        ->can('update', 'Customer');
+    Route::delete('customers/{customer}/photo', [CustomerController::class, 'destroyPhoto'])
+        ->name('customers.photo.destroy')
+        ->can('update', 'customer');
     //Customer resource routes are protected by CustomerPolicy on the controller
-    Route::resource('Customers', CustomerController::class);
+    Route::resource('customers', CustomerController::class);
 
     Route::delete('administratives/{administrative}/photo', [AdministrativeController::class, 'destroyPhoto'])
         ->name('administratives.photo.destroy')
@@ -124,9 +124,9 @@ Route::middleware('can:use-cart')->group(function () {
 
 
 //Movie show is public.
-Route::resource('Movies', MovieController::class)->only(['show']);
+Route::resource('movies', MovieController::class)->only(['show']);
 
 //Screenings index and show are public
-Route::resource('Screenings', ScreeningController::class)->only(['index', 'show']);
+Route::resource('screenings', ScreeningController::class)->only(['index', 'show']);
 
 require __DIR__ . '/auth.php';

@@ -1,12 +1,19 @@
 {
   "resources/css/app.css": {
-    "file": "assets/app-l0sNRNKZ.js",
-    "name": "app",
+    "file": "assets/app-CE93ETO_.css",
     "src": "resources/css/app.css",
     "isEntry": true
   },
+  "resources/img/politecnico_h.svg": {
+    "file": "assets/politecnico_h-DulcW-o_.svg",
+    "src": "resources/img/politecnico_h.svg"
+  },
+  "resources/img/politecnico_h_white.svg": {
+    "file": "assets/politecnico_h_white-DFUHkWD-.svg",
+    "src": "resources/img/politecnico_h_white.svg"
+  },
   "resources/js/app.js": {
-    "file": "assets/app-C1-XIpUa.js",
+    "file": "assets/app-Bg1aHGgo.js",
     "name": "app",
     "src": "resources/js/app.js",
     "isEntry": true

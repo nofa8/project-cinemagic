@@ -1,0 +1,34 @@
+<?php
+
+namespace App\View\Components\Disciplines;
+
+use Closure;
+use Illuminate\Contracts\View\View;
+use Illuminate\View\Component;
+
+class Table extends Component
+{
+    /**
+     * Create a new component instance.
+     */
+    public function __construct(
+        public object $disciplines,
+        public bool $showCourse = true,
+        public bool $showView = true,
+        public bool $showEdit = true,
+        public bool $showDelete = true,
+        public bool $showAddToCart = false,
+        public bool $showRemoveFromCart = false,
+    )
+    {
+        //
+    }
+
+    /**
+     * Get the view / contents that represent the component.
+     */
+    public function render(): View|Closure|string
+    {
+        return view('components.disciplines.table');
+    }
+}

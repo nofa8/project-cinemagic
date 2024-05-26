@@ -68,33 +68,33 @@
                             />
                         @endcan
 
-                        <!-- Menu Item: Teachers -->
-                        @can('viewAny', App\Models\Teacher::class)
+                        <!-- Menu Item: Customers -->
+                        @can('viewAny', App\Models\Customer::class)
                             <x-menus.menu-item
-                                content="Teachers"
+                                content="Customers"
                                 selectable="1"
-                                href="{{ route('teachers.index') }}"
-                                selected="{{ Route::currentRouteName() == 'teachers.index'}}"
+                                href="{{ route('customers.index') }}"
+                                selected="{{ Route::currentRouteName() == 'customers.index'}}"
                                 />
                         @endcan
 
                         {{-- If user has any of the 4 menu options previlege, then it should show the submenu --}}
                         @if(
-                            Gate::check('viewAny', App\Models\Student::class) ||
+                            Gate::check('viewAny', App\Models\Customer::class) ||
                             Gate::check('viewAny', App\Models\User::class) ||
-                            Gate::check('viewAny', App\Models\Department::class) ||
-                            Gate::check('viewAny', App\Models\Course::class)
+                            Gate::check('viewAny', App\Models\Theater::class) ||
+                            Gate::check('viewAny', App\Models\Screening::class)
                             )
                         <!-- Menu Item: Others -->
                         <x-menus.submenu
                             selectable="0"
                             uniqueName="submenu_others"
                             content="More">
-                                @can('viewAny', App\Models\Student::class)
+                                @can('viewAny', App\Models\Customer::class)
                                 <x-menus.submenu-item
-                                    content="Students"
+                                    content="Customer"
                                     selectable="0"
-                                    href="{{ route('students.index') }}" />
+                                    href="{{ route('customers.index') }}" />
                                 @endcan
                                 @can('viewAny', App\Models\User::class)
                                 <x-menus.submenu-item
@@ -103,16 +103,16 @@
                                     href="{{ route('administratives.index') }}" />
                                 @endcan
                                 <hr>
-                                @can('viewAny', App\Models\Department::class)
+                                @can('viewAny', App\Models\Theater::class)
                                 <x-menus.submenu-item
-                                    content="Departments"
+                                    content="Theaters"
                                     selectable="0"
-                                    href="{{ route('departments.index') }}"/>
+                                    href="{{ route('theaters.index') }}"/>
                                 @endcan
-                                @can('viewAny', App\Models\Course::class)
+                                @can('viewAny', App\Models\Screening::class)
                                 <x-menus.submenu-item
                                     content="Course Management"
-                                    href="{{ route('courses.index') }}"/>
+                                    href="{{ route('screening.index') }}"/>
                                 @endcan
                         </x-menus.submenu>
                         @endif
@@ -144,6 +144,7 @@
                                     {{ Auth::user()->name }}
                                 </div>
                             </x-slot>
+                            
                             @can('viewMy', App\Models\Discipline::class)
                             <x-menus.submenu-item
                                 content="My Disciplines"
@@ -188,6 +189,7 @@
                                 form="form_to_logout_from_menu"/>
                         </x-menus.submenu>
                         @else
+                        
                         <!-- Menu Item: Login -->
                         <x-menus.menu-item
                             content="Login"

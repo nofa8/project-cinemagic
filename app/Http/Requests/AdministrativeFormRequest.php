@@ -44,7 +44,7 @@ class AdministrativeFormRequest extends FormRequest
                 'email',
                 Rule::unique('users', 'email')->ignore($this->user?->id)
             ],
-            'admin' => 'required|boolean',
+            'type' => 'required|in:A,E,C',
             'photo_filename' => 'sometimes|image|max:4096', // maxsize = 4Mb
         ];
     }
