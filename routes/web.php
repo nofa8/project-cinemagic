@@ -44,21 +44,12 @@ Route::middleware('auth', 'verified')->group(function () {
 
 
     /* ----- Non-Verified users ----- */
-<<<<<<< HEAD
-    Route::middleware('auth')->group(function () {
-        Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-        Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-        Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-    });
-
-=======
-     Route::middleware('auth')->group(function () {
-         Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-         Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-         Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-     });
+Route::middleware('auth')->group(function () {
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+});
 // CHECK THIS -------- -------- -------- --------
->>>>>>> 0c5010b0fd6286d7989cfad5bcf45d28c71d9f5d
 
 
     Route::view('/dashboard', 'dashboard')->name('dashboard');
