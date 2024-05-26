@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class ScreeningFormRequest extends FormRequest
 {
@@ -22,15 +23,10 @@ class ScreeningFormRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'abbreviation' => 'required|string|max:20',
-            'name' => 'required|string|max:255',
-            'name_pt' => 'required|string|max:255',
-            'course' => 'required|max:20|exists:courses,abbreviation',
-            'year' => 'required|integer|between:1,3',
-            'semester' => 'required|integer|in:0,1,2',
-            'ECTS' => 'required|integer|between:1,100',
-            'hours' => 'required|integer|between:1,1000',
-            'optional' => 'required|boolean',
+            'movie_id' => 'required|exists:movies,id|int',
+            'theater_id' => 'required|exists:theaters,id|int',
+            'date' => 'required|date',
+            'start_time' => 'required|date_format:H:i:s',
         ];
     }
 }

@@ -2,7 +2,6 @@
 
 namespace App\Http\Requests;
 
-use App\Models\Customer;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -15,6 +14,24 @@ class CustomerFormRequest extends FormRequest
     {
         return true;
     }
+
+    /**
+     * Get the validation rules that apply to the request.
+     *
+     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
+     */
+    public function rules(): array
+    {
+        return [
+            'nif' => 'required|string|size:9',  // Assuming NIF is exactly 9 characters
+            'payment_type' => [
+                'required',
+                Rule::in(['VISA', 'PAYPAL', 'MBWAY'])
+            ],
+            'payment_ref' => 'required|string|max:255',
+        ];
+    }
+
 
     protected function prepareForValidation(): void
     {
@@ -31,27 +48,4 @@ class CustomerFormRequest extends FormRequest
         }
     }
 
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
-     */
-    public function rules(): array
-    {
-        return [
-            'name' => 'required|string|max:255',
-            'email' => [
-                'required',
-                'email',
-                Rule::unique('users', 'email')->ignore($this->user?->id)
-            ],
-            'gender' => 'required|in:M,F',
-            'department' => 'required|max:20|exists:departments,abbreviation',
-            'office' => 'required|string|max:50',
-            'extension' => 'required|string|max:20',
-            'locker' => 'required|string|max:20',
-            'admin' => 'required|boolean',
-            'photo_file' => 'sometimes|image|max:4096', // maxsize = 4Mb
-        ];
-    }
 }
