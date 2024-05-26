@@ -15,7 +15,7 @@ class Ticket extends Model
         'seat_id',
         'purchase_id',
         'price',
-        'qrcpde_url',
+        'qrcode_url',
         'status',
     ];
 

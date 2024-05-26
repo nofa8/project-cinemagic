@@ -31,10 +31,10 @@ class CartConfirmationFormRequest extends FormRequest
         return [
             function (Validator $validator) {
                 if ($this->user()) {
-                    if ($this->user()->type == 'S') {
-                        $userStudentNumber = $this->user()?->student?->number;
-                        if ($this->student_number != $userStudentNumber) {
-                            $validator->errors()->add('student_number', "Your student number is $userStudentNumber");
+                    if ($this->user()->type == 'C') {
+                        $nif = $this->user()?->customer?->nif;
+                        if ($this->nif != $nif) {
+                            $validator->errors()->add('nif', "Your nif is $nif");
                         }
                     }
                 }

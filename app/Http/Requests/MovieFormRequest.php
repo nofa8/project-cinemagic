@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class MovieFormRequest extends FormRequest
 {
@@ -21,34 +22,13 @@ class MovieFormRequest extends FormRequest
      */
     public function rules(): array
     {
-        $rules = [
-            'name' => 'required|string|max:255',
-            'name_pt' => 'required|string|max:255',
-            'type' => 'required|in:Degree,Master,TESP',
-            'semesters' => 'required|integer|between:1,10',
-            'ECTS' => 'required|integer|min:1',
-            'places' => 'required|integer|min:0',
-            'contact' => 'required|email',
-            'objectives' => 'required|string',
-            'objectives_pt' => 'required|string',
-            'image_file' => 'sometimes|image|mimes:png|max:4096', // maxsize = 4Mb
-        ];
-        if (strtolower($this->getMethod()) == 'post') {
-            // This will merge 2 arrays:
-            // (adds the "abbreviation" rule to the $rules array)
-            $rules = array_merge($rules, [
-                'abbreviation' => 'required|string|max:20|unique:Movies,abbreviation',
-            ]);
-        }
-        return $rules;
-    }
-
-    public function messages(): array
-    {
         return [
-            'ECTS.required' => 'ECTS is required',
-            'ECTS.integer' => 'ECTS must be an integer',
-            'ECTS.min' => 'ECTS must be equal or greater that 1',
+            'title' => 'required|string|max:255',
+            'genre_code' => 'required|string|max:20|exists:genres,code',
+            'year' => 'required|integer|min:1900|max:' . date('Y'),
+            'poster_filename' => 'required|string|max:255',
+            'synopsis' => 'required|string',
+            'trailer_url' => 'required|url|max:255',
         ];
     }
 }
