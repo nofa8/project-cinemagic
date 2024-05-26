@@ -16,6 +16,8 @@ class Customer extends Model{
         'payment_type',
         'payment_ref',
     ];
+    public $incrementing = false;
+
 
 
 

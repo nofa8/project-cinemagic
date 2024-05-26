@@ -23,13 +23,21 @@ class CustomerFormRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'name' => 'required|string|max:255',
+            'email' => [
+                'required',
+                'email',
+                Rule::unique('users', 'email')->ignore($this->user?->id)
+            ],
+            'type' => 'required|in:A,E,C',
+            'photo_filename' => 'sometimes|image|max:4096', 
             'nif' => 'required|string|size:9',  // Assuming NIF is exactly 9 characters
-            'payment_type' => [
+            /*'payment_type' => [
                 'required',
                 Rule::in(['VISA', 'PAYPAL', 'MBWAY'])
             ],
             'payment_ref' => 'required|string|max:255',
-        ];
+        */];
     }
 
 

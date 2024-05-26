@@ -44,12 +44,21 @@ Route::middleware('auth', 'verified')->group(function () {
 
 
     /* ----- Non-Verified users ----- */
+<<<<<<< HEAD
     Route::middleware('auth')->group(function () {
         Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
         Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
         Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     });
 
+=======
+Route::middleware('auth')->group(function () {
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+});
+// CHECK THIS -------- -------- -------- --------
+>>>>>>> e957a1b7256bc5d50336127b38289a965a9ca5cf
 
 
     Route::view('/dashboard', 'dashboard')->name('dashboard');
