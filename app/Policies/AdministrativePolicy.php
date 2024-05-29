@@ -11,7 +11,7 @@ class AdministrativePolicy
         if ($ability == 'updateAdmin') {
             return null;
         }
-        if ($user?->admin) {
+        if ($user?->type == 'A') {
             return true;
         }
         return null;
@@ -45,7 +45,7 @@ class AdministrativePolicy
     public function updateAdmin(User $user, User $administrative): bool
     {
         // Only update if is admin and not himself
-        return $user->admin && $user->id != $administrative->id;
+        return $user->type == 'A' && $user->id != $administrative->id;
     }
 
     public function delete(User $user, User $administrative): bool
