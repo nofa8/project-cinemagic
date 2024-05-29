@@ -1,25 +1,22 @@
 <div>
-    <figure class="h-auto md:h-72 flex flex-col md:flex-row
+    <figure class="h-96 w-72 flex flex-col items-center
                     rounded-none sm:rounded-xl
                     bg-white dark:bg-gray-900
-                    my-4 p-8 md:p-0">
-        <a class="h-48 w-48 md:h-72 md:w-72 md:min-w-72 md:max-w-72 mx-auto md:m-0" href="{{ route('movies.show', ['movie' => $movie]) }}">
-            <img class="h-full aspect-auto mx-auto rounded-full md:rounded-l-xl md:rounded-r-none"
+                    my-4 p-4">
+        <a class="h-48 w-48" href="{{ route('movies.show', ['movie' => $movie]) }}">
+            <img class="h-full w-full object-cover mx-auto rounded-full"
                 src="{{ $movie->poster_filename }}">
         </a>
-        <div class="h-auto p-6 text-center md:text-left space-y-1 flex flex-col">
+        <div class="h-48 w-full p-4 text-center space-y-1 flex flex-col items-center justify-center">
             <a class="font-semibold text-lg text-gray-800 dark:text-gray-200 leading-tight" href="{{ route('movies.show', ['movie' => $movie]) }}">
                 {{ $movie->title }}
             </a>
             <figcaption class="font-medium">
-                
                 <div class="font-light text-gray-700 dark:text-gray-300">
-                    <a href={{$movie->trailer_url}}>Watch The Trailer</a>.
+                    <a href="{{ $movie->trailer_url }}">Watch The Trailer</a>
                 </div>
             </figcaption>
-            <p class="pt-4 font-light text-gray-700 dark:text-gray-300 overflow-y-auto">
-                {{ $movie->synopsis }}
-            </p>
+            
         </div>
     </figure>
 </div>
