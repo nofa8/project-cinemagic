@@ -42,7 +42,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     //Movie resource routes are protected by MoviePolicy on the controller
     // The route 'show' is public (for anonymous user)
-    Route::resource('movies/showcase', MovieController::class)->except(['show']);
+    Route::resource('movies', MovieController::class)->except(['show']);
 
     //Department resource routes are protected by DepartmentPolicy on the controller
     Route::resource('genres', GenreController::class);
