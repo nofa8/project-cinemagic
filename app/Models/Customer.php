@@ -20,7 +20,7 @@ class Customer extends Model{
 
     public function user(): BelongsTo
     {
-        return $this->belongsTo(User::class, 'customers_id', 'users_id');
+        return $this->belongsTo(User::class, 'id');
     }
 
 

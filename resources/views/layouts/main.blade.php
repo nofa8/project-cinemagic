@@ -137,14 +137,16 @@
                             >
                             <x-slot:content>
                                 <div class="pe-1">
-                                    <img src="{{ Auth::user()->photoFullUrl}}" class="w-11 h-11 min-w-11 min-h-11 rounded-full">
+
+                                    <img src="{{ Auth::user()?->photo_filename ? Auth::user()->photoFullUrl : Vite::asset('resources/img/photos/default.png')}}" class="w-11 h-11 min-w-11 min-h-11 rounded-full">
+                                    {{-- <img src="{{ Auth::user()->photoFullUrl}}" class="w-11 h-11 min-w-11 min-h-11 rounded-full"> --}}
                                 </div>
                                 {{-- ATENÇÃO - ALTERAR FORMULA DE CALCULO DAS LARGURAS MÁXIMAS QUANDO O MENU FOR ALTERADO --}}
                                 <div class="ps-1 sm:max-w-[calc(100vw-39rem)] md:max-w-[calc(100vw-41rem)] lg:max-w-[calc(100vw-46rem)] xl:max-w-[34rem] truncate">
                                     {{ Auth::user()->name }}
                                 </div>
                             </x-slot>
-                            
+
                             {{-- @can('viewMy', App\Models\Discipline::class)
                             <x-menus.submenu-item
                                 content="My Disciplines"
@@ -189,7 +191,7 @@
                                 form="form_to_logout_from_menu"/>
                         </x-menus.submenu>
                         @else
-                        
+
                         <!-- Menu Item: Login -->
                         <x-menus.menu-item
                             content="Login"
