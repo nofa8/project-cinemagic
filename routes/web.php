@@ -15,9 +15,16 @@ use Illuminate\Support\Facades\Route;
 
 Route::view('/', 'home')->name('home');
 
+
 Route::get('movies/showcase', [MovieController::class, 'showCase'])
     ->name('movies.showcase')
     ->can('viewShowCase', Movie::class);
+
+Route::get('movies/show', [MovieController::class, 'show'])
+    ->name('movies.show')
+    ->can('viewShowCase', Movie::class);
+
+
 
 Route::get('movies/{movie}/curriculum', [MovieController::class, 'showCurriculum'])
     ->name('movies.curriculum');
