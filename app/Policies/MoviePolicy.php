@@ -3,9 +3,9 @@
 namespace App\Policies;
 
 use App\Models\User;
-use App\Models\Course;
+use App\Models\Movie;
 
-class CoursePolicy
+class MoviePolicy
 {
     public function before(?User $user, string $ability): bool|null
     {
@@ -30,7 +30,7 @@ class CoursePolicy
         return false;
     }
 
-    public function view(?User $user, Course $course): bool
+    public function view(?User $user, Movie $movie): bool
     {
         return true;
     }
@@ -40,12 +40,12 @@ class CoursePolicy
         return false;
     }
 
-    public function update(User $user, Course $course): bool
+    public function update(User $user, Movie $movie): bool
     {
         return false;
     }
 
-    public function delete(User $user, Course $course): bool
+    public function delete(User $user, Movie $movie): bool
     {
         return false;
     }
