@@ -45,7 +45,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource('movies/showcase', MovieController::class)->except(['show']);
 
     //Department resource routes are protected by DepartmentPolicy on the controller
-    Route::resource('departments', GenreController::class);
+    Route::resource('genres', GenreController::class);
 
     Route::get('screenings/my', [ScreeningController::class, 'myScreenings'])
         ->name('screenings.my')

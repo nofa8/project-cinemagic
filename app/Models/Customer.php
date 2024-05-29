@@ -18,13 +18,9 @@ class Customer extends Model{
     ];
     public $incrementing = false;
 
-
-
-
-
     public function user(): BelongsTo
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'customers_id', 'users_id');
     }
 
 
@@ -33,8 +29,8 @@ class Customer extends Model{
         return $this->belongsToMany(
             Purchase::class,
             'customers_purchases',
-            'customer_id',
-            'purchase_id'
+            'customers_id',
+            'purchases_id'
         );
     }
 }
