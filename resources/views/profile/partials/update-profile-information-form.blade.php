@@ -5,7 +5,7 @@
         </h2>
 
         <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">
-            {{ __("Update your account's profile information and email address.") }}
+            {{ __("Update your account's profile information.") }}
         </p>
     </header>
 
@@ -21,6 +21,23 @@
             <x-input-label for="name" :value="__('Name')" />
             <x-text-input id="name" name="name" type="text" class="mt-1 block w-full" :value="old('name', $user->name)" required autofocus autocomplete="name" />
             <x-input-error class="mt-2" :messages="$errors->get('name')" />
+        </div>
+
+        <div>
+            <x-input-label for="nif" :value="__('NIF')" />
+            <x-text-input id="nif" name="nif" type="text" class="mt-1 block w-full" :value="old('nif', $user->customer?->nif)" required autofocus autocomplete="name" />
+            <x-input-error class="mt-2" :messages="$errors->get('nif')" />
+        </div>
+
+        <div>
+            <x-input-label for="payment_type" :value="__('Payment Type')" />
+            <x-select-input id="payment_type" name="payment_type" class="mt-1 block w-full" :value="old('payment_type', $user->customer?->payment_type)" required autofocus="name">
+                <option value="">Selecione o tipo de pagamento</option>
+                <option value="option1">PayPal</option>
+                <option value="option2">Visa</option>
+                <option value="option3">MBWay</option>
+            </x-select-input>
+            <x-input-error class="mt-2" :messages="$errors->get('payment_type')" />
         </div>
 
         <div>
