@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Facades\Storage;
 
 class Movie extends Model
 {
@@ -20,6 +21,15 @@ class Movie extends Model
         'trailer_url',
     ];
 
+    public function getPhotoFullUrlAttribute()
+    {
+        if ($this->poster_filename && Storage::exists("public/posters/{$this->poster_filename}")) {
+            return asset("storage/posters/{$this->poster_filename}");
+        } else {
+            // To be changed eventually
+            return asset("storage/photos/anonymous.png");
+        }
+    }
 
     public function genre(): BelongsTo
     {
