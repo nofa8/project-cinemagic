@@ -48,6 +48,6 @@ class MoviePolicy
 
     public function delete(User $user, Movie $movie): bool
     {
-        false;
+        return false;
     }
 }

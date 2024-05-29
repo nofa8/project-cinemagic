@@ -71,7 +71,8 @@ class MovieController extends Controller
 
     public function showCase(): View
     {
-        return view('movies.showcase');
+        $allMovies = Movie::orderBy('year')->paginate(15)->withQueryString();
+        return view('movies.showcase')->with('movies', $allMovies);;
     }
     public function showCurriculum(Movie $mov): View
     {
