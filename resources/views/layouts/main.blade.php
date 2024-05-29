@@ -33,7 +33,7 @@
                     <!-- Menu Items -->
                     <div id="menu-container" class="grow flex flex-col sm:flex-row items-stretch
                     invisible h-0 sm:visible sm:h-auto">
-                        <!-- Menu Item: Movies -->
+                        {{-- <!-- Menu Item: Movies -->
                         @can('viewShowcase', App\Models\Movie::class)
                             <x-menus.menu-item
                                 content="Movies"
@@ -115,7 +115,7 @@
                                     href="{{ route('screening.index') }}"/>
                                 @endcan
                         </x-menus.submenu>
-                        @endif
+                        @endif --}}
 
                         <div class="grow"></div>
 
@@ -145,7 +145,7 @@
                                 </div>
                             </x-slot>
                             
-                            @can('viewMy', App\Models\Discipline::class)
+                            {{-- @can('viewMy', App\Models\Discipline::class)
                             <x-menus.submenu-item
                                 content="My Disciplines"
                                 selectable="0"
@@ -163,17 +163,17 @@
                                     selectable="0"
                                     href="{{ route('students.my') }}"/>
                                 <hr>
-                            @endcan
+                            @endcan --}}
                             @auth
                             <hr>
-                            <x-menus.submenu-item
+                            {{-- <x-menus.submenu-item
                                 content="Profile"
                                 selectable="0"
                                 :href="match(Auth::user()->type) {
                                     'A' => route('administratives.edit', ['administrative' => Auth::user()]),
-                                    'T' => route('teachers.edit', ['teacher' => Auth::user()->teacher]),
-                                    'S' => route('students.edit', ['student' => Auth::user()->student]),
-                                }"/>
+                                    'E' => route('teachers.edit', ['teacher' => Auth::user()->teacher]),
+                                    'C' => route('students.edit', ['student' => Auth::user()->student]),
+                                }"/> --}}
                             <x-menus.submenu-item
                                 content="Change Password"
                                 selectable="0"
@@ -218,7 +218,7 @@
         <header class="bg-white dark:bg-gray-900 shadow">
             <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
                 <h4 class="mb-1 text-base text-gray-500 dark:text-gray-400 leading-tight">
-                    Department of Computer Engineering
+                    CineMagic
                 </h4>
                 <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
                     @yield('header-title')
