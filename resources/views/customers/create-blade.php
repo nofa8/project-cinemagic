@@ -16,7 +16,7 @@
                     </p>
                 </header>
 
-                <form method="POST" action="{{ route('teachers.store') }}"
+                <form method="POST" action="{{ route('costumers.store') }}"
                         enctype="multipart/form-data">
                     @csrf
                     @include('customer.shared.fields', ['mode' => 'create'])
