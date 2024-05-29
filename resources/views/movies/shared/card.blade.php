@@ -12,11 +12,7 @@
                 {{ $movie->title }}
             </a>
             <figcaption class="font-medium">
-                <div class="flex justify-center md:justify-start font-base text-base space-x-6 text-gray-700 dark:text-gray-300">
-                    {{-- <div>{{ $movie->semesters }} semesters</div>
-                    <div>{{ $movie->ECTS }} ECTS</div>
-                    <div>{{ $movie->places }} places</div> --}}
-                </div>
+                
                 <div class="font-light text-gray-700 dark:text-gray-300">
                     <a href={{$movie->trailer_url}}>Watch The Trailer</a>.
                 </div>

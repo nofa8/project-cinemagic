@@ -17,27 +17,27 @@ class Curriculum extends Component
         $curriculum = [];
         $mytime = Carbon::now();
         $mytime->toDateTimeString();
-        $theaters = $screening->sortBy('theater_id')->where('date','>=',$mytime)->pluck('theater_id')->unique();
-        $dates = $screening->sortBy('date')->where('date','>=',$mytime)->pluck('date')->unique();
-        foreach ($theaters as $theater) {
-            
-            $curriculum[$theater] = [];
-            foreach($dates as $date) {
-                $dates[$date] = $screening //->sortBy('title')
-                    ->where('theater_id', $theater)
-                    ->where('date', $date)
-                    ->values();
-            }
-            $totals = [];
-            foreach($dates as $date) {
-                $totals[] = $date->count();
-            }
-            $biggestTotal = max($totals);
-            foreach($dates as $date) {
-                $curriculum[$theater][$date] = $date->count() / $biggestTotal;
-            }
+        $theaters = $screening->sortBy('theater_id')->pluck('theater_id')->unique();
+        $dates = $screening->sortBy('date')->pluck('date')->unique();
+        $hours = $screening->sortBy('start_time')->pluck('theater_id')->unique();
+        @dump($theaters);
+        @dump($hours);
+        @dump($dates);
+        foreach ($theaters as $theaterId => $theaterScreenings) {
+            $dates = $theaterScreenings->groupBy('date');
 
-        return curriculum;
+            foreach ($dates as $date => $dateScreenings) {
+                $groupedByTime = $dateScreenings->groupBy('start_time');
+
+                foreach ($groupedByTime as $startTime => $timeScreenings) {
+                    foreach ($timeScreenings as $screening) {
+                        $curriculum[$theaterId][$date][$startTime][] = $screening;
+                    }
+                }
+            }
+        }
+
+        return $curriculum;
     }
 
     public function __construct(

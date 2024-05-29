@@ -28,7 +28,7 @@ class Movie extends Model
 
     public function screenings(): BelongsToMany
     {
-        return $this->belongsToMany(Screening::class,'screenings_movies','screening_id','movie_id');
+        return $this->belongsToMany(Screening::class,'screenings_movies','screenings_id','movies_id');
     }
 
 }

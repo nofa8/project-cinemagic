@@ -44,10 +44,10 @@
     <nav class="bg-indigo-400">
         <ul>
             <li>
-                <a href="{{ route('courses.index') }}">Courses</a>
+                <a href="{{ route('movies.index') }}">Courses</a>
             </li>
             <li>
-                <a href="{{ route('disciplines.index') }}">Disciplines</a>
+                <a href="{{ route('theaters.index') }}">Disciplines</a>
             </li>
         </ul>
     </nav>
