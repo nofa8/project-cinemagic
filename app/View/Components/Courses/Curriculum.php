@@ -5,88 +5,46 @@ namespace App\View\Components\Courses;
 use Closure;
 use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
-
+use Illuminate\Support\Carbon;
 use Illuminate\Database\Eloquent\Collection;
 
 class Curriculum extends Component
 {
     public $curriculum = [];
 
-    private function getCurriculum(Collection $disciplines)
+    private function getCurriculum(Collection $screening)
     {
         $curriculum = [];
-        $yearOfCourse = $disciplines->sortBy('year')->pluck('year')->unique();
-        foreach ($yearOfCourse as $year) {
-            $curriculum[$year] = [];
-            // Build $semesters array with 3 elements
-            // $semesters[0] - annual disciplines
-            // $semesters[1] - disciplines of the first semester
-            // $semesters[2] - disciplines of the second semester
-            for($semester = 0; $semester <= 2; $semester++) {
-                $semesters[$semester] = $disciplines
-                    ->sortBy('name')
-                    ->where('year', $year)
-                    ->where('semester', $semester)
+        $mytime = Carbon::now();
+        $mytime->toDateTimeString();
+        $theaters = $screening->sortBy('theater_id')->where('date','>=',$mytime)->pluck('theater_id')->unique();
+        $dates = $screening->sortBy('date')->where('date','>=',$mytime)->pluck('date')->unique();
+        foreach ($theaters as $theater) {
+            
+            $curriculum[$theater] = [];
+            foreach($dates as $date) {
+                $dates[$date] = $screening //->sortBy('title')
+                    ->where('theater_id', $theater)
+                    ->where('date', $date)
                     ->values();
             }
-            // Annual disciplines:
-            foreach($semesters[0] as $discipline) {
-                $curriculum[$year][] = [
-                    [
-                        'colspan' => 2,
-                        'rowspan' => 0,
-                        'discipline' => $discipline
-                    ],
-                    null
-                ];
+            $totals = [];
+            foreach($dates as $date) {
+                $totals[] = $date->count();
             }
-
-            // Semester disciplines:
-            $totals[1] = $semesters[1]->count();
-            $totals[2] = $semesters[2]->count();
             $biggestTotal = max($totals);
-
-
-            for ($i = 0; $i < $biggestTotal; $i++) {
-                $rowSemesters = [];
-                for ($semester = 1; $semester <= 2; $semester++) {
-                    $discName = $semesters[$semester][$i]->name ?? '';
-                    if ($discName != '') {
-                        $rowSemesters[$semester] = [
-                            'colspan' => 0,
-                            'rowspan' => 0,
-                            'discipline' => $semesters[$semester][$i]
-                        ];
-                    } else {
-                        // First empty line for this semester
-                        if ($i == $totals[$semester]) {
-                            $rowspan = 0;
-                            // Merge vertically when necessary
-                            if ($totals[$semester] + 1 < $biggestTotal) {
-                                $rowspan = $biggestTotal - $totals[$semester];
-                            }
-                            $rowSemesters[$semester] = [
-                                'colspan' => 0,
-                                'rowspan' => $rowspan,
-                                'discipline' => null
-                            ];
-                        } else {
-                            // It is the second, thrid, etc...  empty line
-                            $rowSemesters[$semester] = null;
-                        }
-                    }
-                }
-                $curriculum[$year][] = $rowSemesters;
+            foreach($dates as $date) {
+                $curriculum[$theater][$date] = $date->count() / $biggestTotal;
             }
-        }
-        return $curriculum;
+
+        return curriculum;
     }
 
     public function __construct(
-        public Collection $disciplines,
+        public Collection $screening,
     )
     {
-        $this->curriculum = $this->getCurriculum($disciplines);
+        $this->curriculum = $this->getCurriculum($screening);
     }
 
     /**
