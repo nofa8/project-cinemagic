@@ -12,23 +12,21 @@ class Curriculum extends Component
 {
     public $curriculum = [];
 
-    private function getCurriculum(Collection $screenings)
+    private function getCurriculum(Collection $screening)
     {
         $curriculum = [];
-        $currentTime = Carbon::now();
+        $mytime = Carbon::now();
+        $mytime->toDateTimeString();
+        $theaters = $screening->sortBy('theater_id')->pluck('theater_id')->unique();
+        $dates = $screening->sortBy('date')->pluck('date')->unique();
+        $hours = $screening->sortBy('start_time')->pluck('theater_id')->unique();
+        @dump($theaters);
+        @dump($hours);
+        @dump($dates);
+        foreach ($theaters as $theaterId => $theaterScreenings) {
+            $dates = $theaterScreenings->groupBy('date');
 
-        // Filter screenings for future dates
-        $futureScreenings = $screenings->filter(function ($screening) use ($currentTime) {
-            return Carbon::parse($screening->date)->gte($currentTime);
-        });
-
-        // Group by theater, then by date, and then by start time
-        $groupedByTheater = $futureScreenings->groupBy('theater_id');
-
-        foreach ($groupedByTheater as $theaterId => $theaterScreenings) {
-            $groupedByDate = $theaterScreenings->groupBy('date');
-
-            foreach ($groupedByDate as $date => $dateScreenings) {
+            foreach ($dates as $date => $dateScreenings) {
                 $groupedByTime = $dateScreenings->groupBy('start_time');
 
                 foreach ($groupedByTime as $startTime => $timeScreenings) {

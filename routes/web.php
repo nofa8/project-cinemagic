@@ -20,8 +20,8 @@ Route::get('movies/showcase', [MovieController::class, 'showCase'])
     ->can('viewShowCase', Movie::class);
 
 Route::get('movies/{movie}/curriculum', [MovieController::class, 'showCurriculum'])
-    ->name('movies.curriculum')
-    ->can('viewCurriculum', Movie::class);
+    ->name('movies.curriculum');
+    //->can('viewCurriculum', Movie::class);
 
 /* ----- Non-Verified users ----- */
 Route::middleware('auth')->group(function () {
