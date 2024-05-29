@@ -12,32 +12,34 @@ class Curriculum extends Component
 {
     public $curriculum = [];
 
-    private function getCurriculum(Collection $screening)
+    private function getCurriculum(Collection $screenings)
     {
         $curriculum = [];
-        $mytime = Carbon::now();
-        $mytime->toDateTimeString();
-        $theaters = $screening->sortBy('theater_id')->where('date','>=',$mytime)->pluck('theater_id')->unique();
-        $dates = $screening->sortBy('date')->where('date','>=',$mytime)->pluck('date')->unique();
-        foreach ($theaters as $theater) {
-            
-            $curriculum[$theater] = [];
-            foreach($dates as $date) {
-                $dates[$date] = $screening //->sortBy('title')
-                    ->where('theater_id', $theater)
-                    ->where('date', $date)
-                    ->values();
-            }
-            $totals = [];
-            foreach($dates as $date) {
-                $totals[] = $date->count();
-            }
-            $biggestTotal = max($totals);
-            foreach($dates as $date) {
-                $curriculum[$theater][$date] = $date->count() / $biggestTotal;
-            }
+        $currentTime = Carbon::now();
 
-        return curriculum;
+        // Filter screenings for future dates
+        $futureScreenings = $screenings->filter(function ($screening) use ($currentTime) {
+            return Carbon::parse($screening->date)->gte($currentTime);
+        });
+
+        // Group by theater, then by date, and then by start time
+        $groupedByTheater = $futureScreenings->groupBy('theater_id');
+
+        foreach ($groupedByTheater as $theaterId => $theaterScreenings) {
+            $groupedByDate = $theaterScreenings->groupBy('date');
+
+            foreach ($groupedByDate as $date => $dateScreenings) {
+                $groupedByTime = $dateScreenings->groupBy('start_time');
+
+                foreach ($groupedByTime as $startTime => $timeScreenings) {
+                    foreach ($timeScreenings as $screening) {
+                        $curriculum[$theaterId][$date][$startTime][] = $screening;
+                    }
+                }
+            }
+        }
+
+        return $curriculum;
     }
 
     public function __construct(
