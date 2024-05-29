@@ -33,7 +33,7 @@
                     <!-- Menu Items -->
                     <div id="menu-container" class="grow flex flex-col sm:flex-row items-stretch
                     invisible h-0 sm:visible sm:h-auto">
-                        {{-- <!-- Menu Item: Movies -->
+                        <!-- Menu Item: Movies -->
                         @can('viewShowcase', App\Models\Movie::class)
                             <x-menus.menu-item
                                 content="Movies"
@@ -78,7 +78,7 @@
                                 />
                         @endcan
 
-                        {{-- If user has any of the 4 menu options previlege, then it should show the submenu --}}
+                        {{-- If user has any of the 4 menu options previlege, then it should show the submenu
                         @if(
                             Gate::check('viewAny', App\Models\Customer::class) ||
                             Gate::check('viewAny', App\Models\User::class) ||

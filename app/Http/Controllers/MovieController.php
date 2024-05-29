@@ -69,6 +69,15 @@ class MovieController extends Controller
             ->with('alert-msg', $htmlMessage);
     }
 
+    public function showCase(): View
+    {
+        return view('movies.showcase');
+    }
+    public function showCurriculum(Movie $mov): View
+    {
+        return view('movies.curriculum')->with('movie', $mov);
+    }
+
     public function edit(Movie $movie): View
     {
         $genres = Genre::orderBy('name')->pluck('name', 'code')->toArray();
