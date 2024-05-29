@@ -71,7 +71,7 @@ class MovieController extends Controller
 
     public function showCase(): View
     {
-        return view('movies.showcase');
+        return view('movies.showcase')->with('movies', Movie::get());;
     }
     public function showCurriculum(Movie $mov): View
     {
