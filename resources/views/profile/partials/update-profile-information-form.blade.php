@@ -87,8 +87,15 @@
                 >{{ __('Saved.') }}</p>
             @endif
         </div>
-        <div>
-            <img src="{{ Auth::user()?->photo_filename ? Auth::user()->photoFullUrl : Vite::asset('resources/img/photos/default.png')}}" class="w-24 h-24 min-w-24 min-h-24">
+        <div class="pb-6">
+            <x-field.image
+                name="photo_file"
+                label="Photo"
+                width="md"
+                :readonly="$readonly"
+                deleteTitle="Delete Photo"
+                deleteForm="form_to_delete_photo"
+                :imageUrl="$user->custumer->photoFullUrl"/>
         </div>
     </form>
 </section>
