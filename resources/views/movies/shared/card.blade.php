@@ -4,10 +4,10 @@
                     bg-white dark:bg-gray-900
                     my-4 p-4">
         <a class="h-48 w-48" href="{{ route('movies.show', ['movie' => $movie]) }}">
-            <img class="h-full w-full object-cover mx-auto rounded-full"
-                src="{{ $movie-> }}">
+            <img class="h-full w-full object-cover mx-auto rounded-sm p-2"
+                src="{{ $movie->getPhotoFullUrlAttribute() }}">
         </a>
-        <div class="h-48 w-full p-4 text-center space-y-1 flex flex-col items-center justify-center">
+        <div class="h-32 w-full p-4 text-center space-y-1 flex flex-col items-center justify-center">
             <a class="font-semibold text-lg text-gray-800 dark:text-gray-200 leading-tight" href="{{ route('movies.show', ['movie' => $movie]) }}">
                 {{ $movie->title }}
             </a>
