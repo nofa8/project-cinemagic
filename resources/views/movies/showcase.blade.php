@@ -8,7 +8,7 @@
         :tilte="old('title', $filterByName)" class="mb-6" />
     @can('create', App\Models\Movie::class)
         <div class="flex items-center gap-4 mb-4">
-            <x-button href="{{ route('movie.create') }}" text="Create a new Movie" type="success" />
+            <x-button href="{{ route('movies.create') }}" text="Create a new Movie" type="success" />
         </div>
     @endcan
 

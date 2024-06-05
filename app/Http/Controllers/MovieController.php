@@ -75,16 +75,15 @@ class MovieController extends Controller
     public function showCase(Request $request): View
     {
         
-        $filterByGenre = $request->genre;
-        $filterByName = $request->title;
+        $filterByGenre = $request->Genre;
+        $filterByName = $request->Title;
         $moviesQuery = Movie::query();
         if ($filterByGenre !== null) {
-            $moviesQuery->where('genre', $filterByGenre);
+            $moviesQuery->where('genre_code',$filterByGenre);
         }
 
         if ($filterByName !== null) {
-            $moviesQuery
-                ->where('movies.title', 'like', "%$filterByName%");
+            $moviesQuery->where('movies.title', 'like', "%$filterByName%");
         }
 
         $movies = $moviesQuery
