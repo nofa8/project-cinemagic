@@ -6,6 +6,7 @@ use App\Http\Controllers\ScreeningController;
 use App\Http\Controllers\GenreController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\CartController;
+use App\Http\Controllers\TheaterController;
 use App\Models\Screening;
 use App\Models\Customer;
 use App\Models\Movie;
@@ -27,8 +28,8 @@ Route::get('movies/show', [MovieController::class, 'show'])
 
 
 Route::get('movies/{movie}/curriculum', [MovieController::class, 'showCurriculum'])
-    ->name('movies.curriculum');
-    //->can('viewCurriculum', Movie::class);
+    ->name('movies.curriculum')
+    ->can('viewCurriculum', Movie::class);
 
 /* ----- Non-Verified users ----- */
 Route::middleware('auth')->group(function () {
@@ -53,6 +54,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     //Department resource routes are protected by DepartmentPolicy on the controller
     Route::resource('genres', GenreController::class);
+
+    Route::resource('theaters', TheaterController::class);
 
     Route::get('screenings/my', [ScreeningController::class, 'myScreenings'])
         ->name('screenings.my')
