@@ -14,30 +14,7 @@ class Curriculum extends Component
 
     private function getCurriculum(Collection $screening)
     {
-        $curriculum = [];
-        $mytime = Carbon::now();
-        $mytime->toDateTimeString();
-        $theaters = $screening->sortBy('theater_id')->pluck('theater_id')->unique();
-        $dates = $screening->sortBy('date')->pluck('date')->unique();
-        $hours = $screening->sortBy('start_time')->pluck('theater_id')->unique();
-        @dump($theaters);
-        @dump($hours);
-        @dump($dates);
-        foreach ($theaters as $theaterId => $theaterScreenings) {
-            $dates = $theaterScreenings->groupBy('date');
-
-            foreach ($dates as $date => $dateScreenings) {
-                $groupedByTime = $dateScreenings->groupBy('start_time');
-
-                foreach ($groupedByTime as $startTime => $timeScreenings) {
-                    foreach ($timeScreenings as $screening) {
-                        $curriculum[$theaterId][$date][$startTime][] = $screening;
-                    }
-                }
-            }
-        }
-
-        return $curriculum;
+        
     }
 
     public function __construct(
@@ -52,6 +29,6 @@ class Curriculum extends Component
      */
     public function render(): View|Closure|string
     {
-        return view('components.courses.curriculum');
+        return view('components.movies.curriculum');
     }
 }
