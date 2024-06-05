@@ -37,9 +37,14 @@ class Movie extends Model
         return $this->BelongsTo(Genre::class, 'genre_code', 'code');
     }
 
-    public function screenings(): BelongsToMany
-    {
-        return $this->belongsToMany(Screening::class,'screenings_movies','screenings_id','movies_id');
-    }
+    // Movie.php
 
+
+    
+    public function screenings()
+    {
+        return $this->hasMany(Screening::class);
+    }
 }
+
+

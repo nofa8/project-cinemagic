@@ -29,10 +29,27 @@
 
         <!-- Next Screenings -->
         <div class="font-light text-gray-700 dark:text-gray-300">
-            <strong>Next Screenings:</strong>
-            <ul class="list-disc list-inside mt-1">
-                
-            </ul>
+            <strong>Next 3 Screenings:</strong>
+            <div class="mt-1">
+                @foreach ($movie->screenings()->whereBetween('date', [now(), now()->addDays(14)])->orderBy('date')->take(3)->get() as $screening)
+                    @php
+                        // Concatenate date and time strings
+                        $dateTimeString = $screening->date . ' ' . $screening->start_time;
+                        // Create a DateTime object
+                        $dateTime = new DateTime($dateTimeString);
+                    @endphp
+                    <div class="mr-2 bg-gray-100 dark:bg-gray-800 rounded-lg p-2" style="display: inline-block;">
+                        <div class="text-gray-600 dark:text-gray-400" style="display: inline;">{{ $dateTime->format('F j, Y') }}</div>
+                        <div class="text-gray-600 dark:text-gray-400" style="display: inline;">{{ $dateTime->format('g:i a') }}</div>
+                    </div>
+                @endforeach
+            </div>
         </div>
+        
+        
+        
+        
+        
+        
     </div>
 </div>
