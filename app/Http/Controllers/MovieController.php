@@ -10,12 +10,14 @@ use Illuminate\Http\RedirectResponse;
 use App\Http\Requests\MovieFormRequest;
 use App\Models\Genre;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Carbon;
+
 
 class MovieController extends Controller
 {
     public function index(Request $request): View
     {
-        
+
 
 
         $genres = Genre::orderBy('name')->pluck('name', 'code')->toArray();
@@ -74,29 +76,42 @@ class MovieController extends Controller
 
     public function showCase(Request $request): View
     {
-        
+
         $filterByGenre = $request->Genre;
         $filterByName = $request->Title;
         $moviesQuery = Movie::query();
+
+
         if ($filterByGenre !== null) {
-            $moviesQuery->where('genre_code',$filterByGenre);
+            $moviesQuery->where('genre_code', $filterByGenre);
         }
 
         if ($filterByName !== null) {
             $moviesQuery->where('movies.title', 'like', "%$filterByName%");
         }
+        
+        #$moviesQuery->groupBy("movies.title");
+        $now = Carbon::now();
+        $forteendaysfromnow = Carbon::now()->addDays(14)->format("Y-m-d");
+
+
 
         $movies = $moviesQuery
             ->with('genreRef')
+            ->join('screenings', 'movies.id', '=', 'screenings.movie_id')
+            ->whereBetween('screenings.date', [now(), now()->addDays(14)])
+            ->select('movies.*') // Ensure only movie columns are selected
+            ->distinct() // Ensure unique movies in case of multiple screenings within 14 days
             ->paginate(20)
             ->withQueryString();
+
         return view(
             'movies.showcase',
             compact('movies', 'filterByGenre', 'filterByName')
         );
-       
-        
-        
+
+
+
         #return view('movies.showcase')->with('movies', $allMovies);;
     }
     public function showCurriculum(Movie $mov): View

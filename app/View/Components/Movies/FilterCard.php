@@ -23,7 +23,7 @@ class FilterCard extends Component
 
     )
     {
-        $this->listGenre = Genre::pluck('code','name')->toArray();
+        $this->listGenre = Genre::pluck('name','code')->toArray();
 
         
 

@@ -12,10 +12,9 @@
         </div>
     @endcan
 
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-5">
+    <div class="grid grid-cols-1 gap-5">
         @each('movies.shared.card', $movies, 'movie')
     </div>
-    <div class="mt-4">
-        {{ $movies->links() }}
-    </div>
+    
+    
 @endsection
