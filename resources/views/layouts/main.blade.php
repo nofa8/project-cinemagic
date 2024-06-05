@@ -177,6 +177,10 @@
                                     'C' => route('students.edit', ['student' => Auth::user()->student]),
                                 }"/> --}}
                             <x-menus.submenu-item
+                                content="Profile"
+                                selectable="0"
+                                href="{{ route('profile.edit') }}"/>
+                            <x-menus.submenu-item
                                 content="Change Password"
                                 selectable="0"
                                 href="{{ route('profile.edit.password') }}"/>
