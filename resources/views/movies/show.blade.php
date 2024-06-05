@@ -43,7 +43,7 @@
                     <h3 class="pt-16 pb-4 text-2xl font-medium text-gray-900 dark:text-gray-100">
                         Screenings
                     </h3>
-                    <x-courses.screenings :screenings="$movie->screenings"
+                    <x-movies.screenings :screenings="$movie->screenings"
                         :showView="true"
                         class="pt-4"
                         />
