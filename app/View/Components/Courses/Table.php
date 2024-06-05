@@ -12,7 +12,7 @@ class Table extends Component
      * Create a new component instance.
      */
     public function __construct(
-        public object $courses,
+        public object $movies,
         public bool $showView = true,
         public bool $showEdit = true,
         public bool $showDelete = true,
@@ -26,6 +26,6 @@ class Table extends Component
      */
     public function render(): View|Closure|string
     {
-        return view('components.courses.table');
+        return view('components.movies.table');
     }
 }

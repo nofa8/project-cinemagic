@@ -19,8 +19,8 @@
             width="md"
             :readonly="$readonly"
             deleteTitle="Delete Image"
-            :deleteAllow="($mode == 'edit') && ($movie->imageExists)"
+            :deleteAllow="($mode == 'edit') " {{--&& ($movie->imageExists) --}}
             deleteForm="form_to_delete_image"
-            :imageUrl="$movie->imageUrl"/>
+            :imageUrl="$movie->photoFullUrl"/>
     </div>
 </div>

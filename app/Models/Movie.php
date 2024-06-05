@@ -6,11 +6,12 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Storage;
 
 class Movie extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
 
     protected $fillable = [
         'title',
@@ -27,7 +28,7 @@ class Movie extends Model
             return asset("storage/posters/{$this->poster_filename}");
         } else {
             // To be changed eventually
-            return asset("storage/photos/anonymous.png");
+            return asset("storage/photos/_no_poster_1.png");
         }
     }
 

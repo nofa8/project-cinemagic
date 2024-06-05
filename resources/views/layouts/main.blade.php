@@ -78,7 +78,6 @@
                                 />
                         @endcan
 
-                        {{-- If user has any of the 4 menu options previlege, then it should show the submenu
                         @if(
                             Gate::check('viewAny', App\Models\Customer::class) ||
                             Gate::check('viewAny', App\Models\User::class) ||
@@ -115,7 +114,7 @@
                                     href="{{ route('screening.index') }}"/>
                                 @endcan
                         </x-menus.submenu>
-                        @endif --}}
+                        @endif 
 
                         <div class="grow"></div>
 
@@ -168,14 +167,13 @@
                             @endcan --}}
                             @auth
                             <hr>
-                            {{-- <x-menus.submenu-item
+                            <x-menus.submenu-item
                                 content="Profile"
                                 selectable="0"
                                 :href="match(Auth::user()->type) {
                                     'A' => route('administratives.edit', ['administrative' => Auth::user()]),
-                                    'E' => route('teachers.edit', ['teacher' => Auth::user()->teacher]),
-                                    'C' => route('students.edit', ['student' => Auth::user()->student]),
-                                }"/> --}}
+                                    default => route('customers.edit', ['customer' => Auth::user()->customer]),
+                                }"/> 
                             <x-menus.submenu-item
                                 content="Change Password"
                                 selectable="0"
