@@ -4,14 +4,13 @@
 @endphp
 <div class="flex flex-wrap space-x-8">
     <div class="grow mt-6 space-y-4">
-        <x-field.input name="title" label="title" width="md"
+        <x-field.text_area name="Title" label="Title" width="md"
                         :readonly="$readonly || ($mode == 'edit')"
                         value="{{ old('title', $movie->title) }}"/>
-        <x-field.input name="year" label="year" :readonly="$readonly"
-                        value="{{ old('name', $movie->year) }}"/>
-        <x-field.text-area name="synopsis" label="Synopsis"
-                        :readonly="$readonly"
-                        value="{{ old('synopsis', $movie->synopsis) }}"/>
+
+        <x-field.select name="Genre" label="Genre"
+                        value="{{old('name', $movie->genre) }}"
+                        :options="$listGenre"/>/>
     </div>
     <div class="pb-6">
         <x-field.image

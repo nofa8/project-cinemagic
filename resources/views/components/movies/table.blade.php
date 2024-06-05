@@ -36,8 +36,7 @@
                 @if($showView)
                     @can('view', $movie)
                         <td>
-                            <x-table.icon-show class="ps-3 px-0.5"
-                            href="{{ route('movie.show', ['movie' => $movie]) }}"/>
+                            <x-table.icon-show class="ps-3 px-0.5" href="{ route('movie.show', ['movie' => $movie]) }}" />
                         </td>
                     @else
                         <td></td>

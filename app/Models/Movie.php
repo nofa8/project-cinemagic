@@ -31,7 +31,7 @@ class Movie extends Model
         }
     }
 
-    public function genre(): BelongsTo
+    public function genreRef(): BelongsTo
     {
         return $this->BelongsTo(Genre::class, 'genre_code', 'code');
     }
