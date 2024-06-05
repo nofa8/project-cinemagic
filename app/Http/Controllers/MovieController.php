@@ -15,10 +15,13 @@ class MovieController extends Controller
 {
     public function index(Request $request): View
     {
+        
+
+
         $genres = Genre::orderBy('name')->pluck('name', 'code')->toArray();
         $genres = array_merge([null => 'Any genre'], $genres);
         $filterByGenre = $request->query('genre');
-        $filterByName = $request->query('name');
+        $filterByName = $request->title;
         $moviesQuery = Movie::query();
         if ($filterByGenre !== null) {
             $moviesQuery->where('genre', $filterByGenre);
@@ -26,7 +29,7 @@ class MovieController extends Controller
 
         if ($filterByName !== null) {
             $moviesQuery
-                ->where('movies.name', 'like', "%$filterByName%");
+                ->where('movies.title', 'like', "%$filterByName%");
         }
 
         $movies = $moviesQuery
@@ -69,10 +72,33 @@ class MovieController extends Controller
             ->with('alert-msg', $htmlMessage);
     }
 
-    public function showCase(): View
+    public function showCase(Request $request): View
     {
-        $allMovies = Movie::orderBy('year')->paginate(15)->withQueryString();
-        return view('movies.showcase')->with('movies', $allMovies);;
+        
+        $filterByGenre = $request->genre;
+        $filterByName = $request->title;
+        $moviesQuery = Movie::query();
+        if ($filterByGenre !== null) {
+            $moviesQuery->where('genre', $filterByGenre);
+        }
+
+        if ($filterByName !== null) {
+            $moviesQuery
+                ->where('movies.title', 'like', "%$filterByName%");
+        }
+
+        $movies = $moviesQuery
+            ->with('genreRef')
+            ->paginate(20)
+            ->withQueryString();
+        return view(
+            'movies.showcase',
+            compact('movies', 'filterByGenre', 'filterByName')
+        );
+       
+        
+        
+        #return view('movies.showcase')->with('movies', $allMovies);;
     }
     public function showCurriculum(Movie $mov): View
     {
