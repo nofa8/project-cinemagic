@@ -3,9 +3,9 @@
 namespace App\Policies;
 
 use App\Models\User;
-use App\Models\Department;
+use App\Models\Theater;
 
-class DepartmentPolicy
+class TheaterPolicy
 {
     public function before(?User $user, string $ability): bool|null
     {
@@ -21,7 +21,7 @@ class DepartmentPolicy
         return true;
     }
 
-    public function view(User $user, Department $department): bool
+    public function view(User $user, Theater $theater): bool
     {
         // User is authenticated ($user != null)
         return true;
@@ -32,12 +32,12 @@ class DepartmentPolicy
         return false;
     }
 
-    public function update(User $user, Department $department): bool
+    public function update(User $user, Theater $theater): bool
     {
         return false;
     }
 
-    public function delete(User $user, Department $department): bool
+    public function delete(User $user, Theater $theater): bool
     {
         return false;
     }
