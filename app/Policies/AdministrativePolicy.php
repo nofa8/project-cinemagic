@@ -39,7 +39,7 @@ class AdministrativePolicy
 
     public function createAdmin(User $user): bool
     {
-        return $user->admin;
+        return $user->type == 'A';
     }
 
     public function updateAdmin(User $user, User $administrative): bool

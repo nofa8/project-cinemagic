@@ -91,15 +91,14 @@ class AdministrativeController extends \Illuminate\Routing\Controller
     public function update(AdministrativeFormRequest $request, User $administrative): RedirectResponse
     {
         $validatedData = $request->validated();
-        $administrative->type = 'A';
+        
         $administrative->name = $validatedData['name'];
         $administrative->email = $validatedData['email'];
         // Only updates admin field if it has permission  to do it.
         // Otherwise, do not change it (ignore it)
         if ($request->user()?->can('updateAdmin', $administrative)) {
-            $administrative->admin = $validatedData['admin'];
+            $administrative->type = $validatedData['type'];
         }
-        $administrative->gender = $validatedData['gender'];
         $administrative->save();
         if ($request->hasFile('photo_file')) {
             // Delete previous file (if any)
