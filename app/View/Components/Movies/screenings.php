@@ -14,7 +14,7 @@ class Screenings extends Component
 
     private function getScreenings(Collection $screenings)
     {
-        $screenings = [];
+        $screenings = $screenings->sortBy('date')->pluck('theater_id', 'date','start_time');
         
         return $screenings;
     }
@@ -23,7 +23,7 @@ class Screenings extends Component
         public Collection $Screenings,
     )
     {
-        $this->screening = $this->getScreenings($Screenings);
+        $this->screenings = $this->getScreenings($Screenings);
     }
 
     /**

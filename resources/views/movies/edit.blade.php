@@ -48,5 +48,9 @@
         </div>
     </div>
 </div>
+<form method="POST" class="hidden" action="{{ route('movies.image.destroy', ['movie' => $movie]) }}" id="form_to_delete_image">
+    @csrf
+    @method('DELETE')
+</form>
 @endsection
 

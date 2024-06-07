@@ -34,7 +34,7 @@ class AdministrativePolicy
 
     public function update(User $user, User $administrative): bool
     {
-        return $user->type == 'A' && $user->id == $administrative->id;
+        return true;//$user->type == 'A' && $user->id == $administrative->id;
     }
 
     public function createAdmin(User $user): bool

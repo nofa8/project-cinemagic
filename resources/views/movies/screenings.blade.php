@@ -12,7 +12,7 @@
                         Screenings of "{{ $movie->title }}"
                     </h2>
                 </header>
-                <x-courses.screenings :screenings="$movie->screenings"
+                <x-movies.screenings :screenings="$movie->screenings"
                     :showView="true"
                     class="pt-4"
                     />

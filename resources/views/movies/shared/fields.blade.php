@@ -4,23 +4,34 @@
 @endphp
 <div class="flex flex-wrap space-x-8">
     <div class="grow mt-6 space-y-4">
-        <x-field.text_area name="Title" label="Title" width="md"
-                        :readonly="$readonly || ($mode == 'edit')"
-                        value="{{ old('title', $movie->title) }}"/>
-
-        <x-field.select name="Genre" label="Genre"
-                        value="{{old('name', $movie->genre) }}"
-                        :options="$listGenre"/>/>
+        <x-field.input name="title" label="Title" :readonly="$readonly"
+                       value="{{ old('title', $movie->title) }}"/>
+        <x-field.select name="genre_code" label="Genre" :readonly="$readonly"
+                        value="{{ old('genre', $movie->genre_code) }}"
+                        :options="\App\Models\Genre::all()->pluck('name','code')->toArray()"/>
+        <x-field.input name="year" label="Year" :readonly="$readonly"
+                       value="{{ old('year', $movie->year) }}"/>
+        <x-field.text-area name="synopsis" label="Synopsis" :readonly="$readonly"
+                           value="{{ old('synopsis', $movie->synopsis) }}"/>
+        <x-movies.trailer url="{{ $movie->trailer_url }}" show="{{ $readonly }}"/>
+        {{-- @if($readonly)
+            <x-screenings.table :screenings="$screenings"
+                                :showView="true"
+                                :showEdit="true"
+                                :showDelete="true"
+                                :showAdd="true"
+            />
+        @endif --}}
     </div>
     <div class="pb-6">
         <x-field.image
-            name="image_file"
-            label="movie Image"
+            name="poster_filename"
+            label="Poster"
             width="md"
             :readonly="$readonly"
-            deleteTitle="Delete Image"
-            :deleteAllow="($mode == 'edit') " {{--&& ($movie->imageExists) --}}
+            deleteTitle="Delete Poster"
+            :deleteAllow="($mode == 'edit') && ($movie->imageExists)"
             deleteForm="form_to_delete_image"
-            :imageUrl="$movie->photoFullUrl"/>
+            :imageUrl="$movie->imageFullUrl"/>
     </div>
 </div>

@@ -21,15 +21,13 @@ Route::get('movies/showcase', [MovieController::class, 'showCase'])
     ->name('movies.showcase')
     ->can('viewShowCase', Movie::class);
 
-Route::get('movies/show', [MovieController::class, 'show'])
-    ->name('movies.show')
-    ->can('viewShowCase', Movie::class);
+
+Route::resource('movies', MovieController::class)->only(['show']);
 
 
-
-Route::get('movies/{movie}/curriculum', [MovieController::class, 'showCurriculum'])
-    ->name('movies.curriculum')
-    ->can('viewCurriculum', Movie::class);
+Route::get('movies/{movie}/screenings', [MovieController::class, 'showScreenings'])
+    ->name('movies.screenings');
+    //->can('viewCurriculum', Movie::class);
 
 /* ----- Non-Verified users ----- */
 Route::middleware('auth')->group(function () {
@@ -77,8 +75,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource('customers', CustomerController::class);
 
     Route::delete('administratives/{administrative}/photo', [AdministrativeController::class, 'destroyPhoto'])
-        ->name('administratives.photo.destroy')
-        ->can('update', 'administrative');
+        ->name('administratives.photo.destroy');//->can('update', 'administrative');
 
     //Admnistrative resource routes are protected by AdministrativePolicy on the controller
     Route::resource('administratives', AdministrativeController::class);
