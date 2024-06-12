@@ -7,6 +7,7 @@ use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
 
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Carbon;
 
 class Table extends Component
 {
@@ -19,7 +20,20 @@ class Table extends Component
         
         foreach ($theaters as $theater) {
             $dates = $screenings->where('theater_id', $theater)
-            ->whereBetween('date', [now(), now()->addDays(14)])
+            ->filter(function($screening) {
+                // Check if the date is today and the start time is in the future
+                $agora = now();
+                if (Carbon::parse($screening->date)> now()->addDays(14)){
+                    return false;
+                }
+                elseif (Carbon::parse($screening->date)>now()){
+                    return true;
+                }
+                elseif (Carbon::parse($screening->date)->isToday()) {
+                    return Carbon::parse($screening->start_time)->gt(now()->format('H:i:s'));
+                }
+                return false;                
+            })
             ->sortBy('date')->pluck('date')->unique();
             $dateScreenings = [];
             
@@ -30,8 +44,10 @@ class Table extends Component
                     ->sortBy('start_time')
                     ->values();
             }
+            if ( !empty($dateScreenings) ){
+                $table[$theater] = $dateScreenings;
+            }
             
-            $table[$theater] = $dateScreenings;
         }
         
         return $table;
