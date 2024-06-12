@@ -189,9 +189,7 @@ class MovieController extends Controller
 
     public function show(Movie $movie): View
     {
-        $genres = Genre::orderBy('name')->pluck('name', 'code')->toArray();
         return view('movies.show')
-            ->with('genre', $genres)
             ->with('movie', $movie);
             
     }

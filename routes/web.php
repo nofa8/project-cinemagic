@@ -29,6 +29,9 @@ Route::get('movies/{movie}/screenings', [MovieController::class, 'showScreenings
     ->name('movies.screenings');
     //->can('viewCurriculum', Movie::class);
 
+Route::get('movies/{screenings}/seats', [ScreeningController::class, 'showSeats'])
+->name('screenings.seats');
+
 /* ----- Non-Verified users ----- */
 Route::middleware('auth')->group(function () {
     Route::get('/password', [ProfileController::class, 'editPassword'])->name('profile.edit.password');

@@ -14,14 +14,6 @@
         <x-field.text-area name="synopsis" label="Synopsis" :readonly="$readonly"
                            value="{{ old('synopsis', $movie->synopsis) }}"/>
         <x-movies.trailer url="{{ $movie->trailer_url }}" show="{{ $readonly }}"/>
-        {{-- @if($readonly)
-            <x-screenings.table :screenings="$screenings"
-                                :showView="true"
-                                :showEdit="true"
-                                :showDelete="true"
-                                :showAdd="true"
-            />
-        @endif --}}
     </div>
     <div class="pb-6">
         <x-field.image
@@ -34,4 +26,12 @@
             deleteForm="form_to_delete_image"
             :imageUrl="$movie->imageFullUrl"/>
     </div>
+    @if($readonly)
+            <x-screenings.table :screenings="$movie->screenings"
+                                :showView="true"
+                                :showEdit="true"
+                                :showDelete="true"
+                                :showAdd="true"
+            />
+        @endif
 </div>
