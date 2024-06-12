@@ -40,7 +40,7 @@
 <div {{ $attributes }}>
     <div class="flex-col">
         
-        <img class="{{$widthClass}} {{$maxHeightClass}} aspect-auto"
+        <img class="{{$widthClass}} {{$maxHeightClass}} aspect-auto rounded-full"
              src="{{ $imageUrl }}">
         @if(!$readonly)
         <div class="{{$widthClass}} flex-col space-y-4 items-stretch mt-4">
