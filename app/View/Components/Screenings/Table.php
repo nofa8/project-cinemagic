@@ -17,8 +17,10 @@ class Table extends Component
     {
         $table = [];
         $theaters = $screenings->sortBy('theater_id')->pluck('theater_id')->unique();
-        
+        $now = now();  // Current date and time
+
         foreach ($theaters as $theater) {
+
             $dates = $screenings->where('theater_id', $theater)
             ->filter(function($screening) {
                 // Check if the date is today and the start time is in the future
@@ -36,11 +38,22 @@ class Table extends Component
             })
             ->sortBy('date')->pluck('date')->unique();
             $dateScreenings = [];
-            
+
             foreach ($dates as $date) {
                 $dateScreenings[$date] = $screenings
                     ->where('theater_id', $theater)
                     ->where('date', $date)
+                    ->filter(function ($screening) use ($date, $now) {
+                        // Convert date string to Carbon instance
+                        $screeningDate = \Carbon\Carbon::parse($screening->date);
+
+                        // If the date is today, only include screenings that haven't happened yet
+                        if ($screeningDate->isSameDay($now)) {
+                            return \Carbon\Carbon::parse($screening->start_time) > $now;
+                        }
+                        // Otherwise, include all screenings
+                        return true;
+                    })
                     ->sortBy('start_time')
                     ->values();
             }
@@ -49,7 +62,6 @@ class Table extends Component
             }
             
         }
-        
         return $table;
     }
 

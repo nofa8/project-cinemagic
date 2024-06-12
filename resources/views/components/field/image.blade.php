@@ -39,7 +39,7 @@
 @endphp
 <div {{ $attributes }}>
     <div class="flex-col">
-        
+
         <img class="{{$widthClass}} {{$maxHeightClass}} aspect-auto"
              src="{{ $imageUrl }}">
         @if(!$readonly)
