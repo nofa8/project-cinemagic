@@ -18,7 +18,7 @@ class ScreeningController extends Controller
 
     public function __construct()
     {
-        $this->authorizeResource(Screening::class);
+        //$this->authorizeResource(Screening::class);
     }
 
 
@@ -77,7 +77,9 @@ class ScreeningController extends Controller
 
     public function showSeats(Screening $screening): View
     {
-        return view('screenings.edit')->with('screening', $screening);
+        $screening->load('tickets');
+        
+        return view('screenings.seats')->with('screening', $screening);
     }
 
     public function destroy(Screening $screening): RedirectResponse

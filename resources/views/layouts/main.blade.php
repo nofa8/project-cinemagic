@@ -167,13 +167,13 @@
                             @endcan --}}
                             @auth
                             <hr>
-                            <x-menus.submenu-item
+                            {{-- <x-menus.submenu-item
                                 content="Profile"
                                 selectable="0"
                                 :href="match(Auth::user()->type) {
                                     'A' => route('administratives.edit', ['administrative' => Auth::user()]),
                                     default => route('customers.edit', ['customer' => Auth::user()->customer]),
-                                }"/>
+                                }"/> --}}
                             <x-menus.submenu-item
                                 content="Profile"
                                 selectable="0"

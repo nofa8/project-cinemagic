@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -17,9 +19,9 @@ class Theater extends Model
     ];
     public $timestamps = false;
 
-    public function screenings(): BelongsToMany
+    public function screenings(): HasMany
     {
-        return $this->belongsToMany(Screening::class, 'screenings_theaters', 'screening_id','theater_id');
+        return $this->hasMany(Screening::class,'theater_id','id');
     }
 
     public function seats(): BelongsToMany
