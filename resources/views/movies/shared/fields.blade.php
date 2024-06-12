@@ -27,11 +27,11 @@
             :imageUrl="$movie->imageFullUrl"/>
     </div>
     @if($readonly)
-            <x-screenings.table :screenings="$movie->screenings"
-                                :showView="true"
-                                :showEdit="true"
-                                :showDelete="true"
-                                :showAdd="true"
-            />
-        @endif
+        <x-screenings.table :screenings="$movie->screenings"
+                            :showView="true"
+                            :showEdit="true"
+                            :showDelete="true"
+                            :showAdd="true"
+        />
+    @endif
 </div>
