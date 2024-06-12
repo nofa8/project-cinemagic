@@ -16,8 +16,8 @@
 <form id="send-verification" method="post" action="{{ route('verification.send') }}">
     @csrf
 </form>
-<div>
-    <div>
+<div class="flex flex-wrap lg:flex-nowrap">
+    <div class="w-full lg:w-2/3 lg:pr-6"> <!-- Added padding to the right for the form -->
         <form method="post" action="{{ route('profile.update') }}" class="mt-6 space-y-6">
             @csrf
             @method('patch')
@@ -51,6 +51,12 @@
                         <option value="option1">MBWay</option>
                         <option value="option2">Visa</option>
                         <option value="option3">PayPal</option>
+                    @endif
+                    @if(old('payment_type', $user->customer?->payment_type) == null)
+                        <option value="option1">Choose one</option>
+                        <option value="option2">MBWay</option>
+                        <option value="option3">Visa</option>
+                        <option value="option4">PayPal</option>
                     @endif
                 </x-select-input>
                 <x-input-error class="mt-2" :messages="$errors->get('payment_type')" />
@@ -92,19 +98,17 @@
                     >{{ __('Saved.') }}</p>
                 @endif
             </div>
-            <div class="pb-6">
-                <x-field.image
-                    name="photo_file"
-                    label="Photo"
-                    width="md"
-                    :readonly="$readonly"
-                    deleteTitle="Delete Photo"
-                    :deleteAllow="true"
-                    deleteForm="form_to_delete_photo"
-                    imageUrl="$user->photoFullUrl"/>
-            </div>
         </form>
     </div>
+    <div class="w-full lg:w-1/3 lg:pl-6 flex justify-center lg:justify-start"> <!-- Added padding to the left and center alignment -->
+        <x-field.image
+            name="photo_file"
+            label="Photo"
+            width="md"
+            :readonly="$readonly"
+            deleteTitle="Delete Photo"
+            :deleteAllow="true"
+            deleteForm="form_to_delete_photo"
+            imageUrl="{{ $user->getPhotoFullUrlAttribute() }}"/>
+    </div>
 </div>
-
-
