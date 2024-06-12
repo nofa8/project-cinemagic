@@ -26,7 +26,7 @@ class Ticket extends Model
 
     public function screening(): BelongsTo
     {
-        return $this->belongsTo(Screening::class, 'screening_id');
+        return $this->belongsTo(Screening::class, 'screening_id','id');
     }
 
     public function seat(): BelongsTo

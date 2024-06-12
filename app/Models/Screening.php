@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Screening extends Model
@@ -19,14 +19,14 @@ class Screening extends Model
     ];
 
 
-    public function tickets(): BelongsToMany
+    public function tickets(): HasMany
     {
-        return $this->BelongsToMany(Ticket::class, 'tickets_screenings', 'screening_id','ticket_id');
+        return $this->hasMany(Ticket::class, 'screening_id','id');
     }
 
     public function theater(): BelongsTo
     {
-        return $this->belongsTo(Theater::class);
+        return $this->belongsTo(Theater::class,'theater_id','id');
     }
 
     public function movie(): BelongsTo

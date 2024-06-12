@@ -18,7 +18,7 @@ class ScreeningController extends Controller
 
     public function __construct()
     {
-        $this->authorizeResource(Screening::class);
+        //$this->authorizeResource(Screening::class);
     }
 
 

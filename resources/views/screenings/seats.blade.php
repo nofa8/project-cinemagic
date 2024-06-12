@@ -12,7 +12,7 @@
                 <th>Status</th>
             </tr>
         </thead>
-        <tbody>
+        <tbody>@dump($screening->theater)
             @foreach ($screening->theater->seats as $seat)
                 <tr>
                     <td>{{ $seat->number }}</td>
