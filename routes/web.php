@@ -29,7 +29,7 @@ Route::get('movies/{movie}/screenings', [MovieController::class, 'showScreenings
     ->name('movies.screenings');
     //->can('viewCurriculum', Movie::class);
 
-Route::get('movies/{screenings}/seats', [ScreeningController::class, 'showSeats'])
+Route::get('screenings/{screenings}/seats', [ScreeningController::class, 'showSeats'])
     ->name('screenings.seats');
 
 /* ----- Non-Verified users ----- */
