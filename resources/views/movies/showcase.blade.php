@@ -15,6 +15,8 @@
     <div class="grid grid-cols-1 gap-5">
         @each('movies.shared.card', $movies, 'movie')
     </div>
-    
+    <div class="mt-4">
+        {{ $movies->links() }}
+    </div>
     
 @endsection
