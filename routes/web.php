@@ -11,8 +11,10 @@ use App\Models\Screening;
 use App\Models\Customer;
 use App\Models\Movie;
 use Illuminate\Support\Facades\Route;
-
+use App\Http\Controllers\PDFController;
 /* ----- PUBLIC ROUTES ----- */
+
+Route::get('/generate-pdf', [PDFController::class, 'generatePDF']);
 
 Route::view('/', 'home')->name('home');
 
