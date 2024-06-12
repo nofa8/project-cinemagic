@@ -3,8 +3,10 @@
         <thead>
             <tr>
                 <th class="border-2 border-gray-400 dark:border-gray-500 py-2 px-4 bg-gray-200 dark:bg-gray-800 text-left text-gray-700 dark:text-gray-200 font-semibold">Theater</th>
-                @foreach(array_keys($table[array_key_first($table)]) as $date)
+                @foreach($table as $key=>$dates)
+                @foreach($dates as $date=>$whatever)
                     <th class="py-2 px-4 border-2 border-gray-400 dark:border-gray-500 bg-gray-200 dark:bg-gray-800 text-center text-gray-700 dark:text-gray-200 font-semibold">{{ $date }}</th>
+                @endforeach
                 @endforeach
             </tr>
         </thead>

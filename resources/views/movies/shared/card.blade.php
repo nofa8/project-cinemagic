@@ -2,8 +2,8 @@
 
 <div class="flex flex-col sm:flex-row items-center bg-white dark:bg-gray-900 rounded-xl p-4 space-y-4 sm:space-y-0 sm:space-x-4">
     <!-- Poster on the left -->
-    <a class="h-48 w-48 flex-shrink-0" href="{{ route('movies.show', ['movie' => $movie]) }}">
-        <img class="h-full w-full object-cover"
+    <a class="h-50 w-48 flex-shrink-0 " href="{{ route('movies.show', ['movie' => $movie]) }}">
+        <img class="h-full w-full object-cover pe-4"
             src="{{ $movie->imageFullUrl }}">
     </a>
     

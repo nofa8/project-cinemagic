@@ -18,7 +18,9 @@ class Table extends Component
         $theaters = $screenings->sortBy('theater_id')->pluck('theater_id')->unique();
         
         foreach ($theaters as $theater) {
-            $dates = $screenings->where('theater_id', $theater)->sortBy('date')->pluck('date')->unique();
+            $dates = $screenings->where('theater_id', $theater)
+            ->whereBetween('date', [now(), now()->addDays(14)])
+            ->sortBy('date')->pluck('date')->unique();
             $dateScreenings = [];
             
             foreach ($dates as $date) {
