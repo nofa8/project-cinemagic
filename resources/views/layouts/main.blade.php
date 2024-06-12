@@ -175,6 +175,10 @@
                                     default => route('customers.edit', ['customer' => Auth::user()->customer]),
                                 }"/> 
                             <x-menus.submenu-item
+                                content="Profile"
+                                selectable="0"
+                                href="{{ route('profile.edit') }}"/>
+                            <x-menus.submenu-item
                                 content="Change Password"
                                 selectable="0"
                                 href="{{ route('profile.edit.password') }}"/>

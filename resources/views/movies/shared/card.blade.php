@@ -6,7 +6,7 @@
         <img class="h-full w-full object-cover pe-4"
             src="{{ $movie->imageFullUrl }}">
     </a>
-    
+
     <!-- Content on the right -->
     <div class="flex flex-col justify-center w-full">
         <!-- Title -->
@@ -14,8 +14,8 @@
             {{ $movie->title }}
         </a>
 
-        
-        
+
+
         <div class="flex flex-col justify-center w-full">
             <div class="font-light text-gray-700 dark:text-gray-300 mb-2">
                 {{ $movie->year }}
@@ -28,12 +28,12 @@
                 <a href="{{ $movie->trailer_url }}">Watch The Trailer</a>
             </div>
         </div>
-        
+
         <!-- Synopsis -->
         <div class="font-light text-gray-700 dark:text-gray-300 mb-2">
             {{ $movie->synopsis }}
         </div>
-        
+
 
         <!-- Next Screenings -->
         <div class="font-light text-gray-700 dark:text-gray-300">
@@ -52,6 +52,6 @@
                     </div>
                 @endforeach
             </div>
-        </div>        
+        </div>
     </div>
 </div>
