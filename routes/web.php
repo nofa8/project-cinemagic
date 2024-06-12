@@ -43,8 +43,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-    Route::view('/dashboard', 'dashboard')->name('dashboard');
-
+    Route::get('/dashboard', function () {
+        return redirect('movies/showcase');
+    })->name('dashboard');
     Route::delete('movies/{movie}/image', [MovieController::class, 'destroyImage'])
         ->name('movies.image.destroy')
         ->can('update', Movie::class);
