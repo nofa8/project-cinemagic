@@ -10,12 +10,14 @@ use Illuminate\Http\RedirectResponse;
 use App\Http\Requests\MovieFormRequest;
 use App\Models\Genre;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Storage;
 
 class MovieController extends Controller
 {
     public function index(Request $request): View
     {
-        
+
 
 
         $genres = Genre::orderBy('name')->pluck('name', 'code')->toArray();
@@ -33,7 +35,7 @@ class MovieController extends Controller
         }
 
         $movies = $moviesQuery
-            ->with('genre')
+            ->with('genreRef')
             ->paginate(20)
             ->withQueryString();
         return view(
@@ -74,33 +76,42 @@ class MovieController extends Controller
 
     public function showCase(Request $request): View
     {
-        
-        $filterByGenre = $request->genre;
-        $filterByName = $request->title;
+
+        $filterByGenre = $request->Genre;
+        $filterByName = $request->Title;
         $moviesQuery = Movie::query();
+
+
         if ($filterByGenre !== null) {
-            $moviesQuery->where('genre', $filterByGenre);
+            $moviesQuery->where('genre_code', $filterByGenre);
         }
 
         if ($filterByName !== null) {
-            $moviesQuery
-                ->where('movies.title', 'like', "%$filterByName%");
+            $moviesQuery->where('movies.title', 'like', "%$filterByName%");
         }
-
+        
+        #$moviesQuery->groupBy("movies.title");
+        $now = Carbon::now();
+        $forteendaysfromnow = Carbon::now()->addDays(14)->format("Y-m-d");
         $movies = $moviesQuery
             ->with('genreRef')
+            ->join('screenings', 'movies.id', '=', 'screenings.movie_id')
+            ->whereBetween('screenings.date', [now(), now()->addDays(14)])
+            ->select('movies.*') // Ensure only movie columns are selected
+            ->distinct() // Ensure unique movies in case of multiple screenings within 14 days
             ->paginate(20)
             ->withQueryString();
+
         return view(
             'movies.showcase',
             compact('movies', 'filterByGenre', 'filterByName')
         );
-       
-        
-        
+
+
+
         #return view('movies.showcase')->with('movies', $allMovies);;
     }
-    public function showCurriculum(Movie $mov): View
+    public function showScreenings(Movie $mov): View
     {
         return view('movies.curriculum')->with('movie', $mov);
     }
@@ -116,20 +127,27 @@ class MovieController extends Controller
     public function update(MovieFormRequest $request, Movie $movie): RedirectResponse
     {
         $validatedData = $request->validated();
-        $movie = DB::transaction(function () use ($validatedData, $movie) {
+        $movie = DB::transaction(function () use ($validatedData, $movie, $request) {
             $movie->title = $validatedData['title'];
-            $movie->genre_code = $validatedData['genre_code'];
             $movie->year = $validatedData['year'];
-            $movie->poster_filename = $validatedData['poster_filename'];
+            $movie->genre_code = $validatedData['genre_code'];
             $movie->synopsis = $validatedData['synopsis'];
             $movie->trailer_url = $validatedData['trailer_url'];
             $movie->save();
-
+            if ($request->hasFile('poster_filename')) {
+                if ($movie->poster_filename &&
+                    Storage::fileExists('public/posters/' . $movie->poster_filename)) {
+                    Storage::delete('public/posters/' . $movie->poster_filename);
+                }
+                $path = $request->poster_filename->store('public/posters');
+                $movie->poster_filename = basename($path);
+                $movie->save();
+            }
             return $movie;
         });
         $url = route('movies.show', ['movie' => $movie]);
-        $htmlMessage = "Movie <a href='$url'><u>{$movie->user->name}</u></a> has been updated successfully!";
-        return redirect()->route('movies.index')
+        $htmlMessage = "Movie <a href='$url'><u>{$movie->title}</u></a> has been updated successfully!";
+        return redirect()->route('movies.showcase')
             ->with('alert-type', 'success')
             ->with('alert-msg', $htmlMessage);
     }
@@ -171,10 +189,18 @@ class MovieController extends Controller
 
     public function show(Movie $movie): View
     {
-        $genres = Genre::orderBy('name')->pluck('name', 'code')->toArray();
         return view('movies.show')
-            ->with('genres', $genres)
             ->with('movie', $movie);
+            
+    }
+    public function destroyImage(Movie $movie): RedirectResponse
+    {
+        if ($movie->imageExists) {
+            Storage::delete("public/posters/{$movie->poster_filename}");
+        }
+        return redirect()->back()
+            ->with('alert-type', 'success')
+            ->with('alert-msg', "Poster of movie {$movie->title} has been deleted.");
     }
 
 }

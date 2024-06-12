@@ -36,7 +36,7 @@
                 @if($showView)
                     @can('view', $movie)
                         <td>
-                            <x-table.icon-show class="ps-3 px-0.5" href="{ route('movie.show', ['movie' => $movie]) }}" />
+                            <x-table.icon-show class="ps-3 px-0.5" href="{ route('movies.show', ['movie' => $movie]) }}" />
                         </td>
                     @else
                         <td></td>
@@ -46,7 +46,7 @@
                     @can('update', $movie)
                         <td>
                             <x-table.icon-edit class="px-0.5"
-                            href="{{ route('movie.edit', ['movie' => $movie]) }}"/>
+                            href="{{ route('movies.edit', ['movie' => $movie]) }}"/>
                         </td>
                     @else
                         <td></td>
@@ -56,7 +56,7 @@
                     @can('delete', $movie)
                         <td>
                             <x-table.icon-delete class="px-0.5"
-                            action="{{ route('movie.destroy', ['movie' => $movie]) }}"/>
+                            action="{{ route('movies.destroy', ['movie' => $movie]) }}"/>
                         </td>
                     @else
                         <td></td>

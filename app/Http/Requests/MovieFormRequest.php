@@ -26,7 +26,7 @@ class MovieFormRequest extends FormRequest
             'title' => 'required|string|max:255',
             'genre_code' => 'required|string|max:20|exists:genres,code',
             'year' => 'required|integer|min:1900|max:' . date('Y'),
-            'poster_filename' => 'required|string|max:255',
+            'poster_filename' => 'sometimes|image|max:4096',
             'synopsis' => 'required|string',
             'trailer_url' => 'required|url|max:255',
         ];

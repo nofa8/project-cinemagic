@@ -22,14 +22,18 @@ class Movie extends Model
         'trailer_url',
     ];
 
-    public function getPhotoFullUrlAttribute()
+    public function getImageFullUrlAttribute()
     {
         if ($this->poster_filename && Storage::exists("public/posters/{$this->poster_filename}")) {
             return asset("storage/posters/{$this->poster_filename}");
         } else {
             // To be changed eventually
-            return asset("storage/photos/_no_poster_1.png");
+            return asset("storage/posters/_no_poster_2.png");
         }
+    }
+    public function getImageExistsAttribute()
+    {
+        return Storage::exists("public/posters/{$this->poster_filename}");
     }
 
     public function genreRef(): BelongsTo
@@ -37,9 +41,13 @@ class Movie extends Model
         return $this->BelongsTo(Genre::class, 'genre_code', 'code');
     }
 
-    public function screenings(): BelongsToMany
-    {
-        return $this->belongsToMany(Screening::class,'screenings_movies','screenings_id','movies_id');
-    }
 
+
+    
+    public function screenings()
+    {
+        return $this->hasMany(Screening::class);
+    }
 }
+
+
