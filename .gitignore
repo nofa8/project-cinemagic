@@ -21,3 +21,5 @@ storage/logs/laravel.log
 database
 storage
 public/storage
+storage/logs/laravel.log
+public/build/manifest.json
