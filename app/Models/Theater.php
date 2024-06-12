@@ -21,12 +21,11 @@ class Theater extends Model
 
     public function screenings(): HasMany
     {
-        return $this->hasMany(Screening::class,'theater_id','id');
+        return $this->hasMany(Screening::class, 'theater_id', 'id');
     }
 
-    public function seats(): BelongsToMany
+    public function seats(): HasMany
     {
-        return $this->belongsToMany(Seat::class, 'seats_theaters','seat_id','theater_id');
+        return $this->hasMany(Seat::class, 'theater_id', 'id');
     }
-
 }

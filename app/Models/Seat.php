@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Seat extends Model
@@ -20,9 +21,9 @@ class Seat extends Model
     ];
     public $timestamps = false;
 
-    public function tickets(): BelongsToMany
+    public function tickets(): HasMany
     {
-        return $this->belongsToMany(Ticket::class, 'tickets_seats', 'ticket_id','seat_id');
+        return $this->hasMany(Ticket::class);
     }
 
     public function theater(): BelongsTo
