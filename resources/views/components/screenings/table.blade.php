@@ -19,7 +19,7 @@
                     <tr class="bg-white dark:bg-gray-900 even:bg-gray-50 dark:even:bg-gray-800">
                         @if ($i == 0)
                             <th class="text-center py-2 px-4 border-2 border-gray-400 dark:border-gray-500 bg-gray-100 dark:bg-gray-700  text-gray-800 dark:text-gray-300" rowspan="{{ $maxRows }}">
-                                {{ $theater }}
+                                {{ \App\Models\Theater::where('id',$theater)->pluck('name')[0] }}
                             </th>
                         @endif
                         @foreach($rowsDate as $date => $screenings)
