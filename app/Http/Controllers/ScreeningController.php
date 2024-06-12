@@ -10,7 +10,8 @@ use App\Http\Requests\ScreeningFormRequest;
 use App\Models\Ticket;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\DB;
-
+use App\Models\Movie;
+use App\Models\Theater;
 class ScreeningController extends Controller
 {
     use AuthorizesRequests;
@@ -56,7 +57,10 @@ class ScreeningController extends Controller
 
     public function edit(Screening $screening): View
     {
-        return view('screenings.edit')->with('screening', $screening);
+        $movies = Movie::orderBy('title')->pluck('title', 'id')->toArray();
+        $theaters = Theater::pluck('name', 'id')->toArray(); 
+
+        return view('screenings.edit')->with('movies', $movies)->with('theaters', $theaters);
     }
 
     public function update(ScreeningFormRequest $request, Screening $screening): RedirectResponse

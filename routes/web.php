@@ -30,7 +30,7 @@ Route::get('movies/{movie}/screenings', [MovieController::class, 'showScreenings
     //->can('viewCurriculum', Movie::class);
 
 Route::get('movies/{screenings}/seats', [ScreeningController::class, 'showSeats'])
-->name('screenings.seats');
+    ->name('screenings.seats');
 
 /* ----- Non-Verified users ----- */
 Route::middleware('auth')->group(function () {

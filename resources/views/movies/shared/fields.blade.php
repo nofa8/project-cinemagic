@@ -17,7 +17,7 @@
     </div>
     <div class="pb-6">
         <x-field.image
-            name="poster_filename"
+            name="image_file"
             label="Poster"
             width="md"
             :readonly="$readonly"
