@@ -16,8 +16,8 @@
 <form id="send-verification" method="post" action="{{ route('verification.send') }}">
     @csrf
 </form>
-<div class="flex flex-wrap lg:flex-nowrap">
-    <div class="w-full lg:w-2/3 lg:pr-6"> <!-- Added padding to the right for the form -->
+<div class="flex flex-wrap space-x-8">
+    <div class="grow mt-6 space-y-4">
         <form method="post" action="{{ route('profile.update') }}" class="mt-6 space-y-6">
             @csrf
             @method('patch')
@@ -61,6 +61,13 @@
                 </x-select-input>
                 <x-input-error class="mt-2" :messages="$errors->get('payment_type')" />
             </div>
+
+            <div>
+                <x-input-label for="payment_ref" :value="__('Payment Reference')" />
+                <x-text-input id="payment_ref" name="payment_ref" type="text" class="mt-1 block w-full" :value="old('payment_ref', $user->customer?->payment_ref)" required autofocus autocomplete="name" />
+                <x-input-error class="mt-2" :messages="$errors->get('payment_ref')" />
+            </div>
+
             <div>
                 <x-input-label for="email" :value="__('Email')" />
                 <x-text-input id="email" name="email" type="email" class="mt-1 block w-full" :value="old('email', $user->email)" required autocomplete="username" />
@@ -100,7 +107,7 @@
             </div>
         </form>
     </div>
-    <div class="w-full lg:w-1/3 lg:pl-6 flex justify-center lg:justify-start"> <!-- Added padding to the left and center alignment -->
+    <div class="pl-1">
         <x-field.image
             name="photo_file"
             label="Photo"
