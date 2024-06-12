@@ -39,8 +39,8 @@
 @endphp
 <div {{ $attributes }}>
     <div class="flex-col">
-        
-        <img class="{{$widthClass}} {{$maxHeightClass}} aspect-auto rounded-full"
+
+        <img class="{{$widthClass}} {{$maxHeightClass}} aspect-auto"
              src="{{ $imageUrl }}">
         @if(!$readonly)
         <div class="{{$widthClass}} flex-col space-y-4 items-stretch mt-4">

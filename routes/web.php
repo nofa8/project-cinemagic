@@ -51,7 +51,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/dashboard', function () {
         return redirect('movies/showcase');
     })->name('dashboard');
-    
+
 
     Route::delete('movies/{movie}/image', [MovieController::class, 'destroyImage'])
         ->name('movies.image.destroy')

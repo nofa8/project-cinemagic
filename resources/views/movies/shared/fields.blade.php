@@ -26,21 +26,17 @@
                             value="{{ old('year', $movie->year) }}"/>
                 <x-field.text-area name="synopsis" label="Synopsis" :readonly="$readonly"
                                 value="{{ old('synopsis', $movie->synopsis) }}"/>
-                @if($readonly)
-                <x-screenings.table :screenings="$movie->screenings"
-                                    :showView="true"
-                                    :showEdit="true"
-                                    :showDelete="true"
-                                    :showAdd="true"
-                />
-                @endif
+                <x-movies.trailer url="{{ $movie->trailer_url }}" show="{{ $readonly }}"/>
             </div>
         </div>
     </div>
     <br>
-    <div class="space-y-4">
-        <div class="space-y-4">
-            <x-movies.trailer url="{{ $movie->trailer_url }}" show="{{ $readonly }}"/>
-        </div>
-    </div>
+    @if($readonly)
+        <x-screenings.table :screenings="$movie->screenings"
+                            :showView="true"
+                            :showEdit="true"
+                            :showDelete="true"
+                            :showAdd="true"
+        />
+    @endif
 </div>
