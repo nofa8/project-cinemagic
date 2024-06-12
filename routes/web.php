@@ -45,18 +45,16 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-<<<<<<< HEAD
+
     Route::view('/home', 'home')->name('home');
 
-=======
+
     Route::get('/dashboard', function () {
         return redirect('movies/showcase');
     })->name('dashboard');
-<<<<<<< HEAD
+
     
-=======
->>>>>>> 11d1dec76e53235ed4555164f0d71a7e1d6cf3b4
->>>>>>> ae98e8db1a8782c787290e9be9658837db42bdff
+
     Route::delete('movies/{movie}/image', [MovieController::class, 'destroyImage'])
         ->name('movies.image.destroy')
         ->can('update', Movie::class);
