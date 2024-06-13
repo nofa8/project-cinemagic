@@ -22,8 +22,10 @@ class Theater extends Model
 
     public function getImageFullUrlAttribute()
     {
-        if ($this->poster_filename && Storage::exists("public/photos/{$this->photo_filename}")) {
+        //dd($this->photo_filename, Storage::exists("public/photos/{$this->photo_filename}"));
+        if ($this->photo_filename && Storage::exists("public/photos/{$this->photo_filename}")) {
             return asset("storage/photos/{$this->photo_filename}");
+
         } else {
             // To be changed eventually
             return asset("storage/posters/_no_poster_2.png");

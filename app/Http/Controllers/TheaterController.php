@@ -10,6 +10,7 @@ use Illuminate\Http\RedirectResponse;
 use App\Http\Requests\TheaterFormRequest;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Support\Facades\Storage;
+
 class TheaterController extends \Illuminate\Routing\Controller
 {
     use AuthorizesRequests;
@@ -22,7 +23,7 @@ class TheaterController extends \Illuminate\Routing\Controller
     public function index(): View
     {
         return view('theaters.index')
-            ->with('theaters', Theater::orderBy('name')->paginate(8)->withQueryString());
+            ->with('theaters', Theater::orderBy('name')->paginate(14)->withQueryString());
     }
 
     public function create(): View
@@ -35,8 +36,21 @@ class TheaterController extends \Illuminate\Routing\Controller
     public function store(TheaterFormRequest $request): RedirectResponse
     {
         $newTheater = Theater::create($request->validated());
+
+        if ($request->hasFile('photo_filename')) {
+            // Check if an existing photo exists and delete it
+            if ($newTheater->photo_filename && Storage::exists('public/photos/' . $newTheater->photo_filename)) {
+                Storage::delete('public/photos/' . $newTheater->photo_filename);
+            }
+
+            // Store the new photo
+            $path = $request->photo_filename->store('public/photos');
+            $newTheater->photo_filename = basename($path);
+            $newTheater->save();
+        }
+
         $url = route('theaters.show', ['theater' => $newTheater]);
-        $htmlMessage = "Theater <a href='$url'><u>{$newTheater->name}</u></a> ({$newTheater->abbreviation}) has been created successfully!";
+        $htmlMessage = "Theater <a href='$url'><u>{$newTheater->name}</u></a> has been created successfully!";
         return redirect()->route('theaters.index')
             ->with('alert-type', 'success')
             ->with('alert-msg', $htmlMessage);
@@ -50,23 +64,30 @@ class TheaterController extends \Illuminate\Routing\Controller
 
     public function update(TheaterFormRequest $request, Theater $theater): RedirectResponse
     {
+        // Validate and update the theater's data
         $theater->update($request->validated());
+
+        // Check if a new file is being uploaded
         if ($request->hasFile('photo_filename')) {
-            if ($theater->poster_filename &&
-                Storage::fileExists('public/photos/' . $theater->photo_filename)) {
+            // Check if an existing photo exists and delete it
+            if ($theater->photo_filename && Storage::exists('public/photos/' . $theater->photo_filename)) {
                 Storage::delete('public/photos/' . $theater->photo_filename);
             }
+
+            // Store the new photo
             $path = $request->photo_filename->store('public/photos');
             $theater->photo_filename = basename($path);
             $theater->save();
         }
-        //dd($theater);
+
+        // Redirect with a success message
         $url = route('theaters.show', ['theater' => $theater]);
         $htmlMessage = "Theater <a href='$url'><u>{$theater->name}</u></a> has been updated successfully!";
         return redirect()->route('theaters.index')
             ->with('alert-type', 'success')
             ->with('alert-msg', $htmlMessage);
     }
+
 
     public function destroy(Theater $theater): RedirectResponse
     {

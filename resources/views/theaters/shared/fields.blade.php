@@ -16,5 +16,5 @@
         :deleteAllow="($mode == 'edit') && ($theater->imageExists)"
         deleteForm="form_to_delete_image"
         :imageUrl="$theater->imageFullUrl"/>
-        @dd($theater->poster_filename)
+        
 </div>

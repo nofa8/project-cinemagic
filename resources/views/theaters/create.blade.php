@@ -16,7 +16,7 @@
                     </p>
                 </header>
 
-                <form method="POST" action="{{ route('theaters.store') }}">
+                <form method="POST" action="{{ route('theaters.store') }}" enctype="multipart/form-data">
                     @csrf
                     @include('theaters.shared.fields', ['mode' => 'create'])
                     <div class="flex mt-6">
