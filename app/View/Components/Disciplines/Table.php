@@ -12,7 +12,7 @@ class Table extends Component
      * Create a new component instance.
      */
     public function __construct(
-        public object $cart,
+        public array $cart,
         public bool $showCourse = true,
         public bool $showView = true,
         public bool $showEdit = true,
