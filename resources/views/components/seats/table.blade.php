@@ -25,7 +25,7 @@
                             <td class="border px-4 py-2 text-center">
                                 <label class="inline-flex items-center">
                                     @if($seats[$j] == 'disabled')
-                                    <input type="checkbox" name="seats[]" class="form-checkbox h-3 w-3 text-indigo-800/50" disabled>
+                                    <input type="checkbox" name="seats[]" class="form-checkbox h-3 w-3 text-indigo-800/50" disabled checked>
                                     @else
                                     <input type="checkbox" name="seats[]" value="{{ $seatMatrix[$row][$j]}}" class="form-checkbox h-5 w-5 text-indigo-600" >
                                     @endif
