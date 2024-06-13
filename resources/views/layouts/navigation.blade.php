@@ -101,7 +101,7 @@
 
                     <div class="grow"></div>
                     @php 
-                        $ls = (Auth::check()) ? session('cart', collect([]))->count() : count(json_decode(Cookie::get('cart'), true)) ?? 0;
+                        $ls = (Auth::check()) ? count(session()->get('cart') ?? []) : ( Cookie::get('cart') != null ? count(json_decode(Cookie::get('cart'), true) ?? []) : 0);
                     @endphp
                     <!-- Menu Item: Cart -->
                     <x-menus.cart
