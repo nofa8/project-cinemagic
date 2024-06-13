@@ -1,6 +1,6 @@
 <?php
 
-namespace App\View\Components\Disciplines;
+namespace App\View\Components\Tickets;
 
 use Closure;
 use Illuminate\Contracts\View\View;
@@ -12,7 +12,7 @@ class Table extends Component
      * Create a new component instance.
      */
     public function __construct(
-        public object $cart,
+        public array $cart,
         public bool $showCourse = true,
         public bool $showView = true,
         public bool $showEdit = true,
@@ -29,6 +29,6 @@ class Table extends Component
      */
     public function render(): View|Closure|string
     {
-        return view('components.disciplines.table');
+        return view('components.tickets.table');
     }
 }
