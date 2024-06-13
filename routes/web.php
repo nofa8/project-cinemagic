@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PDFController;
 use App\Http\Controllers\SeatController;
 use App\Http\Controllers\TicketController;
+use App\Models\Theater;
 
 /* ----- PUBLIC ROUTES ----- */
 
@@ -30,10 +31,24 @@ Route::get('movies/showcase', [MovieController::class, 'showCase'])
 Route::resource('movies', MovieController::class)->only(['show']);
 
 
+
+
 Route::delete('theater/{theater}/image', [TheaterController::class, 'destroyImage'])
         ->name('theaters.image.destroy')
         ->can('update', Movie::class);
+Route::get('theaters/deleted', [TheaterController::class, 'deleted'])
+    ->name('theaters.deleted');
+Route::patch('theaters/{theater}/save', [TheaterController::class, 'save'])
+    ->name('theaters.save')
+    ->can('update', Theater::class);
+
+Route::delete('theaters/{theater}/permanent-delete', [TheaterController::class, 'destruction'])
+    ->name('theaters.permanent-delete');
+    
 Route::resource('theaters', TheaterController::class);
+
+
+
 
 
 Route::get('tickets/{ticket}', [TicketController::class, 'show'])
