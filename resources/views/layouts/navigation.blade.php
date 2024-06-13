@@ -91,11 +91,11 @@
                                 selectable="0"
                                 href="{{ route('theaters.index') }}"/>
                             @endcan
-                            @can('viewAny', App\Models\Screening::class)
+                            
                             <x-menus.submenu-item
-                                content="Course Management"
-                                href="{{ route('screening.index') }}"/>
-                            @endcan
+                                content="Screenings"
+                                href="{{ route('screenings.index') }}"/>
+                            
                     </x-menus.submenu>
                     @endif
 
