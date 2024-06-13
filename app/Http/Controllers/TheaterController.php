@@ -114,7 +114,7 @@ class TheaterController extends \Illuminate\Routing\Controller
                             <a href='$url'><u>{$theater->name}</u></a> ({$theater->abbreviation})
                             because there was an error with the operation!";
         }
-        return redirect()->route('Theaters.index')
+        return redirect()->route('theaters.index')
             ->with('alert-type', $alertType)
             ->with('alert-msg', $alertMsg);
     }
