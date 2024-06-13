@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\Collection;
 class Table extends Component
 {
     public $table = [];
-
+    public $seatMatrix = [];
     private function getTable(Collection $seats, Collection $tickets)
     {
         
@@ -41,7 +41,10 @@ class Table extends Component
         }
 
 
-        return $table;
+        return [
+            "table"=>$table,
+            "matrix"=>$seatMatrix
+        ];
     }
 
 
@@ -50,7 +53,9 @@ class Table extends Component
         public Collection $tickets
     )
     {
-        $this->table = $this->getTable($seats, $tickets);
+        $data = $this->getTable($seats, $tickets);
+        $this->table = $data['table'];
+        $this->seatMatrix = $data['matrix'];
     }
 
     /**

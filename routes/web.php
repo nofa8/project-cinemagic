@@ -29,6 +29,10 @@ Route::get('movies/showcase', [MovieController::class, 'showCase'])
 
 Route::resource('movies', MovieController::class)->only(['show']);
 
+Route::get('tickets/{ticket}', [TicketController::class, 'show'])
+    ->name('tickets.show');
+Route::resource('tickets/{ticket}', TicketController::class);
+
 
 Route::get('movies/{movie}/screenings', [MovieController::class, 'showScreenings'])
     ->name('movies.screenings');

@@ -75,8 +75,7 @@ class TicketController extends Controller
      */
     public function show(Ticket $ticket): View
     {
-        return view('tickets.show')
-            ->with('ticket', $ticket);
+        return view('tickets.show', compact('ticket'));
     }
 
     public function save(Request $request)
