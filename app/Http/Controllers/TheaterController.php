@@ -100,6 +100,7 @@ class TheaterController extends \Illuminate\Routing\Controller
                 ->with('alert-type', 'error')
                 ->with('alert-msg', $htmlMessage);
         }
+<<<<<<< HEAD
 
         // Delete the associated photo if it exists
         // if ($theater->photo_filename && Storage::exists('public/photos/' . $theater->photo_filename)) {
@@ -114,6 +115,11 @@ class TheaterController extends \Illuminate\Routing\Controller
         return redirect()->route('theaters.index')
             ->with('alert-type', 'success')
             ->with('alert-msg', $htmlMessage);
+=======
+        return redirect()->route('theaters.index')
+            ->with('alert-type', $alertType)
+            ->with('alert-msg', $alertMsg);
+>>>>>>> 2d2b479c66da3c2271ecefa90e898ec3b334e0f2
     }
 
     public function deleted(){

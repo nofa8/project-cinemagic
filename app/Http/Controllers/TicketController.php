@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Ticket;
+use App\Models\Screening;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 use Illuminate\Http\RedirectResponse;
@@ -144,5 +145,38 @@ class TicketController extends Controller
         return redirect()->route('tickets.index')
             ->with('alert-type', $alertType)
             ->with('alert-msg', $alertMsg);
+    }
+
+    public function verify(Request $request, $screeningId)
+    {
+        $request->validate([
+            'ticket_id' => 'nullable|string',
+            'ticket_url' => 'nullable|url',
+            'ticket_type' => 'required|in:id,url',
+        ]);
+
+        $screening = Screening::findOrFail($screeningId);
+
+        if ($request->ticket_type == 'id') {
+            $ticketId = $request->ticket_id;
+            // Validate the ticket ID
+            $ticket = Ticket::where('id', $ticketId)->where('screening_id', $screening->id)->first();
+            if ($ticket) {
+                return back()->with('success', 'Ticket ID is valid for this screening.');
+            } else {
+                return back()->withErrors(['ticket_id' => 'Invalid Ticket ID for this screening.']);
+            }
+        } elseif ($request->ticket_type == 'url') {
+            $ticketUrl = $request->ticket_url;
+            // Validate the ticket URL
+            $ticket = Ticket::where('url', $ticketUrl)->where('screening_id', $screening->id)->first();
+            if ($ticket) {
+                return back()->with('success', 'Ticket URL is valid for this screening.');
+            } else {
+                return back()->withErrors(['ticket_url' => 'Invalid Ticket URL for this screening.']);
+            }
+        }
+
+        return back()->withErrors(['general' => 'An unexpected error occurred.']);
     }
 }

@@ -32,11 +32,7 @@
             
         </div>
 
-        <!-- Synopsis -->
-        
-
-
-        <!-- Next Screenings -->
+    
         
     </div>
 </div>
