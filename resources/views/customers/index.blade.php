@@ -9,7 +9,8 @@
             <x-button href="{{ route('customers.create') }}" text="Create a new Customer" type="success" />
         </div>
     @endcan --}}
-
+    <x-customers.filter-card :filterAction="route('customers.index')" :resetUrl="route('customers.index')"
+        :name="old('name', $filterByName)" class="mb-6" />
     <div class="grid grid-cols-1 gap-5">
         @each('customers.shared.cards', $customers, 'customers')
     </div>

@@ -57,7 +57,7 @@ class User extends Authenticatable
             return asset("storage/photos/{$this->photo_filename}");
         } else {
             // To be changed eventually
-            return asset("storage/photos/anonymous.png");
+            return asset("storage/photos/default.png");
         }
     }
 
