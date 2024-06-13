@@ -102,15 +102,13 @@
                     <div class="grow"></div>
 
                     <!-- Menu Item: Cart -->
-                    @if (session('cart'))
-                        @can('use-cart')
-                        <x-menus.cart
-                            :href="route('cart.show')"
-                            selectable="1"
-                            selected="{{ Route::currentRouteName() == 'cart.show'}}"
-                            :total="session('cart')->count()"/>
-                        @endcan
-                    @endif
+                    
+                    <x-menus.cart
+                        :href="route('cart.show')"
+                        selectable="1"
+                        selected="{{ Route::currentRouteName() == 'cart.show'}}"
+                        :total="session('cart')->count()"/>
+                    
 
                     @auth
                     <x-menus.submenu
