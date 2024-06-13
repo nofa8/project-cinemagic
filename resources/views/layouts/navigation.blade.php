@@ -100,25 +100,18 @@
                     @endif
 
                     <div class="grow"></div>
-
-                    <!-- Menu Item: Cart -->
-                    @php
-                    function getCartTotal() {
-                        if (Auth::check()) {
-                            return session('cart')->count();
-                        } else {
-                            $cartData = json_decode(Cookie::get('cart'), true);
-                            return ($cartData) ? count($cartData) : 0;
-                        }
-                    }
+                    @php 
+                        $ls = (Auth::check()) ? session('cart', collect([]))->count() : count(json_decode(Cookie::get('cart'), true)) ?? 0;
                     @endphp
+                    <!-- Menu Item: Cart -->
                     <x-menus.cart
-                        :href="route('cart.show')"
-                        selectable="1"
-                        selected="{{ Route::currentRouteName() == 'cart.show'}}"
-                        :total="getCartTotal()"/>
+                    :href="route('cart.show')"
+                    selectable=1
+                    selected="{{Route::currentRouteName() == 'cart.show'}}"
+                    :total="$ls"
+                    /> 
                     
-
+                    
                     @auth
                     <x-menus.submenu
                         selectable="0"

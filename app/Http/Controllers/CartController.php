@@ -49,6 +49,7 @@ class CartController extends Controller
             ];
 
             $cart[] = $cartItem;
+            $request->session()->put('cart', $cart);
             $addedSeats[] = $seatId;
         }
 
