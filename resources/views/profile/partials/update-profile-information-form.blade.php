@@ -35,27 +35,10 @@
         <div>
             <x-input-label for="payment_type" :value="__('Payment Type')" />
             <x-select-input id="payment_type" name="payment_type" class="mt-1 block w-full" required autofocus="name">
-                @if(old('payment_type', $user->customer?->payment_type) == 'PAYPAL')
-                    <option value="option1">PayPal</option>
-                    <option value="option2">MBWay</option>
-                    <option value="option3">Visa</option>
-                @endif
-                @if(old('payment_type', $user->customer?->payment_type) == 'VISA')
-                    <option value="option1">Visa</option>
-                    <option value="option2">MBWay</option>
-                    <option value="option3">PayPal</option>
-                @endif
-                @if(old('payment_type', $user->customer?->payment_type) == 'MBWAY')
-                    <option value="option1">MBWay</option>
-                    <option value="option2">Visa</option>
-                    <option value="option3">PayPal</option>
-                @endif
-                @if(old('payment_type', $user->customer?->payment_type) == null)
-                    <option value="option1">Choose one</option>
-                    <option value="option2">MBWay</option>
-                    <option value="option3">Visa</option>
-                    <option value="option4">PayPal</option>
-                @endif
+                <option value="" disabled {{ old('payment_type', $user->customer?->payment_type) ? '' : 'selected' }}>Choose one</option>
+                <option value="PAYPAL" {{ old('payment_type', $user->customer?->payment_type) == 'PAYPAL' ? 'selected' : '' }}>PayPal</option>
+                <option value="MBWAY" {{ old('payment_type', $user->customer?->payment_type) == 'MBWAY' ? 'selected' : '' }}>MBWay</option>
+                <option value="VISA" {{ old('payment_type', $user->customer?->payment_type) == 'VISA' ? 'selected' : '' }}>Visa</option>
             </x-select-input>
             <x-input-error class="mt-2" :messages="$errors->get('payment_type')" />
         </div>

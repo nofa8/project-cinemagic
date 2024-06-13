@@ -19,8 +19,7 @@
         deleteTitle="Delete Photo"
         :deleteAllow="true"
         deleteForm="form_to_delete_photo"
-        imageUrl="{{ $user->getPhotoFullUrlAttribute() }}"
+        imageUrl="{{ Auth::user()?->photo_filename ? Auth::user()->photoFullUrl : Vite::asset('resources/img/photos/default.png')}}"
         imgClass="rounded-full"
     />
 </div>
-    
