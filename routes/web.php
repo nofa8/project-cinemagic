@@ -33,18 +33,16 @@ Route::resource('movies', MovieController::class)->only(['show']);
 
 
 
-Route::delete('theater/{theater}/image', [TheaterController::class, 'destroyImage'])
-        ->name('theaters.image.destroy')
-        ->can('update', Movie::class);
+
 Route::get('theaters/deleted', [TheaterController::class, 'deleted'])
     ->name('theaters.deleted');
-Route::patch('theaters/{theater}/save', [TheaterController::class, 'save'])
-    ->name('theaters.save')
-    ->can('update', Theater::class);
-
-Route::delete('theaters/{theater}/permanent-delete', [TheaterController::class, 'destruction'])
-    ->name('theaters.permanent-delete');
-    
+Route::patch('theaters/deleted/{theater}/save', [TheaterController::class, 'saveD'])
+    ->name('theaters.save')->withTrashed();
+Route::delete('theaters/{theater}/permanent-delete', [TheaterController::class, 'destructionD'])
+    ->name('theaters.permanent-delete')->withTrashed();
+Route::delete('theater/{theater}/image', [TheaterController::class, 'destroyImage'])
+    ->name('theaters.image.destroy')
+    ->can('update', Movie::class);
 Route::resource('theaters', TheaterController::class);
 
 
@@ -79,7 +77,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     Route::patch('/profile/image', [ProfileController::class, 'updateImage'])->name('profile.update.image');
 
-    Route::view('/home', 'home')->name('home');
 
     Route::get('/dashboard', function () {
         return redirect('movies/showcase');

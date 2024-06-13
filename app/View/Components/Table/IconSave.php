@@ -15,6 +15,6 @@ class IconSave extends Component
 
     public function render()
     {
-        return view('components.icon-save');
+        return view('components.table.icon-save');
     }
 }

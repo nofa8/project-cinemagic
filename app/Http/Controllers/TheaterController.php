@@ -9,6 +9,7 @@ use Illuminate\View\View;
 use Illuminate\Http\RedirectResponse;
 use App\Http\Requests\TheaterFormRequest;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
 class TheaterController extends \Illuminate\Routing\Controller
@@ -100,7 +101,6 @@ class TheaterController extends \Illuminate\Routing\Controller
                 ->with('alert-type', 'error')
                 ->with('alert-msg', $htmlMessage);
         }
-<<<<<<< HEAD
 
         // Delete the associated photo if it exists
         // if ($theater->photo_filename && Storage::exists('public/photos/' . $theater->photo_filename)) {
@@ -115,11 +115,6 @@ class TheaterController extends \Illuminate\Routing\Controller
         return redirect()->route('theaters.index')
             ->with('alert-type', 'success')
             ->with('alert-msg', $htmlMessage);
-=======
-        return redirect()->route('theaters.index')
-            ->with('alert-type', $alertType)
-            ->with('alert-msg', $alertMsg);
->>>>>>> 2d2b479c66da3c2271ecefa90e898ec3b334e0f2
     }
 
     public function deleted(){
@@ -127,7 +122,8 @@ class TheaterController extends \Illuminate\Routing\Controller
         return view('theaters.deleted')->with('theaters', $theaters);
     }
 
-    public function save(Theater $theater): RedirectResponse{
+    public function saveD(Theater $theater): RedirectResponse{
+        Log::info('Reached save method');
         dump($theater);
         if (!$theater->trashed()){
             return view('theaters.deleted');    
@@ -136,9 +132,9 @@ class TheaterController extends \Illuminate\Routing\Controller
         return redirect()->back()->with('alert-type', 'success')
         ->with('alert-msg', "Theater \"{$theater->name}\" has been restored.");;
     }
-
-    public function destruction(Theater $theater): RedirectResponse{
-        if ($theater->trashed()){
+ 
+    public function destructionD (Theater $theater): RedirectResponse{
+        if (!$theater->trashed()){
             return redirect()->route('theaters.index')
                 ->with('alert-type', 'error')
                 ->with('alert-msg', "Theater \"{$theater->name}\" is not in the deleted list.");
@@ -148,7 +144,6 @@ class TheaterController extends \Illuminate\Routing\Controller
         }
         $name = $theater->name;
         $theater->forceDelete();
-        dd($theater);
         return redirect()->route('theaters.deleted')
             ->with('alert-type', 'success')
             ->with('alert-msg', "Theater \"{$name}\" has been permanently deleted.");

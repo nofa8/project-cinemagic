@@ -11,7 +11,7 @@
                     <a href="{{ route('home')}}">
                         <div class="h-16 w-40 bg-cover bg-[url('../img/politecnico_h.svg')] dark:bg-[url('../img/politecnico_h_white.svg')]"></div>
                     </a>
-                </div>
+                </div> 
 
                 <!-- Menu Items -->
                 <div id="menu-container" class="grow flex flex-col sm:flex-row items-stretch
