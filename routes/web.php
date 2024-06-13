@@ -29,6 +29,13 @@ Route::get('movies/showcase', [MovieController::class, 'showCase'])
 
 Route::resource('movies', MovieController::class)->only(['show']);
 
+
+Route::delete('theater/{theater}/image', [TheaterController::class, 'destroyImage'])
+        ->name('theaters.image.destroy')
+        ->can('update', Movie::class);
+Route::resource('theaters', TheaterController::class);
+
+
 Route::get('tickets/{ticket}', [TicketController::class, 'show'])
     ->name('tickets.show');
 Route::resource('tickets', TicketController::class);
@@ -76,7 +83,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource('genres', GenreController::class);
     Route::resource('movies', MovieController::class)->except(['show']);
 
-    Route::resource('theaters', TheaterController::class);
 
     Route::get('screenings/my', [ScreeningController::class, 'myScreenings'])
         ->name('screenings.my')

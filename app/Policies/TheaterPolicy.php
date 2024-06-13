@@ -4,6 +4,7 @@ namespace App\Policies;
 
 use App\Models\User;
 use App\Models\Theater;
+use SebastianBergmann\Type\TrueType;
 
 class TheaterPolicy
 {
@@ -29,16 +30,16 @@ class TheaterPolicy
 
     public function create(User $user): bool
     {
-        return false;
+        return true;
     }
 
     public function update(User $user, Theater $theater): bool
     {
-        return false;
+        return true;
     }
 
     public function delete(User $user, Theater $theater): bool
     {
-        return false;
+        return true;
     }
 }

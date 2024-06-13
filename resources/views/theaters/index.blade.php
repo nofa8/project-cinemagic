@@ -10,7 +10,7 @@
                 <div class="flex items-center gap-4 mb-4">
                     <x-button
                         href="{{ route('theaters.create') }}"
-                        text="Create a new department"
+                        text="Create a new theater"
                         type="success"/>
                 </div>
             @endcan
