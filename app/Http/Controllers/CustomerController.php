@@ -17,7 +17,7 @@ class CustomerController extends Controller
     use AuthorizesRequests;
     public function __construct()
     {
-        $this->authorizeResource(Customer::class);
+        //$this->authorizeResource(Customer::class);
     }
 
     public function index(Request $request): View
@@ -33,7 +33,7 @@ class CustomerController extends Controller
                 ->where('users.type', 'C')
                 ->where('users.name', 'like', "%$filterByName%");
         }
-        
+
 
         $customers = $customersQuery
             ->with('user')
@@ -83,7 +83,7 @@ class CustomerController extends Controller
             $newCustomer->user_id = $newUser->id;
             $newCustomer->nif = $validatedData['nif'];
             $newCustomer->save();
-            
+
             if ($request->hasFile('photo_filename')) {
                 $path = $request->photo_file->store('public/photos');
                 $newUser->photo_filename = basename($path);
