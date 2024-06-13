@@ -12,6 +12,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\DB;
 use App\Models\Movie;
 use App\Models\Theater;
+
 class ScreeningController extends Controller
 {
     use AuthorizesRequests;
@@ -24,9 +25,20 @@ class ScreeningController extends Controller
 
     public function index(): View
     {
-        $allScreens = Screening::orderBy('movie_id')->orderBy('theater_id')->paginate(20)->withQueryString();
+        $allScreens = Screening::where('date', '>=', now()->startOfDay())
+            ->where('date', '<=', now()->addDays(14)->endOfDay())
+            ->where(function ($query) {
+                $query->where('date', '>', now()->startOfDay())
+                    ->orWhere(function ($query) {
+                        $query->where('date', '=', now()->startOfDay())
+                            ->where('start_time', '>', now()->format('H:i:s'));
+                    });
+            })
+            ->orderBy('date', 'asc')
+            ->paginate(20)
+            ->withQueryString();
 
-        return view('screenings.index')->with('allScreens', $allScreens);
+        return view('screenings.index')->with('screenings', $allScreens);
     }
     public function show(Screening $screening): View
     {
@@ -58,7 +70,7 @@ class ScreeningController extends Controller
     public function edit(Screening $screening): View
     {
         $movies = Movie::orderBy('title')->pluck('title', 'id')->toArray();
-        $theaters = Theater::pluck('name', 'id')->toArray(); 
+        $theaters = Theater::pluck('name', 'id')->toArray();
 
         return view('screenings.edit')->with('movies', $movies)->with('theaters', $theaters);
     }
@@ -75,7 +87,7 @@ class ScreeningController extends Controller
     }
 
 
-    
+
 
     public function destroy(Screening $screening): RedirectResponse
     {

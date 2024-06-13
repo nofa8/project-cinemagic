@@ -16,13 +16,13 @@ class ProfileUpdateRequest extends FormRequest
     public function rules(): array
     {
         $rules = [
-            'name' => ['required', 'string', 'max:255'],
-            'nif' => ['required', 'integer', 'digits:9'],
-            'payment_type' => ['required', Rule::in(['MBWAY', 'PAYPAL', 'VISA'])],
-            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', Rule::unique(User::class)->ignore($this->user()->id)],
+            'name' => ['sometimes', 'string', 'max:255'],
+            'nif' => ['sometimes', 'integer', 'digits:9'],
+            'payment_type' => ['sometimes', Rule::in(['MBWAY', 'PAYPAL', 'VISA'])],
+            'email' => ['sometimes', 'string', 'lowercase', 'email', 'max:255', Rule::unique(User::class)->ignore($this->user()->id)],
         ];
 
-        $rules['payment_ref'] = ['required'];
+        $rules['payment_ref'] = ['sometimes'];
         $paymentType = $this->input('payment_type');
 
         if ($paymentType === 'PAYPAL') {
