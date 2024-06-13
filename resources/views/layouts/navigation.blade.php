@@ -1,8 +1,11 @@
-<nav x-data="{ open: false }" class="bg-white dark:bg-gray-900 border-b border-gray-100 dark:border-gray-700">
-    <!-- Primary Navigation Menu -->
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex justify-between h-16">
-            <div class="flex">
+<div class="min-h-screen bg-gray-100 dark:bg-gray-800">
+
+    <!-- Navigation Menu -->
+    <nav class="bg-white dark:bg-gray-900 border-b border-gray-100 dark:border-gray-800">
+        <!-- Navigation Menu Full Container -->
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+            <!-- Logo + Menu Items + Hamburger -->
+            <div class="relative flex flex-col sm:flex-row px-6 sm:px-0 grow justify-between">
                 <!-- Logo -->
                 <div class="shrink-0 -ms-4">
                     <a href="{{ route('home')}}">
@@ -10,91 +13,190 @@
                     </a>
                 </div>
 
-                <!-- Navigation Links -->
-                {{-- <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link :href="route('home')" :active="request()->routeIs('home')">
-                        {{ __('Home') }}
-                    </x-nav-link>
-                </div> --}}
-            </div>
+                <!-- Menu Items -->
+                <div id="menu-container" class="grow flex flex-col sm:flex-row items-stretch
+                invisible h-0 sm:visible sm:h-auto">
+                    <!-- Menu Item: Movies -->
+                    @can('viewShowcase', App\Models\Movie::class)
+                        <x-menus.menu-item
+                            content="Movies"
+                            href="{{ route('movies.showcase') }}"
+                            selected="{{ Route::currentRouteName() == 'movies.showcase'}}"
+                        />
+                    @endcan
 
-            <!-- Settings Dropdown -->
-            <div class="hidden sm:flex sm:items-center sm:ms-6">
-                <x-dropdown align="right" width="48">
-                    <x-slot name="trigger">
-                        <button class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 dark:text-gray-400 bg-white dark:bg-gray-900 hover:text-gray-700 dark:hover:text-gray-300 focus:outline-none transition ease-in-out duration-150">
-                            <div>{{ Auth::user()->name }}</div>
+                    <!-- Menu Item: Curricula -->
+                    @can('viewGenres', App\Models\Genre::class)
+                        <x-menus.submenu-full-width
+                            content="Genres"
+                            selectable="1"
+                            selected="0"
+                            uniqueName="submenu_theaters">
+                            @foreach ($genre as $genre)
+                                <x-menus.submenu-item
+                                :content="$genre->name"
+                                selectable="1"
+                                selected="0"
+                                href="{{ route('genre.curriculum', ['genre' => $genre]) }}"/>
+                            @endforeach
+                        </x-menus.submenu-full-width>
+                    @endcan
+                    <!-- Menu Item: Screenings -->
+                    @can('viewScreenings', App\Models\Screening::class)
+                    <x-menus.menu-item
+                        content="Screenings"
+                        selectable="1"
+                        href="{{ route('screenings.index') }}"
+                        selected="{{ Route::currentRouteName() == 'screenings.index'}}"
+                        />
+                    @endcan
 
-                            <div class="ms-1">
-                                <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                                    <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
-                                </svg>
+                    <!-- Menu Item: Customers -->
+                    @can('viewAny', App\Models\Customer::class)
+                        <x-menus.menu-item
+                            content="Customers"
+                            selectable="1"
+                            href="{{ route('customers.index') }}"
+                            selected="{{ Route::currentRouteName() == 'customers.index'}}"
+                            />
+                    @endcan
+
+                    @if(
+                        Gate::check('viewAny', App\Models\Customer::class) ||
+                        Gate::check('viewAny', App\Models\User::class) ||
+                        Gate::check('viewAny', App\Models\Theater::class) ||
+                        Gate::check('viewAny', App\Models\Screening::class)
+                        )
+                    <!-- Menu Item: Others -->
+                    <x-menus.submenu
+                        selectable="0"
+                        uniqueName="submenu_others"
+                        content="More">
+                            @can('viewAny', App\Models\Customer::class)
+                            <x-menus.submenu-item
+                                content="Customer"
+                                selectable="0"
+                                href="{{ route('customers.index') }}" />
+                            @endcan
+                            @can('viewAny', App\Models\User::class)
+                            <x-menus.submenu-item
+                                content="Administratives"
+                                selectable="0"
+                                href="{{ route('administratives.index') }}" />
+                            @endcan
+                            <hr>
+                            @can('viewAny', App\Models\Theater::class)
+                            <x-menus.submenu-item
+                                content="Theaters"
+                                selectable="0"
+                                href="{{ route('theaters.index') }}"/>
+                            @endcan
+                            @can('viewAny', App\Models\Screening::class)
+                            <x-menus.submenu-item
+                                content="Course Management"
+                                href="{{ route('screening.index') }}"/>
+                            @endcan
+                    </x-menus.submenu>
+                    @endif
+
+                    <div class="grow"></div>
+
+                    <!-- Menu Item: Cart -->
+                    @if (session('cart'))
+                        @can('use-cart')
+                        <x-menus.cart
+                            :href="route('cart.show')"
+                            selectable="1"
+                            selected="{{ Route::currentRouteName() == 'cart.show'}}"
+                            :total="session('cart')->count()"/>
+                        @endcan
+                    @endif
+
+                    @auth
+                    <x-menus.submenu
+                        selectable="0"
+                        uniqueName="submenu_user"
+                        >
+                        <x-slot:content>
+                            <div class="pe-1">
+
+                                <img src="{{ Auth::user()?->photo_filename ? Auth::user()->photoFullUrl : Vite::asset('resources/img/photos/default.png')}}" class="w-11 h-11 min-w-11 min-h-11 rounded-full">
+                                {{-- <img src="{{ Auth::user()->photoFullUrl}}" class="w-11 h-11 min-w-11 min-h-11 rounded-full"> --}}
                             </div>
-                        </button>
-                    </x-slot>
+                            {{-- ATENÇÃO - ALTERAR FORMULA DE CALCULO DAS LARGURAS MÁXIMAS QUANDO O MENU FOR ALTERADO --}}
+                            <div class="ps-1 sm:max-w-[calc(100vw-39rem)] md:max-w-[calc(100vw-41rem)] lg:max-w-[calc(100vw-46rem)] xl:max-w-[34rem] truncate">
+                                {{ Auth::user()->name }}
+                            </div>
+                        </x-slot>
 
-                    <x-slot name="content">
-                        <x-dropdown-link :href="route('profile.edit')">
-                            {{ __('Profile') }}
-                        </x-dropdown-link>
-
-                        <!-- Authentication -->
-                        <form method="POST" action="{{ route('logout') }}">
+                        {{-- @can('viewMy', App\Models\Discipline::class)
+                        <x-menus.submenu-item
+                            content="My Disciplines"
+                            selectable="0"
+                            href="{{ route('disciplines.my') }}"/>
+                        @endcan
+                        @can('viewMy', App\Models\Teacher::class)
+                        <x-menus.submenu-item
+                            content="My Teachers"
+                            selectable="0"
+                            href="{{ route('teachers.my') }}"/>
+                        @endcan
+                        @can('viewMy', App\Models\Student::class)
+                            <x-menus.submenu-item
+                                content="My Students"
+                                selectable="0"
+                                href="{{ route('students.my') }}"/>
+                            <hr>
+                        @endcan --}}
+                        @auth
+                        <hr>
+                        {{-- <x-menus.submenu-item
+                            content="Profile"
+                            selectable="0"
+                            :href="match(Auth::user()->type) {
+                                'A' => route('administratives.edit', ['administrative' => Auth::user()]),
+                                default => route('customers.edit', ['customer' => Auth::user()->customer]),
+                            }"/> --}}
+                        <x-menus.submenu-item
+                            content="Profile"
+                            selectable="0"
+                            href="{{ route('profile.edit') }}"/>
+                        <x-menus.submenu-item
+                            content="Change Password"
+                            selectable="0"
+                            href="{{ route('profile.edit.password') }}"/>
+                        @endauth
+                        <hr>
+                        <form id="form_to_logout_from_menu" method="POST" action="{{ route('logout') }}" class="hidden">
                             @csrf
-
-                            <x-dropdown-link :href="route('logout')"
-                                    onclick="event.preventDefault();
-                                                this.closest('form').submit();">
-                                {{ __('Log Out') }}
-                            </x-dropdown-link>
                         </form>
-                    </x-slot>
-                </x-dropdown>
-            </div>
+                        <x-menus.submenu-item
+                            content="Log Out"
+                            selectable="0"
+                            form="form_to_logout_from_menu"/>
+                    </x-menus.submenu>
+                    @else
 
-            <!-- Hamburger -->
-            <div class="-me-2 flex items-center sm:hidden">
-                <button @click="open = ! open" class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 dark:text-gray-500 hover:text-gray-500 dark:hover:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-900 focus:outline-none focus:bg-gray-100 dark:focus:bg-gray-900 focus:text-gray-500 dark:focus:text-gray-400 transition duration-150 ease-in-out">
-                    <svg class="h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
-                        <path :class="{'hidden': open, 'inline-flex': ! open }" class="inline-flex" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-                        <path :class="{'hidden': ! open, 'inline-flex': open }" class="hidden" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                    </svg>
-                </button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Responsive Navigation Menu -->
-    <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden">
-        <div class="pt-2 pb-3 space-y-1">
-            <x-responsive-nav-link :href="route('home')" :active="request()->routeIs('home')">
-                {{ __('Home') }}
-            </x-responsive-nav-link>
-        </div>
-
-        <!-- Responsive Settings Options -->
-        <div class="pt-4 pb-1 border-t border-gray-200 dark:border-gray-600">
-            <div class="px-4">
-                <div class="font-medium text-base text-gray-800 dark:text-gray-200">{{ Auth::user()->name }}</div>
-                <div class="font-medium text-sm text-gray-500">{{ Auth::user()->email }}</div>
-            </div>
-
-            <div class="mt-3 space-y-1">
-                <x-responsive-nav-link :href="route('profile.edit')">
-                    {{ __('Profile') }}
-                </x-responsive-nav-link>
-
-                <!-- Authentication -->
-                <form method="POST" action="{{ route('logout') }}">
-                    @csrf
-
-                    <x-responsive-nav-link :href="route('logout')"
-                            onclick="event.preventDefault();
-                                        this.closest('form').submit();">
-                        {{ __('Log Out') }}
-                    </x-responsive-nav-link>
-                </form>
+                    <!-- Menu Item: Login -->
+                    <x-menus.menu-item
+                        content="Login"
+                        selectable="1"
+                        href="{{ route('login') }}"
+                        selected="{{ Route::currentRouteName() == 'login'}}"
+                        />
+                    @endauth
+                </div>
+                <!-- Hamburger -->
+                <div class="absolute right-0 top-0 flex sm:hidden pt-3 pe-3 text-black dark:text-gray-50">
+                    <button id="hamburger_btn">
+                        <svg class="h-8 w-8" stroke="currentColor" fill="none" viewBox="0 0 24 24">
+                            <path id="hamburger_btn_open" stroke-linecap="round" stroke-linejoin="round"
+                            stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                            <path class="invisible" id="hamburger_btn_close" stroke-linecap="round"
+                            stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                    </button>
+                </div>
             </div>
         </div>
-    </div>
-</nav>
+    </nav>
