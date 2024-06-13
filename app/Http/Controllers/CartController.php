@@ -8,6 +8,8 @@ use Illuminate\Http\Request;
 use App\Models\Ticket;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cookie;
 
 class CartController extends Controller
 {
@@ -20,27 +22,30 @@ class CartController extends Controller
         // Validate seat IDs (optional)
         // You can add validation here to ensure valid seat IDs are provided
 
-        $cart = session('cart', collect([]));
+        $cart = (Auth::check()) ? session('cart', collect([])) : json_decode(Cookie::get('cart'), true) ?? [];
 
-        $addedSeats = []; // Array to store successfully added seat IDs
-        $failedSeats = []; // Array to store failed seat IDs (optional for error messages)
+        $addedSeats = []; 
+        $failedSeats = [];
 
         foreach ($seatIds as $seatId) {
-            // Check if screening and seat combination already exists in the cart
-            $cartItem = $cart->where(function ($item) use ($screeningId, $seatId) {
-                return $item['screening_id'] == $screeningId && $item['seat_id'] == $seatId;
-            })->first();
-
-            if ($cartItem) {
-                $failedSeats[] = $seatId; // Add failed seat ID (optional)
-                continue; // Skip to the next seat ID
+            $cartItem = null;
+            if (Auth::check()) {
+                $cartItem = $cart->where(function ($item) use ($screeningId, $seatId) {
+                    return $item['screening_id'] == $screeningId && $item['seat_id'] == $seatId;
+                })->first();
+            } else {
+                $cartItem = array_filter($cart, function ($item) use ($screeningId, $seatId) {
+                    return $item['screening_id'] == $screeningId && $item['seat_id'] == $seatId;
+                });
+                $cartItem = reset($cartItem) ?? null;
             }
-
-            // Create a new cart item with screening and seat information
+            if ($cartItem) {
+                $failedSeats[] = $seatId; 
+                continue; 
+            }
             $cartItem = [
                 'screening_id' => $screeningId,
                 'seat_id' => $seatId,
-                // You can add additional information like screening details or seat price here
             ];
 
             $cart[] = $cartItem;
@@ -60,6 +65,11 @@ class CartController extends Controller
 
         $alertType = (count($failedSeats) > 0) ? 'warning' : 'success';
         $htmlMessage = $successMessage . $errorMessage; // Combine success and error messages
+
+        if (!Auth::check()) {
+            $cookie = Cookie::make('cart', json_encode($cart), time() + 3600 * 24); // Expires in 24 hours
+            Cookie::queue($cookie);
+        }
 
         return back()->with('alert-msg', $htmlMessage)->with('alert-type', $alertType);
     }

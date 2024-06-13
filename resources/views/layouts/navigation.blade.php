@@ -102,12 +102,21 @@
                     <div class="grow"></div>
 
                     <!-- Menu Item: Cart -->
-                    
+                    @php
+                    function getCartTotal() {
+                        if (Auth::check()) {
+                            return session('cart')->count();
+                        } else {
+                            $cartData = json_decode(Cookie::get('cart'), true);
+                            return ($cartData) ? count($cartData) : 0;
+                        }
+                    }
+                    @endphp
                     <x-menus.cart
                         :href="route('cart.show')"
                         selectable="1"
                         selected="{{ Route::currentRouteName() == 'cart.show'}}"
-                        :total="session('cart')->count()"/>
+                        :total="getCartTotal()"/>
                     
 
                     @auth
