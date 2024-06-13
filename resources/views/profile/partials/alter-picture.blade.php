@@ -11,20 +11,20 @@
         </p>
     </header>
 
-    <form method="post" action="{{ route('profile.update') }}" class="mt-6 space-y-6">
+    <form method="post" action="{{ route('profile.update.image') }}" class="mt-6 space-y-6" enctype="multipart/form-data">
         @csrf
         @method('patch')
 
         <div class="mt-6">
             <x-field.image
-                name="photo_file"
+                name="photo_filename"
                 label="Photo"
                 width="md"
                 :readonly="$readonly"
                 deleteTitle="Delete Photo"
                 :deleteAllow="true"
                 deleteForm="form_to_delete_photo"
-                imageUrl="{{ Auth::user()?->photo_filename ? Auth::user()->photoFullUrl : Vite::asset('resources/img/photos/default.png')}}"
+                imageUrl="{{ Auth::user()?->photoFullUrl ? Auth::user()->photoFullUrl : Vite::asset('resources/img/photos/default.png')}}"
                 imgClass="rounded-full"
             />
         </div>

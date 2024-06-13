@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
+use Illuminate\Support\Facades\Storage;
 
 class ProfileController extends Controller
 {
@@ -42,6 +43,25 @@ class ProfileController extends Controller
         $request->user()->save();
 
         return Redirect::route('profile.edit')->with('status', 'profile-updated');
+    }
+
+    public function updateImage(ProfileUpdateRequest $request): RedirectResponse
+    {
+
+        if (empty($request->photo_filename)){
+            return Redirect::route('profile.edit');
+        }
+        if ($request->user()->photo_filename &&
+            Storage::fileExists('public/photos/' . $request->user()->photo_filename)) {
+            Storage::delete('public/photos/' . $request->user()->photo_filename);
+        }
+        $path = $request->photo_filename->store('public/photos');
+        $request->user()->photo_filename = basename($path);
+        $request->user()->save();
+
+
+        return Redirect::route('profile.edit')->with('status', 'profile-updated');
+
     }
 
     /**
