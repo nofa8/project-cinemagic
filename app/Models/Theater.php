@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
-
+use Illuminate\Support\Facades\Storage;
 class Theater extends Model
 {
     use HasFactory;
@@ -18,6 +18,22 @@ class Theater extends Model
         'photo_filename',
     ];
     public $timestamps = false;
+
+
+    public function getImageFullUrlAttribute()
+    {
+        if ($this->poster_filename && Storage::exists("public/photos/{$this->photo_filename}")) {
+            return asset("storage/photos/{$this->photo_filename}");
+        } else {
+            // To be changed eventually
+            return asset("storage/posters/_no_poster_2.png");
+        }
+    }
+    public function getImageExistsAttribute()
+    {
+        return Storage::exists("public/photos/{$this->photo_filename}");
+    }
+
 
     public function screenings(): HasMany
     {

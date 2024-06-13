@@ -1,6 +1,6 @@
 @extends('layouts.main')
 
-@section('header-title', 'New Department')
+@section('header-title', 'New Theater')
 
 @section('main')
 <div class="flex flex-col space-y-6">
@@ -16,13 +16,11 @@
                     </p>
                 </header>
 
-                <form method="POST" action="{{ route('departments.store') }}">
+                <form method="POST" action="{{ route('theaters.store') }}">
                     @csrf
-                    <div class="mt-6 space-y-4">
-                        @include('departments.shared.fields', ['mode' => 'create'])
-                    </div>
+                    @include('theaters.shared.fields', ['mode' => 'create'])
                     <div class="flex mt-6">
-                        <x-button element="submit" type="dark" text="Save new department" class="uppercase"/>
+                        <x-button element="submit" type="dark" text="Save new theater" class="uppercase"/>
                     </div>
                 </form>
             </section>

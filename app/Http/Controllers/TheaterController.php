@@ -8,9 +8,8 @@ use App\Models\Customer;
 use Illuminate\View\View;
 use Illuminate\Http\RedirectResponse;
 use App\Http\Requests\TheaterFormRequest;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
-
+use Illuminate\Support\Facades\Storage;
 class TheaterController extends \Illuminate\Routing\Controller
 {
     use AuthorizesRequests;
@@ -23,14 +22,14 @@ class TheaterController extends \Illuminate\Routing\Controller
     public function index(): View
     {
         return view('theaters.index')
-            ->with('theaters', Theater::orderBy('name')->paginate(20)->withQueryString());
+            ->with('theaters', Theater::orderBy('name')->paginate(8)->withQueryString());
     }
 
     public function create(): View
     {
-        $newTheater = new Theater();
+        $theater = new Theater();
         return view('theaters.create')
-            ->with('theater', $newTheater);
+            ->with('theater', $theater);
     }
 
     public function store(TheaterFormRequest $request): RedirectResponse
@@ -52,8 +51,18 @@ class TheaterController extends \Illuminate\Routing\Controller
     public function update(TheaterFormRequest $request, Theater $theater): RedirectResponse
     {
         $theater->update($request->validated());
+        if ($request->hasFile('photo_filename')) {
+            if ($theater->poster_filename &&
+                Storage::fileExists('public/photos/' . $theater->photo_filename)) {
+                Storage::delete('public/photos/' . $theater->photo_filename);
+            }
+            $path = $request->photo_filename->store('public/photos');
+            $theater->photo_filename = basename($path);
+            $theater->save();
+        }
+        //dd($theater);
         $url = route('theaters.show', ['theater' => $theater]);
-        $htmlMessage = "Theater <a href='$url'><u>{$theater->name}</u></a> ({$theater->abbreviation}) has been updated successfully!";
+        $htmlMessage = "Theater <a href='$url'><u>{$theater->name}</u></a> has been updated successfully!";
         return redirect()->route('theaters.index')
             ->with('alert-type', 'success')
             ->with('alert-msg', $htmlMessage);
@@ -87,6 +96,15 @@ class TheaterController extends \Illuminate\Routing\Controller
         return redirect()->route('Theaters.index')
             ->with('alert-type', $alertType)
             ->with('alert-msg', $alertMsg);
+    }
+    public function destroyImage(Theater $theater): RedirectResponse
+    {
+        if ($theater->imageExists) {
+            Storage::delete("public/photos/{$theater->photo_filename}");
+        }
+        return redirect()->back()
+            ->with('alert-type', 'success')
+            ->with('alert-msg', "Photo of theater {$theater->name} has been deleted.");
     }
 
     public function show(Theater $theater): View
