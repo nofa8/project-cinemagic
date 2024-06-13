@@ -1,6 +1,6 @@
 <?php
 
-namespace App\View\Components\Disciplines;
+namespace App\View\Components\Tickets;
 
 use Closure;
 use Illuminate\Contracts\View\View;
@@ -29,6 +29,6 @@ class Table extends Component
      */
     public function render(): View|Closure|string
     {
-        return view('components.disciplines.table');
+        return view('components.tickets.table');
     }
 }
