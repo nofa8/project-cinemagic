@@ -100,18 +100,18 @@
                     @endif
 
                     <div class="grow"></div>
-
+                    @php 
+                        $ls = (Auth::check()) ? session('cart', collect([]))->count() : count(json_decode(Cookie::get('cart'), true)) ?? 0;
+                    @endphp
                     <!-- Menu Item: Cart -->
-                    @if (session('cart'))
-                        @can('use-cart')
-                        <x-menus.cart
-                            :href="route('cart.show')"
-                            selectable="1"
-                            selected="{{ Route::currentRouteName() == 'cart.show'}}"
-                            :total="session('cart')->count()"/>
-                        @endcan
-                    @endif
-
+                    <x-menus.cart
+                    :href="route('cart.show')"
+                    selectable=1
+                    selected="{{Route::currentRouteName() == 'cart.show'}}"
+                    :total="$ls"
+                    /> 
+                    
+                    
                     @auth
                     <x-menus.submenu
                         selectable="0"

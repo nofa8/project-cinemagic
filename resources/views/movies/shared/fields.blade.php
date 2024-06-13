@@ -6,8 +6,8 @@
     <div class="grid md:grid-cols-2 gap-8 max-w-6xl mx-auto">
         <div>
             <x-field.image
-                name="image_file"
-                label="Poster"
+                name="poster_filename"
+                label="poster_filename"
                 width="lg"
                 :readonly="$readonly"
                 deleteTitle="Delete Poster"

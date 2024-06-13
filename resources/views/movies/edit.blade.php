@@ -34,12 +34,13 @@
                     </p>
                 </header>
 
-                <form method="POST" action="{{ route('movies.update', ['movie' => $movie]) }}">
+                <form method="POST" action="{{ route('movies.update', ['movie' => $movie]) }}" enctype="multipart/form-data">
                     @csrf
                     @method('PUT')
                     @include('movies.shared.fields', ['mode' => 'edit'])
                     <div class="flex mt-6">
-                        <x-button element="submit" type="dark" text="Save" class="uppercase"/>
+                        <x-button element="submit" type="dark" text="Save" class="uppercase"
+                        />
                         <x-button element="a" type="light" text="Reset" class="uppercase ms-4"
                                     href="{{ url()->full() }}"/>
                     </div>
