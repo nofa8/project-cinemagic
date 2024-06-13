@@ -10,7 +10,7 @@
                 <h3 class="text-xl w-96 text-center">Cart is Empty</h3>
             @else
             <div class="font-base text-sm text-gray-700 dark:text-gray-300">
-                <x-disciplines.table :cart="session()->get('cart')"
+                <x-tickets.table :cart="session()->get('cart')"
                     :showView="false"
                     :showEdit="false"
                     :showDelete="false"
