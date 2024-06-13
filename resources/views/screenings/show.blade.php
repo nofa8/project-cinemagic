@@ -1,6 +1,6 @@
 @extends('layouts.main')
-<!--->movies->title-->
-@section('header-title', $screening->movies->title )
+
+@section('header-title', $screening->movie->title )
 
 @section('main')
 <div class="flex flex-col space-y-6">
@@ -30,15 +30,6 @@
                             type="danger"/>
                     </form>
                     @endcan
-                    @can('use-cart')
-                    <form method="POST" action="{{ route('cart.add', ['screening' => $screening]) }}">
-                        @csrf
-                        <x-button
-                            element="submit"
-                            text="Add to cart"
-                            type="dark"/>
-                    </form>
-                    @endcan
                 </div>
                 <header>
                     <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">
@@ -48,17 +39,7 @@
                 <div class="mt-6 space-y-4">
                     @include('screenings.shared.fields', ['mode' => 'show'])
                 </div>
-                @can('viewAny', App\Models\Seat::class)
-                    <h3 class="pt-16 pb-4 text-2xl font-medium text-gray-900 dark:text-gray-100">
-                        Seats
-                    </h3>
-                    {{-- <x-seats.table :seats="$screening->theater->seats"
-                        :showView="true"
-                        :showEdit="false"
-                        :showDelete="false"
-                        class="pt-4"
-                        /> --}}
-                @endcan
+                
             </section>
         </div>
     </div>

@@ -3,23 +3,35 @@
     $readonly = $mode == 'show';
 @endphp
 
-<x-field.select name="movie_id" label="Movie" :readonly="$readonly"
-    value="{{ old('movie_id', $screening->movie_id) }}"
-    :options="$movies->pluck('name', 'id')->toArray()"/>
+<x-field.input name="date" label="Date" :readonly="$readonly" value="{{ $screening->date }}" />
+
+    <x-field.input name="start_time" label="Start Time" :readonly="$readonly"
+        value="{{ $screening->start_time }}" />
 
 
-<x-field.select name="theater_id" label="Theater" :readonly="$readonly"
-    value="{{ old('theater_id', $screening->theater_id) }}"
-    :options="$theaters->pluck('name', 'id')->toArray()"/>
+<form method="post" action="{{ route('screenings.show', ['screening' => $screening->id]) }}" class="mt-6 space-y-6">
+    @csrf
+    @method('patch')
+    
+    <div>
+        <x-input-label for="ticket_id" :value="__('Ticket ID')" />
+        <x-text-input id="ticket_id" name="ticket_id" type="text" class="mt-1 block w-full"
+             />
+        <x-input-error class="mt-2" :messages="$errors->get('ticket_id')" />
+    </div>
 
-<x-field.input name="date" label="Date" :readonly="$readonly"
-                value="{{ old('date', $screening->date) }}"/>
+    <div>
+        <x-input-label for="ticket_url" :value="__('Ticket URL')" />
+        <x-text-input id="ticket_url" name="ticket_url" type="text" class="mt-1 block w-full" 
+             />
+        <x-input-error class="mt-2" :messages="$errors->get('ticket_url')" />
+    </div>
 
-<x-field.input name="start_time" label="Start Time" :readonly="$readonly"
-                value="{{ old('start_time', $screening->start_time) }}"/>
+    
 
+    <div class="flex items-center gap-4">
+        <x-primary-button>{{ __('Verify') }}</x-primary-button>
 
+    </div>
 
-
-
-                
+</form>
