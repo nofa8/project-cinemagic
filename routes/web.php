@@ -12,6 +12,9 @@ use App\Models\Customer;
 use App\Models\Movie;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PDFController;
+use App\Http\Controllers\SeatController;
+use App\Http\Controllers\TicketController;
+
 /* ----- PUBLIC ROUTES ----- */
 
 Route::get('/generate-pdf', [PDFController::class, 'generatePDF']);
@@ -31,8 +34,12 @@ Route::get('movies/{movie}/screenings', [MovieController::class, 'showScreenings
     ->name('movies.screenings');
     //->can('viewCurriculum', Movie::class);
 
-Route::get('screenings/{screenings}/seats', [ScreeningController::class, 'showSeats'])
-    ->name('screenings.seats');
+
+Route::get('screenings/{screenings}/seats', [SeatController::class, 'show'])
+    ->name('seats.show');
+
+Route::resource('movies', MovieController::class)->only(['show']);
+
 
 /* ----- Non-Verified users ----- */
 Route::middleware('auth')->group(function () {
@@ -63,6 +70,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     //Department resource routes are protected by DepartmentPolicy on the controller
     Route::resource('genres', GenreController::class);
+    Route::resource('movies', MovieController::class)->except(['show']);
 
     Route::resource('theaters', TheaterController::class);
 

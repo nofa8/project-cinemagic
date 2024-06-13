@@ -30,7 +30,7 @@
                         @foreach ($uniqueDates as $date)
                             @if (isset($rowsDate[$date][$i]))
                                 <td class="py-2 px-4 text-sm border-2 border-gray-300 dark:border-gray-600 text-center">
-                                    <a href="{{ route('screenings.seats', ['screenings' => $rowsDate[$date][$i]->id]) }}" class="text-blue-600 dark:text-blue-400 hover:underline">
+                                    <a href="{{ route('seats.show', ['screenings' => $rowsDate[$date][$i]]) }}" class="text-blue-600 dark:text-blue-400 hover:underline">
                                         {{ $rowsDate[$date][$i]->start_time }}
                                     </a>
                                 </td>

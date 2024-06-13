@@ -17,9 +17,6 @@ class MovieController extends Controller
 {
     public function index(Request $request): View
     {
-
-
-
         $genres = Genre::orderBy('name')->pluck('name', 'code')->toArray();
         $genres = array_merge([null => 'Any genre'], $genres);
         $filterByGenre = $request->query('genre');

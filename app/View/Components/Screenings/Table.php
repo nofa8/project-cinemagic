@@ -24,7 +24,6 @@ class Table extends Component
             $dates = $screenings->where('theater_id', $theater)
             ->filter(function($screening) {
                 // Check if the date is today and the start time is in the future
-                $agora = now();
                 if (Carbon::parse($screening->date)> now()->addDays(14)){
                     return false;
                 }
@@ -38,18 +37,17 @@ class Table extends Component
             })
             ->sortBy('date')->pluck('date')->unique();
             $dateScreenings = [];
-
             foreach ($dates as $date) {
                 $dateScreenings[$date] = $screenings
                     ->where('theater_id', $theater)
                     ->where('date', $date)
                     ->filter(function ($screening) use ($date, $now) {
                         // Convert date string to Carbon instance
-                        $screeningDate = \Carbon\Carbon::parse($screening->date);
+                        $screeningDate = Carbon::parse($screening->date);
 
                         // If the date is today, only include screenings that haven't happened yet
                         if ($screeningDate->isSameDay($now)) {
-                            return \Carbon\Carbon::parse($screening->start_time) > $now;
+                            return Carbon::parse($screening->start_time) > $now;
                         }
                         // Otherwise, include all screenings
                         return true;

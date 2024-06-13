@@ -26,7 +26,7 @@ class Screening extends Model
 
     public function theater(): BelongsTo
     {
-        return $this->belongsTo(Theater::class,'theater_id','id');
+        return $this->belongsTo(Theater::class);
     }
 
     public function movie(): BelongsTo

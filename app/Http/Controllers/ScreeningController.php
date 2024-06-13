@@ -75,12 +75,7 @@ class ScreeningController extends Controller
     }
 
 
-    public function showSeats(Screening $screening): View
-    {
-        $screening->load('tickets');
-        
-        return view('screenings.seats')->with('screening', $screening);
-    }
+    
 
     public function destroy(Screening $screening): RedirectResponse
     {

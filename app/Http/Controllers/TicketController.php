@@ -79,6 +79,13 @@ class TicketController extends Controller
             ->with('ticket', $ticket);
     }
 
+    public function save(Request $request)
+    {
+        $ticket = $request->validated();
+
+        return view('tickets.show')->with($ticket);
+    }
+
     /**
      * Show the form for editing the specified resource.
      */
