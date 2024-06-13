@@ -21,7 +21,7 @@
                         <form method="POST" action="{{ route('cart.add', ['screening' => $screening]) }}">
                             @csrf
                             <x-seats.table :seats="$seats" :tickets="$tickets" />
-                            <x-button class=" gap-4 mt-4" element="submit" text="Add to cart" type="dark"/>
+                            <x-button class=" gap-4 mt-4" element="submit" text="Add to cart" type="dark"/>                        
                         </form>
                     </div>
             </section>
