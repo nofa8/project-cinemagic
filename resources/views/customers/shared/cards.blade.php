@@ -7,7 +7,6 @@
 
         <!-- Content on the right -->
         <div class="flex flex-col justify-center w-full">
-            <!-- Title -->
             <a class="font-semibold text-lg text-gray-800 dark:text-gray-200 leading-tight mb-2">
                 {{ $customers->user->name }}
             </a>
@@ -34,6 +33,16 @@
                 @if(!empty($customers->user->email))
                     <div class="font-light text-gray-700 dark:text-gray-300 mb-2 inline">
                         Email: {{ $customers->user->email }}
+                    </div>
+                @endif
+
+                @if($customers->user->blocked == 0)
+                    <div class="font-light text-gray-700 dark:text-gray-300 mb-2 inline">
+                        Not Blocked
+                    </div>
+                @else
+                    <div class="font-light text-gray-700 dark:text-gray-300 mb-2 inline">
+                        Blocked
                     </div>
                 @endif
 

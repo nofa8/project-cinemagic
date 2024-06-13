@@ -22,7 +22,7 @@ class CustomerController extends Controller
 
     public function index(Request $request): View
     {
-        $filterByName = $request->query('name');
+        $filterByName = $request->name;
         $customersQuery = Customer::query()
             ->join('users', 'users.id', '=', 'customers.id')
             ->select('customers.*')
@@ -30,10 +30,8 @@ class CustomerController extends Controller
 
         if ($filterByName !== null) {
             $customersQuery
-                ->where('users.type', 'C')
                 ->where('users.name', 'like', "%$filterByName%");
         }
-
 
         $customers = $customersQuery
             ->with('user')

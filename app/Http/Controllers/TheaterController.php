@@ -9,6 +9,7 @@ use Illuminate\View\View;
 use Illuminate\Http\RedirectResponse;
 use App\Http\Requests\TheaterFormRequest;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
 class TheaterController extends \Illuminate\Routing\Controller
@@ -91,33 +92,63 @@ class TheaterController extends \Illuminate\Routing\Controller
 
     public function destroy(Theater $theater): RedirectResponse
     {
-        try {
-            $url = route('theaters.show', ['theater' => $theater]);
+        // Check for future screenings
+        $futureScreenings = $theater->screenings()->where('date', '>', now())->count();
 
-            $totalCustomers = Customer::where('theater', $theater->abbreviation)->count();
-            if ($totalCustomers == 0) {
-                $theater->delete();
-                $alertType = 'success';
-                $alertMsg = "Theater {$theater->name} ({$theater->abbreviation}) has been deleted successfully!";
-            } else {
-                $alertType = 'warning';
-                $justification = match (true) {
-                    $totalCustomers <= 0 => "",
-                    $totalCustomers == 1 => "there is 1 Customer in the Theater",
-                    $totalCustomers > 1 => "there are $totalCustomers Customers in the Theater",
-                };
-                $alertMsg = "Theater <a href='$url'><u>{$theater->name}</u></a> ({$theater->abbreviation}) cannot be deleted because $justification.";
-            }
-        } catch (\Exception $error) {
-            $alertType = 'danger';
-            $alertMsg = "It was not possible to delete the Theater
-                            <a href='$url'><u>{$theater->name}</u></a> ({$theater->abbreviation})
-                            because there was an error with the operation!";
+        if ($futureScreenings > 0) {
+            $htmlMessage = "Theater \"{$theater->name}\" cannot be deleted because it has future screenings scheduled.";
+            return redirect()->route('theaters.index')
+                ->with('alert-type', 'error')
+                ->with('alert-msg', $htmlMessage);
         }
+
+        // Delete the associated photo if it exists
+        // if ($theater->photo_filename && Storage::exists('public/photos/' . $theater->photo_filename)) {
+        //     Storage::delete('public/photos/' . $theater->photo_filename);
+        // }
+
+        // Delete the theater from the database
+        $theater->delete();
+
+        // Redirect with a success message
+        $htmlMessage = "Theater \"{$theater->name}\" has been deleted successfully!";
         return redirect()->route('theaters.index')
-            ->with('alert-type', $alertType)
-            ->with('alert-msg', $alertMsg);
+            ->with('alert-type', 'success')
+            ->with('alert-msg', $htmlMessage);
     }
+
+    public function deleted(){
+        $theaters = Theater::onlyTrashed()->orderBy('name')->paginate(14)->withQueryString();
+        return view('theaters.deleted')->with('theaters', $theaters);
+    }
+
+    public function saveD(Theater $theater): RedirectResponse{
+        Log::info('Reached save method');
+        dump($theater);
+        if (!$theater->trashed()){
+            return view('theaters.deleted');    
+        }
+        $theater->restore();
+        return redirect()->back()->with('alert-type', 'success')
+        ->with('alert-msg', "Theater \"{$theater->name}\" has been restored.");;
+    }
+ 
+    public function destructionD (Theater $theater): RedirectResponse{
+        if (!$theater->trashed()){
+            return redirect()->route('theaters.index')
+                ->with('alert-type', 'error')
+                ->with('alert-msg', "Theater \"{$theater->name}\" is not in the deleted list.");
+        }
+        if ($theater->photo_filename && Storage::exists('public/photos/' . $theater->photo_filename)) {
+            Storage::delete('public/photos/' . $theater->photo_filename);
+        }
+        $name = $theater->name;
+        $theater->forceDelete();
+        return redirect()->route('theaters.deleted')
+            ->with('alert-type', 'success')
+            ->with('alert-msg', "Theater \"{$name}\" has been permanently deleted.");
+    }
+
     public function destroyImage(Theater $theater): RedirectResponse
     {
         if ($theater->imageExists) {
