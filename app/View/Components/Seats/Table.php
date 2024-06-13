@@ -20,28 +20,27 @@ class Table extends Component
         foreach ($seats as $seat) {
             $seatMatrix[$seat->row][$seat->seat_number] = $seat->id;
         }
-            
-        if ($tickets->count() == 0){
-            $tickets = [];
-        }      
+        if ($tickets->count()==0){
+            $tickets = new Collection;
+        }else{
+            $tickets = $tickets->pluck('seat_id');
+        }   
         
-        $tickets = $tickets->pluck('seat_id');
+        
         foreach ($seatMatrix as $seat=>$array) {
             foreach($array as $row=>$id){
                 if ($tickets->contains($id)) {
-                    
                     
                     $table[$seat][$row] = 'disabled';
                     continue;
                 }
             
-                $table[$seat][$row] = 'disabled';
+                $table[$seat][$row] = 'enabled';
         
             }
         }
 
 
-        dd($table);
         return $table;
     }
 

@@ -24,7 +24,7 @@ class SeatController extends Controller
    
     public function show(Screening $screenings): View{
         $seats = $screenings->theater->seats;
-        $tickets = $screenings->tickets;
+        $tickets = $screenings->tickets->values();
         return view('seats.show')
             ->with('screening',$screenings)
             ->with('seats',$seats)
