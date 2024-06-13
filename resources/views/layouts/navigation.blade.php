@@ -103,15 +103,24 @@
 
                     <!-- Menu Item: Cart -->
                     
+<<<<<<< HEAD
                      
+=======
+>>>>>>> e003581137cdf81da548bf7c01617bb6d4bf3da0
                     <x-menus.cart
                         :href="route('cart.show')"
                         selectable="1"
                         selected="{{ Route::currentRouteName() == 'cart.show'}}"
+<<<<<<< HEAD
                         />
                         
                     
                     
+=======
+                        :total="session('cart')->count()"/>
+                    
+
+>>>>>>> e003581137cdf81da548bf7c01617bb6d4bf3da0
                     @auth
                     <x-menus.submenu
                         selectable="0"
