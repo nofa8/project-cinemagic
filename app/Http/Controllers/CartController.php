@@ -6,6 +6,7 @@ use App\Http\Requests\TicketFormRequest;
 use App\Models\Screening;
 use Illuminate\Http\Request;
 use App\Models\Ticket;
+use Illuminate\Contracts\View\View;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
@@ -13,6 +14,11 @@ use Illuminate\Support\Facades\Cookie;
 
 class CartController extends Controller
 {
+    public function show(): View 
+    { 
+        $cart = session('cart', null); 
+        return view('cart.show', compact('cart')); 
+    } 
 
     public function addToCart(Request $request, Screening $screening) // Assuming you want a single screening object
     {

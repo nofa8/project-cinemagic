@@ -6,11 +6,11 @@
     <div class="flex justify-center">
         <div class="my-4 p-6 bg-white dark:bg-gray-900 overflow-hidden
                     shadow-sm sm:rounded-lg text-gray-900 dark:text-gray-50">
-            @empty($cart)
+            @empty(session()->get('cart'))
                 <h3 class="text-xl w-96 text-center">Cart is Empty</h3>
             @else
             <div class="font-base text-sm text-gray-700 dark:text-gray-300">
-                <x-disciplines.table :disciplines="$cart"
+                <x-disciplines.table :cart="session()->get('cart')"
                     :showView="false"
                     :showEdit="false"
                     :showDelete="false"
