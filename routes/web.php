@@ -30,7 +30,7 @@ Route::get('movies/showcase', [MovieController::class, 'showCase'])
     ->name('movies.showcase')
     ->can('viewShowCase', Movie::class);
 
-
+Route::get('movies/create', [MovieController::class, 'create'])->name('movies.create');
 Route::resource('movies', MovieController::class)->only(['show']);
 
 Route::get('register', [RegisteredUserController::class, 'create'])->name('register');
@@ -67,6 +67,8 @@ Route::get('movies/{movie}/screenings', [MovieController::class, 'showScreenings
     ->name('movies.screenings');
     //->can('viewCurriculum', Movie::class);
 
+
+Route::delete('theaters/{theater}/seat', [SeatController::class, 'destroyUpdate'])->name('seats.destroyAll');
 
 Route::get('screenings/{screenings}/seats', [SeatController::class, 'show'])
     ->name('seats.show');
