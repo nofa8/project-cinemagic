@@ -64,9 +64,13 @@ class AdministrativeController extends \Illuminate\Routing\Controller
         $newAdministrative->email = $validatedData['email'];
         // Only sets admin field if it has permission  to do it.
         // Otherwise, admin is false
-        $newAdministrative->type = $request->user()?->can('createAdmin', User::class)
-        ? 'A'
-        : 'C';
+
+        $newAdministrative->type = $validatedData['type'];
+
+        // $newAdministrative->type = $request->user()?->can('createAdmin', User::class)
+        // ? 'A'
+        // : 'C';
+
         // Initial password is always 123
         $newAdministrative->password = bcrypt('123');
         $newAdministrative->save();
@@ -98,9 +102,11 @@ class AdministrativeController extends \Illuminate\Routing\Controller
         $administrative->email = $validatedData['email'];
         // Only updates admin field if it has permission  to do it.
         // Otherwise, do not change it (ignore it)
-        if ($request->user()?->can('updateAdmin', $administrative)) {
+
+        // if ($request->user()?->can('updateAdmin', $administrative)) {
             $administrative->type = $validatedData['type'];
-        }
+        // }
+
         $administrative->save();
         if ($request->hasFile('photo_file')) {
             // Delete previous file (if any)

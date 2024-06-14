@@ -12,14 +12,14 @@
                 :name="old('name', $filterByName)"
                 class="mb-6"
                 />
-            @can('create', App\Models\User::class)
+            {{-- @can('create', App\Models\User::class) --}}
                 <div class="flex items-center gap-4 mb-4">
                     <x-button
                         href="{{ route('administratives.create') }}"
                         text="Create a new administrative"
                         type="success"/>
                 </div>
-            @endcan
+            {{-- @endcan --}}
             <div class="font-base text-sm text-gray-700 dark:text-gray-300">
                 <x-administratives.table :administratives="$administratives"
                     :showView="true"
