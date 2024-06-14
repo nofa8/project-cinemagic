@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
 use Illuminate\Support\Facades\Storage;
+use App\Models\User;
 
 class ProfileController extends Controller
 {
@@ -51,8 +52,7 @@ class ProfileController extends Controller
         if (empty($request->photo_filename)){
             return Redirect::route('profile.edit');
         }
-        if ($request->user()->photo_filename &&
-            Storage::fileExists('public/photos/' . $request->user()->photo_filename)) {
+        if ($request->user()->photo_filename && Storage::fileExists('public/photos/' . $request->user()->photo_filename)) {
             Storage::delete('public/photos/' . $request->user()->photo_filename);
         }
         $path = $request->photo_filename->store('public/photos');
@@ -62,6 +62,17 @@ class ProfileController extends Controller
 
         return Redirect::route('profile.edit')->with('status', 'profile-updated');
 
+    }
+
+    public function destroyImage(User $user): RedirectResponse
+    {
+        if ($user->photo_filename && Storage::fileExists('public/photos/' . $user->photo_filename)) {
+            Storage::delete("public/photos/{$user->photo_filename}");
+        }
+
+        return redirect()->back()
+            ->with('alert-type', 'success')
+            ->with('alert-msg', "Photo of user {$user->name} has been deleted.");
     }
 
     /**

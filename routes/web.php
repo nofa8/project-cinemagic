@@ -90,6 +90,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     Route::patch('/profile/image', [ProfileController::class, 'updateImage'])->name('profile.update.image');
+    Route::delete('/profile/image', [ProfileController::class, 'destroyImage'])->name('profile.destroy.image');
 
 
     Route::get('/dashboard', function () {
