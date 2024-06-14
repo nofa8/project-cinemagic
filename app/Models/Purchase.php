@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Purchase extends Model
@@ -29,8 +30,8 @@ class Purchase extends Model
         return $this->hasOne(Customer::class);
     }
 
-    public function tickets(): BelongsToMany
+    public function tickets(): HasMany
     {
-        return $this->belongsToMany(Ticket::class, 'tickets_purchases','ticket_id','purchase_id');
+        return $this->hasMany(Ticket::class);
     }
 }
