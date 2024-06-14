@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Genre extends Model
@@ -13,6 +13,7 @@ class Genre extends Model
 
     protected $fillable = [
         'name',
+        'code',
     ];
     protected $primaryKey = 'code';
     public $incrementing = false;
@@ -20,9 +21,9 @@ class Genre extends Model
 
     public $timestamps = false;
 
-    public function movies(): BelongsToMany
+    public function movies(): HasMany
     {
-        return $this->belongsToMany(Movie::class,'movies_genres','movie_id','genre_id');
+        return $this->HasMany(Movie::class);
     }
 
 }

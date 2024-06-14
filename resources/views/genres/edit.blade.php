@@ -16,7 +16,7 @@
                         href="{{ route('genres.show', ['genre' => $genre]) }}"
                         text="View"
                         type="info"/>
-                    <form method="POST" action="{{ route('genres.destroy', ['genres' => $genre]) }}">
+                    <form method="POST" action="{{ route('genres.destroy', ['genre' => $genre]) }}">
                         @csrf
                         @method('DELETE')
                         <x-button
