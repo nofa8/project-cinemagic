@@ -47,6 +47,7 @@ Route::delete('theaters/{theater}/permanent-delete', [TheaterController::class, 
 Route::delete('theater/{theater}/image', [TheaterController::class, 'destroyImage'])
     ->name('theaters.image.destroy')
     ->can('update', Movie::class);
+
 Route::resource('theaters', TheaterController::class);
 
 
@@ -65,7 +66,8 @@ Route::get('movies/{movie}/screenings', [MovieController::class, 'showScreenings
 
 Route::get('screenings/{screenings}/seats', [SeatController::class, 'show'])
     ->name('seats.show');
-//Route::delete('theaters/seat', [SeatController::class, 'destroyUpdate'])->name(['seats.destroy']);
+
+
 
 Route::resource('movies', MovieController::class)->only(['show']);
 
