@@ -50,7 +50,7 @@ class Table extends Component
 
     public function __construct(
         public Collection $seats,
-        public Collection $tickets
+        public Collection $tickets= new Collection
     )
     {
         $data = $this->getTable($seats, $tickets);

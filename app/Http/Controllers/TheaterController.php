@@ -8,6 +8,7 @@ use App\Models\Customer;
 use Illuminate\View\View;
 use Illuminate\Http\RedirectResponse;
 use App\Http\Requests\TheaterFormRequest;
+use App\Models\Seat;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
@@ -34,24 +35,53 @@ class TheaterController extends \Illuminate\Routing\Controller
             ->with('theater', $theater);
     }
 
-    public function store(TheaterFormRequest $request): RedirectResponse
+    public function store(Request $request): RedirectResponse
     {
-        $newTheater = Theater::create($request->validated());
+        
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'photo_filename' => 'sometimes|image|max:4096', 
+        ]);
+        $newTheater = [
+            'name' => $request->get('name'),
+            
+        ];
 
         if ($request->hasFile('photo_filename')) {
-            // Check if an existing photo exists and delete it
-            if ($newTheater->photo_filename && Storage::exists('public/photos/' . $newTheater->photo_filename)) {
-                Storage::delete('public/photos/' . $newTheater->photo_filename);
-            }
-
-            // Store the new photo
+            
             $path = $request->photo_filename->store('public/photos');
-            $newTheater->photo_filename = basename($path);
-            $newTheater->save();
+            $newTheater['photo_filename'] = basename($path);
         }
 
-        $url = route('theaters.show', ['theater' => $newTheater]);
-        $htmlMessage = "Theater <a href='$url'><u>{$newTheater->name}</u></a> has been created successfully!";
+
+
+        $theater = Theater::create($newTheater);
+        if (!$request->has('row') || !$request->has('seat_number')) {
+            return redirect()->route('theaters.index');
+        }
+
+        
+        $seats = [
+            'row' => array_map('chr', range(ord('A'), ord($request->get('row')))),
+            'seat_number' => range(1, $request->get('seat_number')),
+        ];
+        
+        $seatDataArray = [];
+        foreach ($seats['row'] as $seatData) {
+            foreach($seats['seat_number'] as $seatNumber){
+                $seatDataArray[] = [
+                    'theater_id' => $theater->id,
+                    'row' => $seatData,
+                    'seat_number' => $seatNumber,
+                ];
+                //dd($seatDataArray);
+            }
+        }
+        $url = route('theaters.show', ['theater' => $theater]);
+        $htmlMessage = "Theater <a href='{$url}'>{$theater->name}</a> has been created successfully!";
+        Seat::insert($seatDataArray);
+            
+
         return redirect()->route('theaters.index')
             ->with('alert-type', 'success')
             ->with('alert-msg', $htmlMessage);

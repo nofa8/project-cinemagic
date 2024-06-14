@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Screening;
 use App\Models\Seat;
+use App\Models\Theater;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 use Illuminate\Support\Collection;
@@ -39,9 +41,12 @@ class SeatController extends Controller
         $success = [];
         $failure = [];
         $seat = $request->get('seats');
+        
         foreach ($seat as $id) {
             $the_seat = Seat::find($id);
-            $val = $the_seat->tickets->screening->where('date', '>', now())->count();
+            $val = $the_seat?->tickets()->whereHas('screening', function ($query) {
+                $query->where('date', '>', now());
+            })->count();
             if ($val > 0) {
                 $failure[] = $id;
                 continue;
@@ -78,4 +83,25 @@ class SeatController extends Controller
         return redirect()->back()
             ->with('success', 'Seat deleted successfully.');
     }
+
+    public function store(Request $request, Theater $theater): RedirectResponse
+    {
+        $request->validate([
+            'row' => 'required|string|max:1',
+            'seat_number' => 'required|integer|min:1|max:50',
+        ]);
+
+        $seatData = [
+            'theater_id' => $theater->id,
+            'row' => $request->get('row'),
+            'seat_number' => $request->get('seat_number'),
+        ];
+
+        $seat = Seat::create($seatData);
+
+        return redirect()->back()
+            ->with('alert-type', 'success')
+            ->with('alert-msg', 'Seats created');
+    }
+
 }
