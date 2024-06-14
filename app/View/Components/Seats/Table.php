@@ -16,7 +16,7 @@ class Table extends Component
     {
         
         $table = [];
-        $seats = $seats->sortBy('row')->sortBy('seat_number')->values();
+        $seats = $seats->sortBy('seat_number')->sortBy('row')->values();
         foreach ($seats as $seat) {
             $seatMatrix[$seat->row][$seat->seat_number] = $seat->id;
         }

@@ -1,6 +1,10 @@
 @php
     $mode = $mode ?? 'edit';
     $readonly = $mode == 'show';
+    $sim = "nao";
+    if ($theater->name == null){
+        $sim = "sim";
+    }
 @endphp
 <div class="m-4 p-4">
     <x-field.input name="name" label="Name" :readonly="$readonly"
@@ -18,7 +22,7 @@
         :imageUrl="$theater->imageFullUrl"/>
         
 </div>
-@if($theater==null)
+@if( $sim=="sim")
 <div class="flex mt-6">
     <x-field.select name="row" label="Last Row Letter"
             :options="array_combine(array_map('chr', range(ord('A'), ord('Z'))) ,array_map('chr', range(ord('A'), ord('Z')))) "/>
