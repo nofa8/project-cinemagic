@@ -65,9 +65,9 @@ class ProfileController extends Controller
 
         $user->save(); // Salva as alterações no user
 
-        $url = route('profile.edit');
+        $url = route('movies.showcase');
         $htmlMessage = "Profile <a href='$url'><u>{$user->name}</u></a> has been updated successfully!";
-        return redirect()->route('profile.edit')
+        return redirect()->route('movies.showcase')
             ->with('alert-type', 'success')
             ->with('alert-msg', $htmlMessage);
     }
@@ -86,19 +86,31 @@ class ProfileController extends Controller
         $request->user()->save();
 
 
-        return Redirect::route('profile.edit')->with('status', 'profile-updated');
+        $url = route('movies.showcase');
+        $htmlMessage = "Profile image <a href='$url'><u>{$request->user()->name}</u></a> has been updated successfully!";
+        return redirect()->route('movies.showcase')
+            ->with('alert-type', 'success')
+            ->with('alert-msg', $htmlMessage);
 
     }
 
     public function destroyImage(User $user): RedirectResponse
     {
-        if ($user->photo_filename && Storage::fileExists('public/photos/' . $user->photo_filename)) {
-            Storage::delete("public/photos/{$user->photo_filename}");
-        }
 
-        return redirect()->back()
-            ->with('alert-type', 'success')
-            ->with('alert-msg', "Photo of user {$user->name} has been deleted.");
+        if ($user->photo_filename) {
+            if (Storage::fileExists('public/photos/' . $user->photo_filename)) {
+                Storage::delete('public/photos/' . $user->photo_filename);
+            }
+            $user->photo_filename = null;
+            $user->save();
+
+            $url = route('movies.showcase');
+            $htmlMessage = "Profile image <a href='$url'><u>{$user->name}</u></a> has been deleted successfully!";
+            return redirect()->route('movies.showcase')
+                ->with('alert-type', 'success')
+                ->with('alert-msg', $htmlMessage);
+        }
+        return redirect()->back();
     }
 
     /**
