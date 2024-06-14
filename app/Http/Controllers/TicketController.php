@@ -74,9 +74,14 @@ class TicketController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Ticket $ticket): View
+
+    public function show(Ticket $ticket)
     {
-        return view('tickets.show', compact('ticket'));
+        return view('tickets.show', ['ticket' => $ticket]);
+    }
+    public function showTicket(Ticket $ticket)
+    {
+        return view('tickets.ticket', ['ticket' => $ticket]);
     }
 
     public function save(Request $request)
@@ -151,27 +156,27 @@ class TicketController extends Controller
     {
         $isValid = false;
         $ticket = null;
-    
-        
+
+
 
         if ($request->filled('ticket_id')) {
             $ticketCount = Ticket::where('id', $request->ticket_id)
-                                 ->where('screening_id', $screening->id)
-                                 ->where('status', 'valid')
-                                 ->count();
-            
-    
+                ->where('screening_id', $screening->id)
+                ->where('status', 'valid')
+                ->count();
+
+
             if ($ticketCount > 0) {
                 $ticket = Ticket::where('id', $request->ticket_id)
-                                ->where('screening_id', $screening->id)
-                                ->where('status', 'valid')
-                                ->first();
+                    ->where('screening_id', $screening->id)
+                    ->where('status', 'valid')
+                    ->first();
                 $isValid = true;
-            } 
-    
-        } 
+            }
+
+        }
         if ($isValid && $ticket) {
-            return redirect()->back()
+            return redirect()->route('tickets.show', ['ticket' => $ticket->id])
                 ->with('alert-type', 'success')
                 ->with('alert-msg', 'Ticket is Valid.');
         } else {
@@ -179,6 +184,20 @@ class TicketController extends Controller
                 ->with('alert-type', 'error')
                 ->with('alert-msg', 'Ticket is Invalid.');
         }
+    }
+    public function validate(Request $request, Ticket $ticket)
+    {
+        $screening = $ticket->screening;
+        $ticket->status = 'invalid';
+
+        $ticketUpdated = $ticket->update($ticket->toArray());
+
+        $url = route('tickets.show', ['ticket' => $ticket]);
+        $htmlMessage = "Ticket <a href='$url'><u>{$ticket->id}</u></a> ({$ticket->price}) has been updated successfully!";
+        return redirect()->route('screenings.show', ['screening' => $screening])
+            ->with('alert-type', 'success')
+            ->with('alert-msg', $htmlMessage);
+
     }
 }
 

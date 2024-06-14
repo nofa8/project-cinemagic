@@ -37,6 +37,7 @@ Route::get('register', [RegisteredUserController::class, 'create'])->name('regis
 Route::post('register', [RegisteredUserController::class, 'store']);
 
 Route::post('/tickets/verify/{screening}', [TicketController::class, 'verify'])->name('tickets.verify');
+Route::post('/tickets/validate/{ticket}', [TicketController::class, 'validate'])->name('tickets.validate');
 
 Route::get('theaters/deleted', [TheaterController::class, 'deleted'])
     ->name('theaters.deleted');
@@ -54,8 +55,11 @@ Route::resource('theaters', TheaterController::class);
 
 
 
-Route::get('tickets/{ticket}', [TicketController::class, 'show'])
+Route::get('tickets/{ticket}/show', [TicketController::class, 'show'])
     ->name('tickets.show');
+
+Route::get('tickets/ticket/{ticket}', [TicketController::class, 'showTicket'])
+    ->name('tickets.ticket');
 Route::resource('tickets', TicketController::class);
 
 

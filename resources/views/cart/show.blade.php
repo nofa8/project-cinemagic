@@ -11,47 +11,47 @@
                 <h3 class="text-xl w-96 text-center">Cart is Empty</h3>
             @else
                 <div class="font-base text-sm text-gray-700 dark:text-gray-300">
-                    <x-tickets.table :cart="$cart" :showView="false" :showEdit="false" :showDelete="false"
-                        :showAddCart="false" :showRemoveFromCart="true" />
+                    <x-tickets.table :cart="$cart" :showView="false" :showEdit="false" :showDelete="false" :showAddCart="false"
+                        :showRemoveFromCart="true" />
                 </div>
                 <div class="mt-12">
                     <div class="flex justify-between space-x-12 items-end">
                         <div>
                             <h3 class="mb-4 text-xl">Shopping Cart Confirmation </h3>
-                            @if (!Auth::check())
-                                <form action="{{ route('cart.confirm') }}" method="post">
-                                    @csrf
-                                    <x-field.input name="costumer_name" label="Costumer Name" width="lg" :readonly="false"
-                                        value="" />
-                                    <x-field.input name="email" label="Email" width="lg" :readonly="false"
-                                        value="" />
-                                    <x-field.input name="nif" label="NIF" width="lg" :readonly="false"
-                                        value="" />
-                                    <br>
-                                    <x-input-label for="payment_type" :value="__('Payment Type')" />
-                                    <x-select-input id="payment_type" name="payment_type" class="mt-1 block w-full" required
-                                        autofocus="name">
-                                        <option value="">Choose one</option>
-                                        <option value="PAYPAL">PayPal</option>
-                                        <option value="MBWAY">MBWay</option>
-                                        <option value="VISA">Visa</option>
-                                    </x-select-input>
 
-                                    <x-input-error class="mt-2" :messages="$errors->get('payment_type')" />
+                            <form action="{{ route('cart.confirm') }}" method="post">
+                                @csrf
+                                <x-field.input name="costumer_name" label="Costumer Name" width="lg" :readonly="false"
+                                    value="" />
+                                <x-field.input name="email" label="Email" width="lg" :readonly="false" value="" />
+                                <x-field.input name="nif" label="NIF" width="lg" :readonly="false" value="" />
+                                <br>
+                                <x-input-label for="payment_type" :value="__('Payment Type')" />
+                                <x-select-input id="payment_type" name="payment_type" class="mt-1 block w-full" required
+                                    autofocus="name">
+                                    <option value="">Choose one</option>
+                                    <option value="PAYPAL">PayPal</option>
+                                    <option value="MBWAY">MBWay</option>
+                                    <option value="VISA">Visa</option>
+                                </x-select-input>
 
-                                    <x-input-label for="payment_ref" :value="__('Payment Reference')" />
-                                    <x-text-input id="payment_ref" name="payment_ref" type="text" class="mt-1 block w-full"
-                                        value="" required autofocus autocomplete="name" />
-                                    <x-input-error class="mt-2" :messages="$errors->get('payment_ref')" />
+                                <x-input-error class="mt-2" :messages="$errors->get('payment_type')" />
+
+                                <x-input-label for="payment_ref" :value="__('Payment Reference')" />
+                                <x-text-input id="payment_ref" name="payment_ref" type="text" class="mt-1 block w-full"
+                                    value="" required autofocus autocomplete="name" />
+                                <x-input-error class="mt-2" :messages="$errors->get('payment_ref')" />
 
 
 
 
-                                </form>
-                            @endif
-                            <x-field.input name="price_total" label="Total to pay" width="lg" :readonly="true"
-                                :value="$many *
-                                    App\Models\Configuration::pluck('ticket_price')[0]" />
+                            </form>
+
+                            <x-input-label for="payment_total" :value="__('Total To Pay')" />
+                            <x-text-input id="pay_value" name="Total to pay" type="text" class="mt-3 block w-full "
+                                value="{{ $many * App\Models\Configuration::pluck('ticket_price')[0] }} € "
+                                :readonly="true" />
+
                             <x-button element="submit" type="dark" text="Confirm" class="mt-4" />
                             <form action="{{ route('cart.destroy') }}" method="post">
                                 @csrf
