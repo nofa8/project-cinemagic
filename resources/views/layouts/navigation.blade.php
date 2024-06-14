@@ -107,6 +107,9 @@
                             <x-menus.submenu-item
                                 content="Genres"
                                 href="{{ route('genres.index') }}"/>
+                            <x-menus.submenu-item
+                                content="Screenings Management"
+                                href="{{ route('screenings.management') }}"/>
 
                     </x-menus.submenu>
 

@@ -45,9 +45,13 @@ class ScreeningController extends Controller
         return view('screenings.show')->with('screening', $screening);
     }
 
-    public function showCase(): View
+    public function management(): View
     {
-        return view('screenings.showcase');
+        $allScreens = Screening::
+            orderBy('date', 'desc')
+            ->paginate(21)
+            ->withQueryString();
+        return view('screenings.management')->with('screenings',$allScreens);
     }
 
     public function create(): View
