@@ -1,13 +1,27 @@
-@php
-    $mode = $mode ?? 'edit';
-    $readonly = $mode == 'show';
-@endphp
-
-<x-field.input name="qrcode_url" label="QR Code URL" :readonly="$readonly || ($mode == 'edit')"
-               value="{{ old('qrcode_url', $ticket->qrcode_url) }}"/>
-
-<x-field.select name="status" label="Status" :readonly="$readonly" :options="['valid' => 'Valid', 'invalid' => 'Invalid']"
-                value="{{ old('status', $ticket->status) }}"/>
-
-<x-field.input name="price" label="Price" :readonly="$readonly" type="number" step="0.01"
-               value="{{ old('price', $ticket->price) }}"/>
+<div class="container mx-auto mt-5">
+    <div class="max-w-xl mx-auto bg-white p-5 rounded-lg shadow-md">
+        <h1 class="text-2xl font-bold mb-5">Ticket Details</h1>
+        
+        <div class="mb-4">
+            <h2 class="text-xl font-semibold">Ticket ID: {{ $ticket->id }}</h2>
+        </div>
+        <div class="mb-4">
+            <h2 class="text-xl font-semibold">Costumer Name: {{ $ticket->purchase->customer_name}} </h2>
+        </div>
+        <div class="mb-4">
+            <h2 class="text-xl font-semibold">Ticket Price: {{ $ticket->price }}€</h2>
+        </div>
+        <div class="mb-4">
+            <h2 class="text-xl font-semibold">Ticket Theater: {{ $ticket->screening->theater->name }}</h2>
+        </div>
+        <div class="mb-4">
+            <h2 class="text-xl font-semibold">Ticket Movie: {{ $ticket->screening->movie->title }}</h2>
+        </div>
+        <div class="mb-4">
+            <h2 class="text-xl font-semibold">Ticket Screening Date: {{ $ticket->screening->date }} {{$ticket->screening->start_time}}</h2>
+        </div>
+        <div class="mb-4">
+            <h2 class="text-xl font-semibold"> Screening ID: {{ $ticket->screening->id }} </h2>
+        </div>
+    </div>
+</div>
