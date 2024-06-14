@@ -2,6 +2,12 @@
     $mode = $mode ?? 'edit';
     $readonly = $mode == 'show';
     $adminReadonly = $readonly;
+
+    $options = [
+        'A' => 'Administrative',
+        'E' => 'Employee',
+    ];
+
     if (!$adminReadonly) {
         if ($mode == 'create') {
             $adminReadonly = Auth::user()?->cannot('createAdmin', App\Models\User::class);
@@ -19,8 +25,9 @@
                         value="{{ old('name', $administrative->name) }}"/>
         <x-field.input name="email" type="email" label="Email" :readonly="$readonly"
                         value="{{ old('email', $administrative->email) }}"/>
-        <x-field.checkbox name="admin" label="Administrator" :readonly="$adminReadonly"
-                        value="{{ old('admin', $administrative->admin) }}"/>
+        <div class="flex items-center space-x-4">
+            <x-field.radio-group name="type" label="Type" :options="$options" :value="old('type', $administrative->type)" :readonly="$readonly"/>
+        </div>
     </div>
     <div class="pb-6">
         <x-field.image

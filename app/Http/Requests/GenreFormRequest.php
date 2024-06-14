@@ -28,7 +28,7 @@ class GenreFormRequest extends FormRequest
             // This will merge 2 arrays:
             // (adds the "abbreviation" rule to the $rules array)
             $rules = array_merge($rules, [
-                'code' => 'required|string|max:20|unique:genres,abbreviation',
+                'code' => 'required|string|max:20|unique:genres,code',
             ]);
         }
         return $rules;
