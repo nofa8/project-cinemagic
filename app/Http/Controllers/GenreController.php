@@ -26,7 +26,16 @@ class GenreController extends Controller
 
     public function store(GenreFormRequest $request): RedirectResponse
     {
-        $newGenre = Genre::create($request->validated());
+        $validatedData = $request->validated();
+        $newGenre = DB::transaction(function () use ($validatedData) {
+            $newGenre = new Genre();
+            $newGenre->code = $validatedData['code'];
+            $newGenre->name = $validatedData['name'];
+            $newGenre->save();
+            return $newGenre;
+        });
+
+
         $url = route('genres.show', ['genre' => $newGenre]);
         $htmlMessage = "Genre <a href='$url'><u>{$newGenre->name}</u></a> ({$newGenre->code}) has been created successfully!";
         return redirect()->route('genres.index')

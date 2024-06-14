@@ -31,17 +31,17 @@
                     </h2>
                 </header>
                 <div class="mt-6 space-y-4">
-                    @include('genre.shared.fields', ['mode' => 'show'])
+                    @include('genres.shared.fields', ['mode' => 'show'])
                 </div>
                 <h3 class="pt-16 pb-4 text-2xl font-medium text-gray-900 dark:text-gray-100">
                     Movies
                 </h3>
-                <x-movies.table :movies="$genre_code->movies"
+                <x-movies.table :movies="$genre->movies"
                     :showGenre="false"
                     :showView="true"
                     :showEdit="false"
                     :showDelete="false"
-                    class="pt-4"
+                    class="pt-4 dark:text-gray-100"
                     />
             </section>
         </div>
