@@ -37,7 +37,7 @@
                     </h2>
                 </header>
                 <div class="mt-6 space-y-4">
-                    @include('screenings.shared.fields', ['mode' => 'show'])
+                    @include('screenings.shared.fields', ['mode' => 'show', 'screening'=> $screening])
                 </div>
                 
             </section>

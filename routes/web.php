@@ -36,7 +36,7 @@ Route::resource('movies', MovieController::class)->only(['show']);
 Route::get('register', [RegisteredUserController::class, 'create'])->name('register');
 Route::post('register', [RegisteredUserController::class, 'store']);
 
-
+Route::put('/tickets/{screening}/verify', [TicketController::class, 'verify'])->name('tickets.verify');
 
 Route::get('theaters/deleted', [TheaterController::class, 'deleted'])
     ->name('theaters.deleted');
@@ -68,6 +68,9 @@ Route::get('screenings/{screenings}/seats', [SeatController::class, 'show'])
 //Route::delete('theaters/seat', [SeatController::class, 'destroyUpdate'])->name(['seats.destroy']);
 
 Route::resource('movies', MovieController::class)->only(['show']);
+
+
+
 
 
 /* ----- Non-Verified users ----- */
