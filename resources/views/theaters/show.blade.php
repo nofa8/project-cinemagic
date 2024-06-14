@@ -39,10 +39,11 @@
                 <div class="mt-6 space-y-4">
                     @include('theaters.shared.fields', ['mode' => 'show'])
                 </div>
-                <div class=" px-4 py-2 my-2" disabled>
+                <div class=" px-4 py-2 my-2 overflow-x-auto" disabled>
                     <fieldset disabled>
-                    <x-seats.table  :seats="$theater->seats" :tickets="new Illuminate\Database\Eloquent\Collection()" />
-                    </fieldset>
+
+                        <x-seats.table  :seats="$theater->seats" :tickets="new Illuminate\Database\Eloquent\Collection()" />
+                    </fieldset >
                 </div>
             </section>
         </div>
