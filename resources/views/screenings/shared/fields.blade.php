@@ -9,7 +9,7 @@
     value="{{ $screening->start_time }}" />
 
 
-<form method="put" action="{{ route('tickets.verify', ['screening' => $screening]) }}" class="mt-6 space-y-6">
+<form method="post" action="{{ route('tickets.verify', ['screening' => $screening]) }}" class="mt-6 space-y-6">
     @csrf
 
     <div>
@@ -17,15 +17,7 @@
         <x-text-input id="ticket_id" name="ticket_id" type="text" class="mt-1 block w-full" />
         <x-input-error class="mt-2" :messages="$errors->get('ticket_id')" />
     </div>
-
-    <div>
-        <x-input-label for="ticket_url" :value="__('Ticket URL')" />
-        <x-text-input id="ticket_url" name="ticket_url" type="text" class="mt-1 block w-full" />
-        <x-input-error class="mt-2" :messages="$errors->get('ticket_url')" />
-    </div>
-
     
-
     <div class="flex items-center gap-4">
         <x-primary-button>{{ __('Verify') }}</x-primary-button>
     </div>

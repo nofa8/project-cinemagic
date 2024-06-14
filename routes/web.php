@@ -36,7 +36,7 @@ Route::resource('movies', MovieController::class)->only(['show']);
 Route::get('register', [RegisteredUserController::class, 'create'])->name('register');
 Route::post('register', [RegisteredUserController::class, 'store']);
 
-Route::put('/tickets/{screening}/verify', [TicketController::class, 'verify'])->name('tickets.verify');
+Route::post('/tickets/verify/{screening}', [TicketController::class, 'verify'])->name('tickets.verify');
 
 Route::get('theaters/deleted', [TheaterController::class, 'deleted'])
     ->name('theaters.deleted');

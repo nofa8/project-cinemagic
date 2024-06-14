@@ -152,7 +152,7 @@ class TicketController extends Controller
         $isValid = false;
         $ticket = null;
     
-        dd($screening->id);
+        
 
         if ($request->filled('ticket_id')) {
             $ticketCount = Ticket::where('id', $request->ticket_id)
@@ -169,19 +169,6 @@ class TicketController extends Controller
                 $isValid = true;
             } 
     
-        } elseif ($request->filled('ticket_url')) {
-            $ticketCount = Ticket::where('qrcode_url', $request->ticket_url)
-                                 ->where('screening_id', $screening->id)
-                                 ->where('status', 'valid')
-                                 ->count();
-    
-            if ($ticketCount > 0) {
-                $ticket = Ticket::where('qrcode_url', $request->ticket_url)
-                                ->where('screening_id', $screening->id)
-                                ->where('status', 'valid')
-                                ->first();
-                $isValid = true;
-            } 
         } 
         if ($isValid && $ticket) {
             return redirect()->back()
