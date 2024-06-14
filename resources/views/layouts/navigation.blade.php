@@ -199,10 +199,10 @@
                             content="Profile"
                             selectable="0"
                             href="{{ route('profile.edit') }}"/>
-                        <x-menus.submenu-item
+                        {{-- <x-menus.submenu-item
                             content="Change Password"
                             selectable="0"
-                            href="{{ route('profile.edit.password') }}"/>
+                            href="{{ route('profile.edit.password') }}"/> --}}
                         @endauth
                         <hr>
                         <form id="form_to_logout_from_menu" method="POST" action="{{ route('logout') }}" class="hidden">
