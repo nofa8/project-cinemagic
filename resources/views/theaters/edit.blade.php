@@ -47,7 +47,7 @@
                 </form>
             </section>
 
-            <form method="POST" action="{{ route('seats.destroyAll') }}">
+            <form method="POST" action="{{ route('seats.destroyAll', ["theater" => $theater]) }}">
                 @csrf
                 @method('DELETE')
                 <div class=" px-4 py-2 my-2">

@@ -138,6 +138,9 @@ class TheaterController extends \Illuminate\Routing\Controller
         // }
 
         // Delete the theater from the database
+        $theater->seats()->each(function ($seat) {
+            $seat->delete();
+        });     
         $theater->delete();
 
         // Redirect with a success message
@@ -148,7 +151,7 @@ class TheaterController extends \Illuminate\Routing\Controller
     }
 
     public function deleted(){
-        $theaters = Theater::onlyTrashed()->orderBy('name')->paginate(14)->withQueryString();
+        $theaters = Theater::onlyTrashed()->orderBy('name')->paginate(20)->withQueryString();
         return view('theaters.deleted')->with('theaters', $theaters);
     }
 
@@ -167,6 +170,13 @@ class TheaterController extends \Illuminate\Routing\Controller
                 ->with('alert-type', 'error')
                 ->with('alert-msg', "Theater \"{$theater->name}\" is not in the deleted list.");
         }
+
+        if ($theater?->seats()->withTrashed()->count() > 0) {
+            $theater->seats()->withTrashed()->each(function ($seat) {
+                $seat->forceDelete();
+              });              
+        }
+
         if ($theater->photo_filename && Storage::exists('public/photos/' . $theater->photo_filename)) {
             Storage::delete('public/photos/' . $theater->photo_filename);
         }

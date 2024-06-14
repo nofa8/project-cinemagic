@@ -68,6 +68,8 @@ Route::get('movies/{movie}/screenings', [MovieController::class, 'showScreenings
     //->can('viewCurriculum', Movie::class);
 
 
+Route::delete('theaters/{theater}/seat', [SeatController::class, 'destroyUpdate'])->name('seats.destroyAll');
+
 Route::get('screenings/{screenings}/seats', [SeatController::class, 'show'])
     ->name('seats.show');
 

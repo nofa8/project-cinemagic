@@ -17,6 +17,7 @@ class Table extends Component
         
         $table = [];
         $seats = $seats->sortBy('seat_number')->sortBy('row')->values();
+        $seatMatrix = [];
         foreach ($seats as $seat) {
             $seatMatrix[$seat->row][$seat->seat_number] = $seat->id;
         }
@@ -24,7 +25,9 @@ class Table extends Component
             $tickets = new Collection;
         }else{
             $tickets = $tickets->pluck('seat_id');
-        }   
+        }  
+        
+        
         
         
         foreach ($seatMatrix as $seat=>$array) {
