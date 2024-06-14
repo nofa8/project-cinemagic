@@ -8,3 +8,5 @@
 <x-field.input name="row" label="Row Character" :readonly="$readonly"
     value="{{ old('row', $seat->row) }}"/>
 
+
+

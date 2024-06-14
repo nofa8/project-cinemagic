@@ -65,6 +65,7 @@ Route::get('movies/{movie}/screenings', [MovieController::class, 'showScreenings
 
 Route::get('screenings/{screenings}/seats', [SeatController::class, 'show'])
     ->name('seats.show');
+//Route::delete('theaters/seat', [SeatController::class, 'destroyUpdate'])->name(['seats.destroy']);
 
 Route::resource('movies', MovieController::class)->only(['show']);
 

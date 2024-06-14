@@ -1,6 +1,6 @@
 @extends('layouts.main')
 
-@section('header-title', $theater->name)
+
 @section('main')
 <div class="flex flex-col space-y-6">
     <div class="p-4 sm:p-8 bg-white dark:bg-gray-900 shadow sm:rounded-lg">
@@ -27,7 +27,8 @@
                             element="submit"
                             text="Delete"
                             type="danger"/>
-                    </form>
+                    </form>                    
+
                     {{-- @endcan --}}
                 </div>
                 <header>
@@ -37,6 +38,9 @@
                 </header>
                 <div class="mt-6 space-y-4">
                     @include('theaters.shared.fields', ['mode' => 'show'])
+                </div>
+                <div class=" px-4 py-2 my-2">
+                    <x-seats.table  :seats="$theater->seats" :tickets="new Illuminate\Database\Eloquent\Collection()" />
                 </div>
             </section>
         </div>

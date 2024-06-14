@@ -24,7 +24,7 @@ class TheaterController extends \Illuminate\Routing\Controller
     public function index(): View
     {
         return view('theaters.index')
-            ->with('theaters', Theater::orderBy('name')->paginate(14)->withQueryString());
+            ->with('theaters', Theater::orderBy('name')->paginate(20)->withQueryString());
     }
 
     public function create(): View

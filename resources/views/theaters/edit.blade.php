@@ -46,6 +46,14 @@
                     </div>
                 </form>
             </section>
+            <form method="POST" action="{{ route('seats.destroy') }}">
+                @csrf
+                @method('DELETE')
+                <div class=" px-4 py-2 my-2">
+                    <x-seats.table  :seats="$theater->seats" :tickets="new Illuminate\Database\Eloquent\Collection()" />
+                </div>
+                <x-button element="submit" type="dark" text="Update" class="uppercase"/>
+            </form>
         </div>
     </div>
 </div>

@@ -22,9 +22,13 @@
                     <tr>
                         <td class="border-b-2 text-center">{{ $row }}</td>
                         @for($j = 1; $j <= $max; $j++)
+
+
                             <td class="border px-4 py-2 text-center">
                                 <label class="inline-flex items-center">
-                                    @if($seats[$j] == 'disabled')
+                                    @if( empty($seats[$j]) )
+                                    <input type="checkbox" name="seats[]" class="form-checkbox h-3 w-3 text-red-800/50" disabled checked>
+                                    @elseif($seats[$j] == 'disabled')
                                     <input type="checkbox" name="seats[]" class="form-checkbox h-3 w-3 text-indigo-800/50" disabled checked>
                                     @else
                                     <input type="checkbox" name="seats[]" value="{{ $seatMatrix[$row][$j]}}" class="form-checkbox h-5 w-5 text-indigo-600" >
