@@ -32,4 +32,8 @@
             </div>
         </div>
     </div>
+    <form method="POST" class="hidden" action="{{ route('profile.destroy.image', ['user' => $user]) }}" id="form_to_delete_photo">
+        @csrf
+        @method('DELETE')
+    </form>
 </x-app-layout>

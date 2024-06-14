@@ -86,7 +86,7 @@ class MovieController extends Controller
         if ($filterByName !== null) {
             $moviesQuery->where('movies.title', 'like', "%$filterByName%");
         }
-        
+
         #$moviesQuery->groupBy("movies.title");
         $now = Carbon::now();
         $forteendaysfromnow = Carbon::now()->addDays(14)->format("Y-m-d");
@@ -179,7 +179,7 @@ class MovieController extends Controller
                             <a href='$url'><u>{$movie->title}</u></a>
                             because there was an error with the operation!";
         }
-        return redirect()->route('movies.index')
+        return redirect()->route('movies.showcase')
             ->with('alert-type', $alertType)
             ->with('alert-msg', $alertMsg);
     }
@@ -188,7 +188,7 @@ class MovieController extends Controller
     {
         return view('movies.show')
             ->with('movie', $movie);
-            
+
     }
     public function destroyImage(Movie $movie): RedirectResponse
     {

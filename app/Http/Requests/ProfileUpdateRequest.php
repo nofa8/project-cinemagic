@@ -19,6 +19,7 @@ class ProfileUpdateRequest extends FormRequest
             'name' => ['sometimes', 'string', 'max:255'],
             'nif' => ['sometimes', 'integer', 'digits:9'],
             'payment_type' => ['sometimes', Rule::in(['MBWAY', 'PAYPAL', 'VISA'])],
+            'photo_filename' => 'sometimes|image|max:4096',
             'email' => ['sometimes', 'string', 'lowercase', 'email', 'max:255', Rule::unique(User::class)->ignore($this->user()->id)],
         ];
 

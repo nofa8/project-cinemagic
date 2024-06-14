@@ -22,12 +22,13 @@
                 width="md"
                 :readonly="$readonly"
                 deleteTitle="Delete Photo"
-                :deleteAllow="true"
+                :deleteAllow="($mode == 'edit') && ($user->photo_filename)"
                 deleteForm="form_to_delete_photo"
                 imageUrl="{{ Auth::user()?->photoFullUrl ? Auth::user()->photoFullUrl : Vite::asset('resources/img/photos/default.png')}}"
                 imgClass="rounded-full"
             />
         </div>
+
         <div class="mt-6">
             <x-primary-button>{{ __('Save') }}</x-primary-button>
 
