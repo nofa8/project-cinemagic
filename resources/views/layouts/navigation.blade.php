@@ -11,7 +11,7 @@
                     <a href="{{ route('home')}}">
                         <div class="h-16 w-40 bg-cover bg-[url('../img/politecnico_h.svg')] dark:bg-[url('../img/politecnico_h_white.svg')]"></div>
                     </a>
-                </div> 
+                </div>
 
                 <!-- Menu Items -->
                 <div id="menu-container" class="grow flex flex-col sm:flex-row items-stretch
@@ -61,6 +61,15 @@
                             />
                     @endcan
 
+                    {{-- @can('viewAny', App\Models\Customer::class) --}}
+                        <x-menus.menu-item
+                            content="Administratives & Employees"
+                            selectable="1"
+                            href="{{ route('administratives.index') }}"
+                            selected="{{ Route::currentRouteName() == 'administratives.index'}}"
+                            />
+                    {{-- @endcan     --}}
+
                     @if(
                         Gate::check('viewAny', App\Models\Customer::class) ||
                         Gate::check('viewAny', App\Models\User::class) ||
@@ -91,11 +100,11 @@
                                 selectable="0"
                                 href="{{ route('theaters.index') }}"/>
                             @endcan
-                            
+
                             <x-menus.submenu-item
                                 content="Screenings"
                                 href="{{ route('screenings.index') }}"/>
-                            
+
                     </x-menus.submenu>
 
                     <x-menus.submenu
@@ -121,16 +130,16 @@
                                 selectable="0"
                                 href="{{ route('theaters.deleted') }}"/>
                             @endcan
-                            
+
                             <x-menus.submenu-item
                                 content="Screenings"
                                 href="{{ route('screenings.index') }}"/>
-                            
+
                     </x-menus.submenu>
                     @endif
 
                     <div class="grow"></div>
-                    @php 
+                    @php
                         $ls = (Auth::check()) ? count(session()->get('cart') ?? []) : ( Cookie::get('cart') != null ? count(json_decode(Cookie::get('cart'), true) ?? []) : 0);
                     @endphp
                     <!-- Menu Item: Cart -->
@@ -139,8 +148,8 @@
                     selectable=1
                     selected="{{Route::currentRouteName() == 'cart.show'}}"
                     :total="$ls"
-                    /> 
-                    
+                    />
+
                     @auth
                     <x-menus.submenu
                         selectable="0"
