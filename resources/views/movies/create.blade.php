@@ -16,7 +16,7 @@
                     </p>
                 </header>
 
-                <form method="POST" action="{{ route('movies.store') }}">
+                <form method="POST" action="{{ route('movies.store') }}" enctype="multipart/form-data">
                     @csrf
                     @include('movies.shared.fields', ['mode' => 'create'])
                     <div class="flex mt-6">

@@ -30,7 +30,7 @@ Route::get('movies/showcase', [MovieController::class, 'showCase'])
     ->name('movies.showcase')
     ->can('viewShowCase', Movie::class);
 
-
+Route::get('movies/create', [MovieController::class, 'create'])->name('movies.create');
 Route::resource('movies', MovieController::class)->only(['show']);
 
 Route::get('register', [RegisteredUserController::class, 'create'])->name('register');
