@@ -22,8 +22,6 @@
                     <tr>
                         <td class="border-b-2 text-center">{{ $row }}</td>
                         @for($j = 1; $j <= $max; $j++)
-
-
                             <td class="border px-4 py-2 text-center">
                                 <label class="inline-flex items-center">
                                     @if( empty($seats[$j]) )

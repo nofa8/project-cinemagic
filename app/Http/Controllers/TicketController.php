@@ -19,7 +19,7 @@ class TicketController extends Controller
 
     public function __construct()
     {
-        $this->authorizeResource(Ticket::class);
+        //$this->authorizeResource(Ticket::class);
     }
     /**
      * Display a listing of the resource.
@@ -67,8 +67,8 @@ class TicketController extends Controller
         $url = route('tickets.show', ['ticket' => $NewTicket]);
         $htmlMessage = "Ticket <a href='$url'><u>{$NewTicket->id}</u></a> ({$NewTicket->price}) has been created successfully!";
         return redirect()->route('tickets.index')
-        ->with('alert-type', 'success')
-        ->with('alert-msg', $htmlMessage);
+            ->with('alert-type', 'success')
+            ->with('alert-msg', $htmlMessage);
     }
 
     /**
@@ -121,7 +121,7 @@ class TicketController extends Controller
             // ->where('purchases.ticket_id', $ticket->id)
             // ->distinct('customers.id')
             // ->count('customers.id');
-            if ($totalTickets == 0 ) {
+            if ($totalTickets == 0) {
                 $ticket->delete();
                 $alertType = 'success';
                 $alertMsg = "ticket {$ticket->name} ({$ticket->abbreviation}) has been deleted successfully!";
@@ -147,36 +147,40 @@ class TicketController extends Controller
             ->with('alert-msg', $alertMsg);
     }
 
-    public function verify(Request $request, $screeningId)
+    public function verify(Request $request, Screening $screening)
     {
-        $request->validate([
-            'ticket_id' => 'nullable|string',
-            'ticket_url' => 'nullable|url',
-            'ticket_type' => 'required|in:id,url',
-        ]);
+        $isValid = false;
+        $ticket = null;
+    
+        
 
-        $screening = Screening::findOrFail($screeningId);
-
-        if ($request->ticket_type == 'id') {
-            $ticketId = $request->ticket_id;
-            // Validate the ticket ID
-            $ticket = Ticket::where('id', $ticketId)->where('screening_id', $screening->id)->first();
-            if ($ticket) {
-                return back()->with('success', 'Ticket ID is valid for this screening.');
-            } else {
-                return back()->withErrors(['ticket_id' => 'Invalid Ticket ID for this screening.']);
-            }
-        } elseif ($request->ticket_type == 'url') {
-            $ticketUrl = $request->ticket_url;
-            // Validate the ticket URL
-            $ticket = Ticket::where('url', $ticketUrl)->where('screening_id', $screening->id)->first();
-            if ($ticket) {
-                return back()->with('success', 'Ticket URL is valid for this screening.');
-            } else {
-                return back()->withErrors(['ticket_url' => 'Invalid Ticket URL for this screening.']);
-            }
+        if ($request->filled('ticket_id')) {
+            $ticketCount = Ticket::where('id', $request->ticket_id)
+                                 ->where('screening_id', $screening->id)
+                                 ->where('status', 'valid')
+                                 ->count();
+            
+    
+            if ($ticketCount > 0) {
+                $ticket = Ticket::where('id', $request->ticket_id)
+                                ->where('screening_id', $screening->id)
+                                ->where('status', 'valid')
+                                ->first();
+                $isValid = true;
+            } 
+    
+        } 
+        if ($isValid && $ticket) {
+            return redirect()->back()
+                ->with('alert-type', 'success')
+                ->with('alert-msg', 'Ticket is Valid.');
+        } else {
+            return redirect()->back()
+                ->with('alert-type', 'error')
+                ->with('alert-msg', 'Ticket is Invalid.');
         }
-
-        return back()->withErrors(['general' => 'An unexpected error occurred.']);
     }
 }
+
+
+

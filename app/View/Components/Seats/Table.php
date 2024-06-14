@@ -16,7 +16,7 @@ class Table extends Component
     {
         
         $table = [];
-        $seats = $seats->sortBy('row')->sortBy('seat_number')->values();
+        $seats = $seats->sortBy('seat_number')->sortBy('row')->values();
         foreach ($seats as $seat) {
             $seatMatrix[$seat->row][$seat->seat_number] = $seat->id;
         }
@@ -50,7 +50,7 @@ class Table extends Component
 
     public function __construct(
         public Collection $seats,
-        public Collection $tickets
+        public Collection $tickets= new Collection
     )
     {
         $data = $this->getTable($seats, $tickets);
