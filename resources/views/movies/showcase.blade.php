@@ -18,5 +18,5 @@
     <div class="mt-4">
         {{ $movies->links() }}
     </div>
-    
+
 @endsection
