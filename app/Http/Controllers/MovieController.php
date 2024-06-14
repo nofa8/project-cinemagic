@@ -17,18 +17,17 @@ class MovieController extends Controller
 {
     public function index(Request $request): View
     {
-        $genres = Genre::orderBy('name')->pluck('name', 'code')->toArray();
-        $genres = array_merge([null => 'Any genre'], $genres);
-        $filterByGenre = $request->query('genre');
-        $filterByName = $request->title;
+        $filterByGenre = $request->Genre;
+        $filterByName = $request->Title;
         $moviesQuery = Movie::query();
+
+
         if ($filterByGenre !== null) {
-            $moviesQuery->where('genre', $filterByGenre);
+            $moviesQuery->where('genre_code', $filterByGenre);
         }
 
         if ($filterByName !== null) {
-            $moviesQuery
-                ->where('movies.title', 'like', "%$filterByName%");
+            $moviesQuery->where('movies.title', 'like', "%$filterByName%");
         }
 
         $movies = $moviesQuery
@@ -37,17 +36,15 @@ class MovieController extends Controller
             ->withQueryString();
         return view(
             'movies.index',
-            compact('genres', 'movies', 'filterByGenre', 'filterByName')
+            compact( 'movies', 'filterByGenre', 'filterByName')
         );
     }
 
     public function create(): View
     {
-        $newMovie = new Movie();
-        $genres = Genre::orderBy('name')->pluck('name', 'code')->toArray();
+        $movie = new Movie();
         return view('movies.create')
-            ->with('genres', $genres)
-            ->with('movie', $newMovie);
+            ->with('movie', $movie);
     }
 
     public function store(MovieFormRequest $request): RedirectResponse
@@ -65,7 +62,7 @@ class MovieController extends Controller
             return $newMovie;
         });
         $url = route('movies.show', ['movie' => $newMovie]);
-        $htmlMessage = "Movie <a href='$url'><u>{$newMovie->user->name}</u></a> has been created successfully!";
+        $htmlMessage = "Movie <a href='$url'><u>{$newMovie->title}</u></a> has been created successfully!";
         return redirect()->route('movies.index')
             ->with('alert-type', 'success')
             ->with('alert-msg', $htmlMessage);
@@ -132,8 +129,10 @@ class MovieController extends Controller
             $movie->trailer_url = $validatedData['trailer_url'];
             $movie->save();
             if ($request->hasFile('poster_filename')) {
-                if ($movie->poster_filename &&
-                    Storage::fileExists('public/posters/' . $movie->poster_filename)) {
+                if (
+                    $movie->poster_filename &&
+                    Storage::fileExists('public/posters/' . $movie->poster_filename)
+                ) {
                     Storage::delete('public/posters/' . $movie->poster_filename);
                 }
                 $path = $request->poster_filename->store('public/posters');
@@ -154,7 +153,7 @@ class MovieController extends Controller
         try {
             $url = route('movies.show', ['movie' => $movie]);
             $totalMoviesScreenings = DB::scalar(
-                'select count(*) from screenings where movie_id = ?',
+                'select count(*) from screenings where NOW() < CONCAT(date, " ", start_time) AND movie_id = ?;',
                 [$movie->id]
             );
             if ($totalMoviesScreenings == 0) {
@@ -179,7 +178,7 @@ class MovieController extends Controller
                             <a href='$url'><u>{$movie->title}</u></a>
                             because there was an error with the operation!";
         }
-        return redirect()->route('movies.showcase')
+        return redirect()->back()
             ->with('alert-type', $alertType)
             ->with('alert-msg', $alertMsg);
     }
