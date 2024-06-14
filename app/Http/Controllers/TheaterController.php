@@ -123,8 +123,6 @@ class TheaterController extends \Illuminate\Routing\Controller
     }
 
     public function saveD(Theater $theater): RedirectResponse{
-        Log::info('Reached save method');
-        dump($theater);
         if (!$theater->trashed()){
             return view('theaters.deleted');    
         }

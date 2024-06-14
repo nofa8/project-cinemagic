@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 use App\Models\Ticket;
 use Illuminate\Contracts\View\View;
 use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\RedirectResponse; 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cookie;
 
@@ -16,8 +16,14 @@ class CartController extends Controller
 {
     public function show(): View 
     { 
-        $cart = session('cart', null); 
-        return view('cart.show', compact('cart')); 
+        if (Auth::check() && empty(session()->get('cart'))){
+            $cart = [];
+        }else{
+            $cart = (Auth::check()) ? session()->get('cart', collect()) : json_decode(Cookie::get('cart'), true) ?? [];
+
+        }
+        $much = count($cart);
+        return view('cart.show', compact('cart'))->with('many',$much); 
     } 
 
     public function addToCart(Request $request, Screening $screening) // Assuming you want a single screening object
@@ -26,7 +32,7 @@ class CartController extends Controller
         $seatIds = $request->get('seats');
         // Validate seat IDs (optional)
         // You can add validation here to ensure valid seat IDs are provided
-        if (empty(session()->get('cart'))){
+        if (Auth::check() && empty(session()->get('cart'))){
             $cart = [];
         }else{
             $cart = (Auth::check()) ? session()->get('cart', collect()) : json_decode(Cookie::get('cart'), true) ?? [];
@@ -77,5 +83,27 @@ class CartController extends Controller
             Cookie::queue($cookie);
         }
         return back()->with('alert-msg', $htmlMessage)->with('alert-type', $alertType);
+    }
+
+
+    public function destroy(Request $request): RedirectResponse
+    {
+
+        if (Auth::check() && empty(session()->get('cart'))){
+            return back()
+            ->with('alert-type', 'error')
+            ->with('alert-msg', 'Shopping Cart didn\'t need any cleaning');
+        }else{
+
+            if (Auth::check()) {
+                $request->session()->forget('cart');
+            }else{
+                Cookie::queue(Cookie::forget('cart'));
+            }
+
+        }
+        return back()
+            ->with('alert-type', 'success')
+            ->with('alert-msg', 'Shopping Cart has been cleared');
     }
 }

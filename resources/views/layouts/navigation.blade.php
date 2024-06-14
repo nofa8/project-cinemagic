@@ -97,6 +97,36 @@
                                 href="{{ route('screenings.index') }}"/>
                             
                     </x-menus.submenu>
+
+                    <x-menus.submenu
+                        selectable="0"
+                        uniqueName="submenu_others"
+                        content="Deleted">
+                            @can('viewAny', App\Models\Customer::class)
+                            <x-menus.submenu-item
+                                content="Customer"
+                                selectable="0"
+                                href="{{ route('customers.index') }}" />
+                            @endcan
+                            @can('viewAny', App\Models\User::class)
+                            <x-menus.submenu-item
+                                content="Administratives"
+                                selectable="0"
+                                href="{{ route('administratives.index') }}" />
+                            @endcan
+                            <hr>
+                            @can('viewAny', App\Models\Theater::class)
+                            <x-menus.submenu-item
+                                content="Theaters"
+                                selectable="0"
+                                href="{{ route('theaters.deleted') }}"/>
+                            @endcan
+                            
+                            <x-menus.submenu-item
+                                content="Screenings"
+                                href="{{ route('screenings.index') }}"/>
+                            
+                    </x-menus.submenu>
                     @endif
 
                     <div class="grow"></div>
@@ -110,7 +140,6 @@
                     selected="{{Route::currentRouteName() == 'cart.show'}}"
                     :total="$ls"
                     /> 
-                    
                     
                     @auth
                     <x-menus.submenu

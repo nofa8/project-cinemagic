@@ -7,11 +7,11 @@
         <div
             class="my-4 p-6 bg-white dark:bg-gray-900 overflow-hidden
                     shadow-sm sm:rounded-lg text-gray-900 dark:text-gray-50">
-            @empty(session()->get('cart'))
+            @empty($cart)
                 <h3 class="text-xl w-96 text-center">Cart is Empty</h3>
             @else
                 <div class="font-base text-sm text-gray-700 dark:text-gray-300">
-                    <x-tickets.table :cart="session()->get('cart')" :showView="false" :showEdit="false" :showDelete="false"
+                    <x-tickets.table :cart="$cart" :showView="false" :showEdit="false" :showDelete="false"
                         :showAddCart="false" :showRemoveFromCart="true" />
                 </div>
                 <div class="mt-12">
@@ -50,7 +50,7 @@
                                 </form>
                             @endif
                             <x-field.input name="price_total" label="Total to pay" width="lg" :readonly="true"
-                                :value="sizeof(session()->get('cart')) *
+                                :value="$many *
                                     App\Models\Configuration::pluck('ticket_price')[0]" />
                             <x-button element="submit" type="dark" text="Confirm" class="mt-4" />
                             <form action="{{ route('cart.destroy') }}" method="post">
