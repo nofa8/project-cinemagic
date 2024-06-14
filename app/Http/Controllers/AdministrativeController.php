@@ -18,13 +18,15 @@ class AdministrativeController extends \Illuminate\Routing\Controller
 
     public function __construct()
     {
-        $this->authorizeResource(User::class, 'administrative');
+        //$this->authorizeResource(User::class, 'administrative');
     }
 
     public function index(Request $request): View
     {
-        $administrativesQuery = User::where('type', 'A')
+        $currentAdminId = auth()->id();
+        $administrativesQuery = User::where('type', 'A')->orWhere('type', 'E')->where('id','!=',$currentAdminId)
             ->orderBy('name');
+
         $filterByName = $request->query('name');
         if ($filterByName) {
             $administrativesQuery->where('name', 'like', "%$filterByName%");
@@ -57,7 +59,7 @@ class AdministrativeController extends \Illuminate\Routing\Controller
     {
         $validatedData = $request->validated();
         $newAdministrative = new User();
-        
+
         $newAdministrative->name = $validatedData['name'];
         $newAdministrative->email = $validatedData['email'];
         // Only sets admin field if it has permission  to do it.
@@ -91,7 +93,7 @@ class AdministrativeController extends \Illuminate\Routing\Controller
     public function update(AdministrativeFormRequest $request, User $administrative): RedirectResponse
     {
         $validatedData = $request->validated();
-        
+
         $administrative->name = $validatedData['name'];
         $administrative->email = $validatedData['email'];
         // Only updates admin field if it has permission  to do it.

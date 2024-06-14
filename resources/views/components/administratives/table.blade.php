@@ -23,34 +23,34 @@
                 <td class="px-2 py-2 text-left hidden lg:table-cell">{{ $administrative->email }}</td>
                 <td class="px-2 py-2 text-center hidden xl:table-cell">{{ $administrative->admin ? 'Yes' : '-' }}</td>
                 @if($showView)
-                    @can('view', $administrative)
+                    {{-- @can('view', $administrative) --}}
                         <td>
                             <x-table.icon-show class="ps-3 px-0.5"
                             href="{{ route('administratives.show', ['administrative' => $administrative]) }}"/>
                         </td>
                     @else
                         <td></td>
-                    @endcan
+                    {{-- @endcan --}}
                 @endif
                 @if($showEdit)
-                    @can('update', $administrative)
+                    {{-- @can('update', $administrative) --}}
                         <td>
                             <x-table.icon-edit class="px-0.5"
                             href="{{ route('administratives.edit', ['administrative' => $administrative]) }}"/>
                         </td>
                     @else
                         <td></td>
-                    @endcan
+                    {{-- @endcan --}}
                 @endif
-                @if($showDelete)
-                    @can('delete', $administrative)
-                        <td>
-                            <x-table.icon-delete class="px-0.5"
-                            action="{{ route('administratives.destroy', ['administrative' => $administrative]) }}"/>
-                        </td>
-                    @else
-                        <td></td>
-                    @endcan
+                @if($showDelete && $administrative->id !== auth()->id())
+                {{-- @can('delete', $administrative) --}}
+                    <td>
+                        <x-table.icon-delete class="px-0.5"
+                        action="{{ route('administratives.destroy', ['administrative' => $administrative]) }}"/>
+                    </td>
+                {{-- @endcan --}}
+                @else
+                    <td></td>
                 @endif
             </tr>
         @endforeach
