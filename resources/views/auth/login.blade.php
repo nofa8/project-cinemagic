@@ -42,6 +42,15 @@
             <x-primary-button class="ms-3">
                 {{ __('Log in') }}
             </x-primary-button>
+
         </div>
     </form>
+    <div class="flex justify-end space-x-4 my-2">
+        <form method="GET" action="{{ route('register') }}">
+            @csrf
+            <x-primary-button>
+                {{ __('Sign up') }}
+            </x-primary-button>
+        </form>
+    </div>
 </x-guest-layout>

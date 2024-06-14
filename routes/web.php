@@ -15,6 +15,9 @@ use App\Http\Controllers\PDFController;
 use App\Http\Controllers\SeatController;
 use App\Http\Controllers\TicketController;
 use App\Models\Theater;
+use App\Http\Controllers\Auth\RegisteredUserController;
+
+
 
 /* ----- PUBLIC ROUTES ----- */
 
@@ -30,7 +33,8 @@ Route::get('movies/showcase', [MovieController::class, 'showCase'])
 
 Route::resource('movies', MovieController::class)->only(['show']);
 
-
+Route::get('register', [RegisteredUserController::class, 'create'])->name('register');
+Route::post('register', [RegisteredUserController::class, 'store']);
 
 
 
