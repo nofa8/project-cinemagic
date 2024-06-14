@@ -24,11 +24,8 @@ class AdministrativeController extends \Illuminate\Routing\Controller
     public function index(Request $request): View
     {
         $currentAdminId = auth()->id();
-        $administrativesQuery = User::where(function ($query) {
-            $query->where('type', 'A')
-                  ->orWhere('type', 'E');
-        })->where('id', '!=', $currentAdminId)
-          ->orderBy('name');
+        $administrativesQuery = User::where('type', 'A')->orWhere('type', 'E')->where('id','!=',$currentAdminId)
+            ->orderBy('name');
 
         $filterByName = $request->query('name');
         if ($filterByName) {

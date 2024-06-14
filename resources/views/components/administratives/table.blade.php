@@ -42,15 +42,15 @@
                         <td></td>
                     {{-- @endcan --}}
                 @endif
-                @if($showDelete)
-                    {{-- @can('delete', $administrative) --}}
-                        <td>
-                            <x-table.icon-delete class="px-0.5"
-                            action="{{ route('administratives.destroy', ['administrative' => $administrative]) }}"/>
-                        </td>
-                    @else
-                        <td></td>
-                    {{-- @endcan --}}
+                @if($showDelete && $administrative->id !== auth()->id())
+                {{-- @can('delete', $administrative) --}}
+                    <td>
+                        <x-table.icon-delete class="px-0.5"
+                        action="{{ route('administratives.destroy', ['administrative' => $administrative]) }}"/>
+                    </td>
+                {{-- @endcan --}}
+                @else
+                    <td></td>
                 @endif
             </tr>
         @endforeach
