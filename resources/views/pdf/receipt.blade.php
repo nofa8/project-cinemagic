@@ -15,8 +15,15 @@
     <p>Payment Type: {{ $purchase->payment_type }}</p>
     <p>Payment Reference: {{ $purchase->payment_ref }}</p>
     @if (isset($purchase?->customer?->user?->photoFullUrl))
-        <img class="w-sm h-sm" src="$purchase?->customer?->user?->photoFullUrl" alt="Photo">
-     />
+    <div class="max-w-sm max-h-sm">
+        <x-field.image
+            name="photo_file"
+            label="Photo"
+            width="1/5"
+            :readonly="true"
+            :deleteAllow="false"
+            :imageUrl="$purchase?->customer?->user?->photoFullUrl"/>
+    </div>
     @endif
     <h2>Tickets</h2>
     <ul>
