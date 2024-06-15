@@ -16,7 +16,7 @@
                         </p>
                     </header>
 
-                    <form method="POST" action="{{ route('screenings.update', ['screening', $screening->id]) }}">
+                    <form method="POST" action="{{ route('screenings.update', ['screening'=> $screening]) }}">
                         @csrf
                         @method('PUT')
                         <div class="mt-6 space-y-4">

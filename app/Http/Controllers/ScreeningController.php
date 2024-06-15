@@ -96,22 +96,43 @@ class ScreeningController extends Controller
 
     public function update(ScreeningFormRequest $request, Screening $screening): RedirectResponse
     {
-        dd($request);
+        
         $validatedData = $request->validated();
-        $screening = DB::transaction(function () use ($validatedData, $screening, $request) {
-            $screening->movie_id = $validatedData['movie_id'];
-            $screening->theater_id = $validatedData['theater_id'];
-            $screening->date = $validatedData['date'];
-            $screening->start_time = $validatedData['start_time'];
-            
-            $screening->save();
-            
-            return $screening;
-        });
-        $url = route('screenings.show');
-        $htmlMessage = "Screening <a href='$url'><u>{$screening->id}</u></a> has been updated successfully!";
-        return redirect()->route('screenings.show', ['screening', $screening])
-            ->with('alert-type', 'success')
+
+
+        $totalTicketsScreening = $screening->tickets()->count();
+
+       
+        $url = route('screenings.show', ['screening' => $screening]);
+        if ($totalTicketsScreening == 0) {
+            $screening = DB::transaction(function () use ($validatedData, $screening) {
+                $screening->movie_id = $validatedData['movie_id'];
+                $screening->theater_id = $validatedData['theater_id'];
+                $screening->date = $validatedData['date'];
+                $screening->start_time = $validatedData['start_time'];
+                
+                $screening->save();
+                
+                return $screening;
+            });
+            $htmlMessage = "Screening <a href='$url'><u>{$screening->id}</u></a> updated with success.";
+            $alertType = 'success';
+        } else {
+            $alertType = 'warning';
+            $justification = match (true) {
+                $totalTicketsScreening <= 0 => "",
+                $totalTicketsScreening == 1 => "there is 1 ticket for this screening",
+                $totalTicketsScreening > 1 => "there are {$totalTicketsScreening} tickets for this screening",
+            };
+            $htmlMessage = "Screening <a href='$url'><u>{$screening->id}</u></a> cannot be deleted because $justification.";
+        }
+
+
+        
+        
+        
+        return redirect()->route('screenings.show', ['screening' =>$screening])
+            ->with('alert-type', $alertType)
             ->with('alert-msg', $htmlMessage);
     }
 
@@ -130,7 +151,7 @@ class ScreeningController extends Controller
                     $screening->delete();
                 });
                 $alertType = 'success';
-                $alertMsg = "Screening {$screening->id}, {$screening->date} {$screening->movies()->pluck('name')} {$screening->theater_id} has been deleted successfully!";
+                $alertMsg = "Screening {$screening->id}, {$screening->date} {$screening->start_time}, {$screening->movie->title}, {$screening->theater->name} has been deleted successfully!";
             } else {
                 $alertType = 'warning';
                 $justification = match (true) {

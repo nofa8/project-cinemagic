@@ -32,9 +32,9 @@ Route::get('movies/showcase', [MovieController::class, 'showCase'])
 
 Route::get('movies/create', [MovieController::class, 'create'])->name('movies.create');
 
-Route::resource('screenings', ScreeningController::class);
-Route::get('screenings/management', [ScreeningController::class, 'management'])->name('screenings.management');
 
+Route::get('screenings/management', [ScreeningController::class, 'management'])->name('screenings.management');
+Route::resource('screenings', ScreeningController::class);
 
 Route::resource('movies', MovieController::class)->only(['show']);
 
