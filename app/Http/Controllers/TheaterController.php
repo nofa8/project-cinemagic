@@ -44,7 +44,6 @@ class TheaterController extends \Illuminate\Routing\Controller
         ]);
         $newTheater = [
             'name' => $request->get('name'),
-            
         ];
 
         if ($request->hasFile('photo_filename')) {

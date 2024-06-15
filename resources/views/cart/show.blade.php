@@ -59,7 +59,7 @@
 
                                 <x-input-label for="payment_ref" :value="__('Payment Reference')" />
                                 <x-text-input id="payment_ref" name="payment_ref" type="text" class="mt-1 block w-full"
-                                    value="{{ old('payment_ref', $user->customer?->payment_ref) ?? ""}}" required autofocus autocomplete="name" />
+                                    value="{{old('payment_ref', $user->customer?->payment_ref) }}" required autofocus autocomplete="name" />
                                 <x-input-error class="mt-2" :messages="$errors->get('payment_ref')" />
 
 
