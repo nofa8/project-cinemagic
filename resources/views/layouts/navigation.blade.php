@@ -70,6 +70,15 @@
                             />
                     {{-- @endcan     --}}
 
+                    {{-- @can('viewAny', App\Models\Customer::class) --}}
+                        <x-menus.menu-item
+                            content="Statistics"
+                            selectable="1"
+                            href="{{ route('statistics.index') }}"
+                            selected="{{ Route::currentRouteName() == 'statistics.index'}}"
+                        />
+                    {{-- @endcan     --}}
+
                     @if(
                         Gate::check('viewAny', App\Models\Customer::class) ||
                         Gate::check('viewAny', App\Models\User::class) ||
@@ -140,7 +149,7 @@
                             <x-menus.submenu-item
                                 content="Screenings"
                                 href="{{ route('screenings.index') }}"/>
-                            
+
 
                     </x-menus.submenu>
                     @endif

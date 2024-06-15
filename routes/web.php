@@ -18,6 +18,7 @@ use App\Models\Theater;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\PurchaseController;
 use App\Http\Controllers\PDFControllerView;
+use App\Http\Controllers\StatisticsController;
 
 /* ----- PUBLIC ROUTES ----- */
 
@@ -25,6 +26,11 @@ Route::get('/generate-pdf', [PDFController::class, 'generatePDF']);
 
 Route::view('/', 'home')->name('home');
 
+Route::get('statistics', [StatisticsController::class, 'index'])
+    ->name('statistics.index');
+    // ->can('viewStatistics', Movie::class);
+
+Route::post('/export-statistics', [StatisticsController::class, 'exportToExcel'])->name('statistics.export');
 
 Route::get('movies/showcase', [MovieController::class, 'showCase'])
     ->name('movies.showcase')
