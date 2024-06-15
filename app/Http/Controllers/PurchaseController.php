@@ -20,7 +20,7 @@ use Barryvdh\DomPDF\Facade\PDF;
 use Illuminate\Support\Str;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 use App\Models\Screening;
-
+use App\Services\Payment;
 
 class PurchaseController extends Controller
 {
@@ -64,21 +64,38 @@ class PurchaseController extends Controller
         $customer = $auth ? Customer::find(Auth::user()->id) : [];
         
 
-        
+        $extra = "";
+        if ($request->payment_type === 'PAYPAL') {
+            $extra = 'string|lowercase|email|max:255';
+        } elseif ($request->payment_type === 'MBWAY') {
+            $extra = 'integer|digits:9';
+        } elseif ($request->payment_type === 'VISA') {
+            $extra = 'integer|digits:19';
+        }else{
+            return redirect()->back()->with('danger', 'Invalid payment type!');
+        }
 
         $request->validate([
             'Total_pay' => 'required|numeric|between:0,99999999.99',
             'payment_type' => ['required', Rule::in(['VISA', 'PAYPAL', 'MBWAY'])],
-            'payment_ref' => 'required|string|max:255',
+            'payment_ref' => "required|".$extra,
         ]);
-
-
+        $allright = false;
+        match($request->payment_type){
+            'PAYPAL' => $allright= Payment::payWithPaypal($request->payment_ref),
+            'MBWAY'=> $allright= Payment::payWithMBway($request->payment_ref),
+            'VISA'=> $allright= Payment::payWithVisa(substr($request->payment_ref, 0, 16), substr($request->payment_ref, -3))
+        };
+        if (!$allright){
+            return redirect()->back()->with('danger', 'Payment error!');
+        }
+       
         if (!$auth){
-
+            
             $request->validate([
                 'name' => 'required|string|max:255',
-                'email' => 'required|string|email|max:255|unique:users',
-                'nif' => 'sometimes|string|nullable|unique:customers|size:9', 
+                'email' => 'required|string|email|max:255|unique:users|lowercase',
+                'nif' => 'sometimes|integer|digits:9|nullable', 
             ]);
             
 

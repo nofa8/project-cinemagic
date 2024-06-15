@@ -37,20 +37,20 @@
                                     @if(old('payment_type', $user->customer?->payment_type)== 'PAYPAL')
                                         <option value="PAYPAL">PayPal</option>
                                         <option value="MBWAY">MBWay</option>
-                                        <option value="VISA">Visa</option>
+                                        <option value="VISA">Visa "CardNumberCVC"</option>
                                     @elseif(old('payment_type', $user->customer?->payment_type)== 'MBWAY')
                                         <option value="MBWAY">MBWay</option>
                                         <option value="PAYPAL">PayPal</option>
-                                        <option value="VISA">Visa</option>
+                                        <option value="VISA">Visa "CardNumberCVC"</option>
                                     @elseif(old('payment_type', $user->customer?->payment_type)== 'VISA')
-                                        <option value="VISA">Visa</option>    
+                                        <option value="VISA">Visa "CardNumberCVC"</option>    
                                         <option value="MBWAY">MBWay</option>
                                         <option value="PAYPAL">PayPal</option>
                                     @else
                                         <option value="">Choose one</option>
                                         <option value="PAYPAL">PayPal</option>
                                         <option value="MBWAY">MBWay</option>
-                                        <option value="VISA">Visa</option>
+                                        <option value="VISA">Visa "CardNumberCVC"</option>
                                     @endif
                                 </x-select-input>
 
@@ -69,7 +69,7 @@
                                     <option value="">Choose one</option>
                                     <option value="PAYPAL">PayPal</option>
                                     <option value="MBWAY">MBWay</option>
-                                    <option value="VISA">Visa</option>
+                                    <option value="VISA">Visa "CardNumberCVC"</option>
                                 </x-select-input>
 
                                 <x-input-error class="mt-2" :messages="$errors->get('payment_type')" />

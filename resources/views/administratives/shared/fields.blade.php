@@ -36,7 +36,7 @@
             width="md"
             :readonly="$readonly"
             deleteTitle="Delete Photo"
-            :deleteAllow="($mode == 'edit') && ($administrative->photo_url)"
+            :deleteAllow="($mode == 'edit') && ($administrative->photoFullUrl)"
             deleteForm="form_to_delete_photo"
             :imageUrl="$administrative->photoFullUrl"/>
     </div>
