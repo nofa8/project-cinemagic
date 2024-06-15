@@ -12,6 +12,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\DB;
 use App\Models\Movie;
 use App\Models\Theater;
+use Illuminate\Support\Carbon;
 
 class ScreeningController extends Controller
 {
@@ -53,20 +54,34 @@ class ScreeningController extends Controller
             ->withQueryString();
         return view('screenings.management')->with('screenings',$allScreens);
     }
-
-    public function create(): View
+    
+    public function create(Request $request): View
     {
         $newScreening = new Screening();
+        
+
         return view('screenings.create')->with('screening', $newScreening);
     }
 
     public function store(ScreeningFormRequest $request): RedirectResponse
     {
-        $newScreening = Screening::create($request->validated());
+        
+        $validatedData = $request->validated();
+        $newScreening = DB::transaction(function () use ($validatedData) {
+            $newScreening = new Screening();
+            $newScreening->movie_id = $validatedData['movie_id'];
+            $newScreening->theater_id = $validatedData['theater_id'];
+            $newScreening->date = $validatedData['date'];
+            $newScreening->start_time = $validatedData['start_time'];
+            $newScreening->save();
+            return $newScreening;
+        });
 
-        $url = route('screenings.show', ['screening' => $newScreening]);
+
+        $url = route('screenings.management');
         $htmlMessage = "Screening <a href='$url'><u>{$newScreening->id}</u></a> ({$newScreening->date}) has been created successfully!";
-        return redirect()->route('screenings.index')
+        $newScreening->save();
+        return redirect()->route('screenings.management')
             ->with('alert-type', 'success')
             ->with('alert-msg', $htmlMessage);
     }
@@ -76,16 +91,26 @@ class ScreeningController extends Controller
         $movies = Movie::orderBy('title')->pluck('title', 'id')->toArray();
         $theaters = Theater::pluck('name', 'id')->toArray();
 
-        return view('screenings.edit')->with('movies', $movies)->with('theaters', $theaters);
+        return view('screenings.edit')->with('screening', $screening)->with('movies', $movies)->with('theaters', $theaters);
     }
 
     public function update(ScreeningFormRequest $request, Screening $screening): RedirectResponse
     {
-        $screening->update($request->validated());
-
-        $url = route('screenings.show', ['screening' => $screening]);
-        $htmlMessage = "Screening <a href='$url'><u>{$screening->id}</u></a> ({$screening->date}) has been updated successfully!";
-        return redirect()->route('screening.index')
+        dd($request);
+        $validatedData = $request->validated();
+        $screening = DB::transaction(function () use ($validatedData, $screening, $request) {
+            $screening->movie_id = $validatedData['movie_id'];
+            $screening->theater_id = $validatedData['theater_id'];
+            $screening->date = $validatedData['date'];
+            $screening->start_time = $validatedData['start_time'];
+            
+            $screening->save();
+            
+            return $screening;
+        });
+        $url = route('screenings.show');
+        $htmlMessage = "Screening <a href='$url'><u>{$screening->id}</u></a> has been updated successfully!";
+        return redirect()->route('screenings.show', ['screening', $screening])
             ->with('alert-type', 'success')
             ->with('alert-msg', $htmlMessage);
     }

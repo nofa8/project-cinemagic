@@ -31,7 +31,11 @@ Route::get('movies/showcase', [MovieController::class, 'showCase'])
     ->can('viewShowCase', Movie::class);
 
 Route::get('movies/create', [MovieController::class, 'create'])->name('movies.create');
+
+Route::resource('screenings', ScreeningController::class);
 Route::get('screenings/management', [ScreeningController::class, 'management'])->name('screenings.management');
+
+
 Route::resource('movies', MovieController::class)->only(['show']);
 
 Route::get('register', [RegisteredUserController::class, 'create'])->name('register');
@@ -55,6 +59,7 @@ Route::resource('theaters', TheaterController::class);
 
 
 Route::post('purchases/store', [PurchaseController::class,'store'])->name('purchases.store');
+
 
 
 Route::get('tickets/{ticket}/show', [TicketController::class, 'show'])
