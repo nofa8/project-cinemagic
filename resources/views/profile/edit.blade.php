@@ -4,7 +4,16 @@
             {{ __('Profile') }}
         </h2>
     </x-slot>
-
+    <div class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
+        @if (session('alert-msg'))
+            <x-alert type="{{ session('alert-type') ?? 'info' }}">
+                {!! session('alert-msg') !!}
+            </x-alert>
+        @endif
+        @if (!$errors->isEmpty())
+                <x-alert type="warning" message="Operation failed because there are validation errors!"/>
+        @endif
+    </div>
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
             <div class="p-4 sm:p-8 bg-white dark:bg-gray-900 shadow sm:rounded-lg">
@@ -32,7 +41,7 @@
             </div>
         </div>
     </div>
-    <form method="POST" class="hidden" action="{{ route('profile.destroy.image', ['user' => $user]) }}" id="form_to_delete_photo">
+    <form method="POST" class="hidden" action="{{ route('profile.destroy.image') }}" id="form_to_delete_photo">
         @csrf
         @method('DELETE')
     </form>

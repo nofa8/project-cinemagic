@@ -65,9 +65,9 @@ class ProfileController extends Controller
 
         $user->save(); // Salva as alterações no user
 
-        $url = route('movies.showcase');
+        $url = route('profile.edit', ['user' => $request->user]);
         $htmlMessage = "Profile <a href='$url'><u>{$user->name}</u></a> has been updated successfully!";
-        return redirect()->route('movies.showcase')
+        return redirect()->route('profile.edit', ['user' => $request->user])
             ->with('alert-type', 'success')
             ->with('alert-msg', $htmlMessage);
     }
@@ -86,31 +86,33 @@ class ProfileController extends Controller
         $request->user()->save();
 
 
-        $url = route('movies.showcase');
+        $url = route('profile.edit', ['user' => $request->user]);
         $htmlMessage = "Profile image <a href='$url'><u>{$request->user()->name}</u></a> has been updated successfully!";
-        return redirect()->route('movies.showcase')
+        return redirect()->route('profile.edit', ['user' => $request->user])
             ->with('alert-type', 'success')
             ->with('alert-msg', $htmlMessage);
 
     }
 
-    public function destroyImage(User $user): RedirectResponse
+    public function destroyImage(): RedirectResponse
     {
+        $user = Auth::user();
+        if (Storage::fileExists("public/photos/{$user->photo_filename}")) {
 
-        if ($user->photo_filename) {
-            if (Storage::fileExists('public/photos/' . $user->photo_filename)) {
-                Storage::delete('public/photos/' . $user->photo_filename);
-            }
-            $user->photo_filename = null;
-            $user->save();
+            Storage::delete("public/photos/{$user->photo_filename}");
 
-            $url = route('movies.showcase');
+            $url = route('profile.edit', ['user' => $user]);
             $htmlMessage = "Profile image <a href='$url'><u>{$user->name}</u></a> has been deleted successfully!";
-            return redirect()->route('movies.showcase')
+            return redirect()->route('profile.edit', ['user' => $user])
                 ->with('alert-type', 'success')
                 ->with('alert-msg', $htmlMessage);
         }
-        return redirect()->back();
+
+        $url = route('movies.showcase');
+        $htmlMessage = "Profile image <a href='$url'><u>{$user->name}</u></a> has not been deleted successfully!";
+        return redirect()->route('movies.showcase')
+            ->with('alert-type', 'error')
+            ->with('alert-msg', $htmlMessage);
     }
 
     /**
