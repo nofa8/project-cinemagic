@@ -16,7 +16,7 @@ use App\Http\Controllers\SeatController;
 use App\Http\Controllers\TicketController;
 use App\Models\Theater;
 use App\Http\Controllers\Auth\RegisteredUserController;
-
+use App\Http\Controllers\PurchaseController;
 
 
 /* ----- PUBLIC ROUTES ----- */
@@ -54,6 +54,7 @@ Route::resource('theaters', TheaterController::class);
 
 
 
+Route::post('purchases/store', [PurchaseController::class,'store'])->name('purchases.store');
 
 
 Route::get('tickets/{ticket}/show', [TicketController::class, 'show'])
