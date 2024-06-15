@@ -60,8 +60,8 @@ class PurchaseController extends Controller
         if (count($cart) == 0){
             return redirect()->back()->with('danger', 'Cart empty!');
         }
-        //dd($cart);
-        $customer = Customer::find(Auth::user()->id) ;
+
+        $customer = $auth ? Customer::find(Auth::user()->id) : [];
         
 
         
@@ -74,25 +74,27 @@ class PurchaseController extends Controller
 
 
         if (!$auth){
+
             $request->validate([
-                'name' => 'sometimes|string|max:255',
-                'email' => 'sometimes|string|email|max:255|unique:customers',
-                'nif' => 'sometimes|string|size:9', 
+                'name' => 'required|string|max:255',
+                'email' => 'required|string|email|max:255|unique:users',
+                'nif' => 'sometimes|string|nullable|unique:customers|size:9', 
             ]);
+            
+
             $customer = [
                 'id'=>null,
                 'name' => $request->name,
                 'email' => $request->email,
                 'nif' => $request?->nif,
             ];
-        }else{
-            $customer->payment_type = $request->payment_type;
-            $customer->payment_ref = $request->payment_ref;
+        }elseif(!empty($customer)){
+            $customer->payment_type = $request?->payment_type;
+            $customer->payment_ref = $request?->payment_ref;
             $customer->save();
             $customer = $customer->user->toArray();
         }
-
-        if ($customer == null){
+        else{
             $customer = new Customer;
             $customer->id = Auth::user()->id;
             $customer->payment_type = $request->payment_type;
@@ -106,6 +108,7 @@ class PurchaseController extends Controller
             'customer_email' => $customer['email'],
             'customer_id' => $customer['id'],
             'date' => now(),
+            'nif' => $customer['nif'] ?? null,
             'total_price' => $request->get('Total_pay'),
             'payment_type' => $request->get('payment_type'),
             'payment_ref' => $request->get('payment_ref'),
@@ -149,7 +152,7 @@ class PurchaseController extends Controller
         if ($failes){
             return redirect()->route('cart.show')
                 ->with('alert-type', 'danger')
-                ->with('alert-msg',  implode(',',$fails));
+                ->with('alert-msg',  "Erro ao comprar os tickets: ".implode(',',$fails)."\nJá não estão disponíveis");
         }
         foreach($tickets as $ticket){
             $ticket->save();
@@ -157,6 +160,8 @@ class PurchaseController extends Controller
         //dd($purchase->tickets);
         //The receipt PDF file also includes all the tickets – tickets will not generate their own PDF files.
         $pdf = $this->generatePdfReceipt($purchase, $tickets);
+        Mail::to($customer['email'])->send(new PurchaseReceiptMail($purchase, $tickets, $pdf->output()));
+
         if ($auth) {
             $request->session()->forget('cart');
             //Guardar cenas do pdf receipt no storage
@@ -166,10 +171,11 @@ class PurchaseController extends Controller
             $purchase->receipt_pdf_filename =  $purchase->id . '.pdf';
             $purchase->save();
         }else{
+            
             Cookie::queue(Cookie::forget('cart'));
+            
         }
         
-        Mail::to($customer['email'])->send(new PurchaseReceiptMail($purchase, $tickets, $pdf->output()));
         return redirect()->route('cart.show')->with('success', 'Purchase created successfully!');
     }
 

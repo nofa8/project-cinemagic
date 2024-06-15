@@ -23,11 +23,10 @@
                                 @csrf
                                 @method('POST')
                                 @if(!Auth::check())
-                                <x-field.input name="costumer_name" label="Costumer Name" width="lg" :readonly="false"
+                                <x-field.input name="name" label="Customer Name" width="lg" :readonly="false"
                                     value="" />
-                                
-                                <x-field.input name="email" label="Email" width="lg" :readonly="false" value="" />
-                                <br>
+
+                                <x-field.input id="email" name="email" label="Email"  width="lg" :readonly="false" value="" />
                                 @endif
                                 
                                 @if (Auth::check() && !empty(Auth::user()->customer))
@@ -79,6 +78,11 @@
                                 <x-text-input id="payment_ref" name="payment_ref" type="text" class="mt-1 block w-full"
                                     value="" required autofocus autocomplete="name" />
                                 <x-input-error class="mt-2" :messages="$errors->get('payment_ref')" />
+                                
+                                
+                                <x-field.input id="nif" name="nif" label="NIF" width="lg" :readonly="false"/>
+
+
                                 @endif
 
                                 <x-input-label for="payment_total" :value="__('Total To Pay')" />
