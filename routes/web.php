@@ -17,7 +17,7 @@ use App\Http\Controllers\TicketController;
 use App\Models\Theater;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\PurchaseController;
-
+use App\Http\Controllers\PDFControllerView;
 
 /* ----- PUBLIC ROUTES ----- */
 
@@ -51,6 +51,10 @@ Route::delete('theater/{theater}/image', [TheaterController::class, 'destroyImag
     ->can('update', Movie::class);
 
 Route::resource('theaters', TheaterController::class);
+
+
+
+Route::get('/tickets/ticket_qr_codes', [PDFControllerView::class, 'show'])->name('ticket.pdf');
 
 
 

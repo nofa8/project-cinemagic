@@ -16,7 +16,12 @@ use App\Mail\PurchaseReceiptMail;
 use App\Http\Controllers\PDFController;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Mail;
-use Barryvdh\DomPDF\Facade\PDF;
+use Barryvdh\DomPDF\Facade\PDF; 
+use Illuminate\Support\Str;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
+use App\Models\Screening;
+
+
 class PurchaseController extends Controller
 {
     public function index()
@@ -33,9 +38,19 @@ class PurchaseController extends Controller
         $pdf = PDF::loadView('pdf.receipt', compact('purchase', 'tickets'));
         return $pdf;
     }
+
+    protected function generatePdfTicket($ticket)
+    {
+        $pdf = PDF::loadView('pdf.ticket', compact('ticket'));
+        return $pdf;
+    }
+
+
+
     public function store(Request $request)
     {
-
+        //Had to install imagick because of QrCode and dependencies
+        //dd(phpinfo());
         $auth = Auth::check();
         if ($auth && empty(session()->get('cart'))){
             $cart = [];
@@ -98,22 +113,50 @@ class PurchaseController extends Controller
         $purchase = Purchase::create($purchases); // Create a new purchase record
         $indivValue = $request->get('Total_pay')/count($cart);
         $tickets = [];
+        $fails = [];
+        $failes = false;
         foreach ($cart as $cartData) {
-            
-            //dd($customer, $cartData, $indivValue);
-            $tickets[] = [
+
+            if (Ticket::where('seat_id', $cartData['seat_id'])->where('screening_id', $cartData['screening_id'])->exists()) {
+                $scr = Screening::find($cartData['screening_id']);
+                $seaat = Seat::find($cartData['seat_id']);
+                $fails[] = "Screening: ".$scr?->movie?->title.' '.$scr?->date.' '.$scr?->start_time.', Seat: '.$seaat?->row.' '.$seaat?->seat_number;
+                $failes = true;
+                continue;
+            }
+            if ($failes){
+                continue; //optimize when found problem
+            }
+            $ticket = Ticket::create([
                 'screening_id' => $cartData['screening_id'],
                 'seat_id' => $cartData['seat_id'],
-                'price' => $indivValue, 
-                'purchase_id' => $purchase->id, 
+                'price' => $indivValue,
+                'purchase_id' => $purchase->id,
                 'status' => 'valid',
-            ];
+            ]);
+            $lsss = Str::random(40);
+            $ticket->qrcode_url = $ticket->id ."".$lsss ;
+            
+
+            $pdff = $this->generatePdfTicket($ticket);
+            $pdfPathh = "ticket_qrcodes/". $ticket->qrcode_url.".pdf";
+            
+
+            Storage::put($pdfPathh, $pdff->output());
+            $tickets[] = $ticket;
+        } 
+
+        if ($failes){
+            return redirect()->route('cart.show')
+                ->with('alert-type', 'danger')
+                ->with('alert-msg',  implode(',',$fails));
         }
-        
-        Ticket::insert($tickets); 
+        foreach($tickets as $ticket){
+            $ticket->save();
+        }
         //dd($purchase->tickets);
         //The receipt PDF file also includes all the tickets – tickets will not generate their own PDF files.
-        $pdf = $this->generatePdfReceipt($purchase, $purchase->tickets);
+        $pdf = $this->generatePdfReceipt($purchase, $tickets);
         if ($auth) {
             $request->session()->forget('cart');
             //Guardar cenas do pdf receipt no storage
@@ -127,7 +170,6 @@ class PurchaseController extends Controller
         }
         
         Mail::to($customer['email'])->send(new PurchaseReceiptMail($purchase, $tickets, $pdf->output()));
-
         return redirect()->route('cart.show')->with('success', 'Purchase created successfully!');
     }
 

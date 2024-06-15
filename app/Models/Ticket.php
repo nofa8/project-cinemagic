@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-
+use Illuminate\Support\Facades\Storage;
 class Ticket extends Model
 {
     use HasFactory;
@@ -18,6 +18,16 @@ class Ticket extends Model
         'qrcode_url',
         'status',
     ];
+
+    public function getCodeFullUrlAttribute()
+    {
+        if ($this->qrcode_url) {
+            return asset("storage/ticket_qrcodes/{$this->qrcode_url}");
+        } else {
+            // To be changed eventually
+            return null;
+        }
+    }
 
     public function purchase(): BelongsTo
     {
@@ -33,4 +43,5 @@ class Ticket extends Model
     {
         return $this->belongsTo(Seat::class,'seat_id');
     }
+
 }

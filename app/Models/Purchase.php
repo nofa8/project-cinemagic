@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Purchase extends Model
 {
@@ -25,9 +25,9 @@ class Purchase extends Model
     ];
 
 
-    public function customer(): HasOne
+    public function customer(): BelongsTo
     {
-        return $this->hasOne(Customer::class);
+        return $this->belongsTo(Customer::class);
     }
 
     public function tickets(): HasMany

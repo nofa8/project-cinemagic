@@ -9,7 +9,7 @@
         "barryvdh/laravel-dompdf": "^2.2",
         "laravel/framework": "^11.0",
         "laravel/tinker": "^2.9",
-        "simplesoftwareio/simple-qrcode": "^4.2"
+        "simplesoftwareio/simple-qrcode": "~4"
     },
     "require-dev": {
         "fakerphp/faker": "^1.23",
