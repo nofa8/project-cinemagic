@@ -242,15 +242,19 @@
                 </div>
                 <!-- Hamburger -->
                 <div class="absolute right-0 top-0 flex sm:hidden pt-3 pe-3 text-black dark:text-gray-50">
-                    <button id="hamburger_btn">
+                    <input type="checkbox" id="hamburger_btn" class="hidden" />
+                    <label for="hamburger_btn" class="cursor-pointer flex flex-col justify-center items-center">
                         <svg class="h-8 w-8" stroke="currentColor" fill="none" viewBox="0 0 24 24">
-                            <path id="hamburger_btn_open" stroke-linecap="round" stroke-linejoin="round"
+                            <path id="hamburger_btn_open" class="block" stroke-linecap="round" stroke-linejoin="round"
                             stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
-                            <path class="invisible" id="hamburger_btn_close" stroke-linecap="round"
+                            <path id="hamburger_btn_close" class="invisible"  stroke-linecap="round"
                             stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
                         </svg>
-                    </button>
+                    </label>
                 </div>
+                
             </div>
         </div>
     </nav>
+
+    

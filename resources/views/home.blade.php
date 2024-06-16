@@ -1,31 +1,33 @@
 @extends('layouts.main')
 
-@section('header-title', 'Introduction')
+@section('header-title', 'Welcome to CineMagic')
 
 @section('main')
-<main>
-    <div class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
-        <div class="my-4 p-6 bg-white dark:bg-gray-900 overflow-hidden shadow-sm sm:rounded-lg text-gray-900 dark:text-gray-50">
-            <section class="py-12 px-4 bg-gray-100 dark:bg-gray-800 rounded-lg text-gray-700 dark:text-gray-200">
-                <h2 class="text-2xl font-semibold leading-tight">CineMagic: Your Gateway to Unforgettable Movie Experiences</h2>
-                <p class="mt-4 text-lg leading-loose">
-                  CineMagic is your ultimate destination for an unparalleled movie-watching experience in theaters. Our platform is dedicated to bringing the magic of the big screen to life, providing movie enthusiasts with seamless access to the latest blockbusters and timeless classics in the best cinemas near you.
-                </p>
-                <ul class="list-disc space-y-2 mt-6 ml-6">
-                  <li>Effortlessly browse showtimes</li>
-                  <li>Reserve your favorite seats</li>
-                  <li>Purchase tickets in advance</li>
-                </ul>
-                <p class="mt-4 text-lg leading-loose">
-                  With CineMagic, you can ensure a hassle-free and enjoyable outing. Our commitment to delivering high-quality visuals and immersive soundscapes guarantees that every visit to the theater is a memorable one. Join the CineMagic community today and rediscover the joy of watching movies the way they were meant to be seen – on the big screen.
-                </p>
-                <a href="{{ route('movies.showcase') }}" class="inline-flex items-center px-4 py-2 mt-6 text-white bg-blue-600 rounded-full hover:bg-blue-700 focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 font-medium">
-                  Browse Movies Now
-                  <svg class="ml-2 -mr-1 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
-                </a>
-            </section>
-              
+<main class="bg-gray-100 dark:bg-gray-800 min-h-screen">
+    <div class="max-w-7xl mx-auto py-12 sm:px-6 lg:px-8">
+        <div class="my-6 p-8 bg-white dark:bg-gray-900 overflow-hidden shadow-lg rounded-lg text-gray-900 dark:text-gray-50">
+            <h2 class="text-3xl font-bold text-gray-800 dark:text-gray-200 leading-tight mb-4">
+                Welcome to CineMagic
+            </h2>
+            <p class="text-lg font-medium text-gray-700 dark:text-gray-300 mb-6">
+                Dive into the world of movies with CineMagic, your ultimate destination for the latest blockbusters, timeless classics, and everything in between.
+            </p>
+            <p class="text-lg font-medium text-gray-700 dark:text-gray-300">
+                Join us for an unparalleled cinematic experience, where we bring the magic of the big screen to life. From exclusive premieres to special screenings, CineMagic is more than just a cinema—it's a community for movie lovers.
+            </p>
         </div>
+        <div class="my-6 p-8 bg-white dark:bg-gray-900 overflow-hidden shadow-lg rounded-lg text-gray-900 dark:text-gray-50">
+            <h2 class="text-3xl font-bold text-gray-800 dark:text-gray-200 leading-tight mb-4">
+                About Us
+            </h2>
+            <p class="text-lg font-medium text-gray-700 dark:text-gray-300 mb-6">
+                CineMagic is recognized for its outstanding contribution to the film industry and education. Our state-of-the-art facilities and experienced staff ensure a premium viewing experience for all our guests.
+            </p>
+            <p class="text-lg font-medium text-gray-700 dark:text-gray-300">
+                Whether you're a casual viewer or a film aficionado, CineMagic offers a range of screenings, events, and educational programs designed to entertain and inspire.
+            </p>
+        </div>
+        
     </div>
 </main>
 @endsection
