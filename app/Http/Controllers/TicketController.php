@@ -28,25 +28,31 @@ class TicketController extends Controller
     {
         $filterByScreening = $request->query('screening_id');
         $filterBySeat = $request->query('seat_id');
-        $ticketQuery = Ticket::query();
+        $userId = auth()->id(); // Obter o ID do usuário autenticado
+
+        // Iniciar a consulta do Ticket com um join na tabela 'purchases'
+        $ticketQuery = Ticket::query()
+            ->join('purchases', 'tickets.purchase_id', '=', 'purchases.id')
+            ->where('purchases.customer_id', $userId) // Filtrar tickets pelo customer_id associado ao usuário autenticado
+            ->select('tickets.*'); // Garantir que apenas as colunas da tabela 'tickets' sejam selecionadas
+
         if ($filterByScreening !== null) {
-            $ticketQuery->where('screening_id', $filterByScreening);
+            $ticketQuery->where('tickets.screening_id', $filterByScreening);
         }
         if ($filterBySeat !== null) {
-            $ticketQuery->where('seat_id', $filterBySeat);
+            $ticketQuery->where('tickets.seat_id', $filterBySeat);
         }
 
         $tickets = $ticketQuery
             ->with('screening')
-            ->orderBy('seat_id')
-            ->orderBy('price')
-            ->orderBy('status')
+            ->orderBy('tickets.seat_id')
+            ->orderBy('tickets.price')
+            ->orderBy('tickets.status')
             ->paginate(20)
             ->withQueryString();
-        return view(
-            'tickets.index',
-            compact('tickets', 'filterByScreening', 'filterBySeat')
-        );
+
+        return view('tickets.index', compact('filterByScreening', 'filterBySeat'))
+            ->with('tickets', $tickets);
     }
 
     /**
