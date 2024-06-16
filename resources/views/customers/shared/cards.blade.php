@@ -40,13 +40,21 @@
                     @endif --}}
 
                     @if ($customers->user->blocked == 0)
-                        <div class="font-light text-gray-700 dark:text-gray-300 mb-2 inline">
-                            Not Blocked
-                        </div>
+                    <div class="flex items-center space-x-4 mb-2">
+                        <span class="font-light text-gray-700 dark:text-gray-300">Not Blocked</span>
+                        <form action="{{ route('customers.invert', ['customer'=> $customers]) }}" method="POST">
+                            @csrf
+                            <x-button element="submit" text="Block"  type="danger"/>
+                        </form>
+                    </div>
                     @else
-                        <div class="font-light text-gray-700 dark:text-gray-300 mb-2 inline">
-                            Blocked
-                        </div>
+                    <div class="flex items-center space-x-4 mb-2">
+                        <span class="font-light text-gray-700 dark:text-gray-300">Blocked</span>
+                        <form action="{{ route('customers.invert', ['customer'=> $customers]) }}" method="POST">
+                            @csrf
+                            <x-button element="submit" text="Unblock"  type="success"/>
+                        </form>
+                    </div>
                     @endif
 
                 </div>
@@ -95,14 +103,23 @@
                     @endif --}}
 
                     @if ($customers->userD->blocked == 0)
-                        <div class="font-light text-gray-700 dark:text-gray-300 mb-2 inline">
-                            Not Blocked
+                        <div class="flex items-center space-x-4 mb-2">
+                            <span class="font-light text-gray-700 dark:text-gray-300">Not Blocked</span>
+                            <form action="{{ route('customers.deleted.invert', ['customer'=> $customers]) }}" method="POST">
+                                @csrf
+                                <x-button element="submit" text="Block"  type="danger"/>
+                            </form>
                         </div>
                     @else
-                        <div class="font-light text-gray-700 dark:text-gray-300 mb-2 inline">
-                            Blocked
+                        <div class="flex items-center space-x-4 mb-2">
+                            <span class="font-light text-gray-700 dark:text-gray-300">Blocked</span>
+                            <form action="{{ route('customers.deleted.invert', ['customer'=> $customers]) }}" method="POST">
+                                @csrf
+                                <x-button element="submit" text="Unblock"  type="success"/>
+                            </form>
                         </div>
                     @endif
+
                 <div class="flex justify-start mb-auto">
                     <td class=" py-2">
                         <x-table.icon-save class="text-gray-400 hover:text-white px-2 py-1 rounded"

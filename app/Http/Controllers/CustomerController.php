@@ -112,6 +112,40 @@ class CustomerController extends Controller
             ->with('customer', $customer);
     }
 
+    public function invertBlockTrash(Customer $customer): RedirectResponse
+    {
+        if (empty($customer)){
+            return redirect()->back()
+            ->with('alert-type', 'danger')
+            ->with('alert-msg', "Customer non-existent");
+        }
+        $customer->userD->blocked = $customer->userD->blocked == 1 ? 0:1;
+        $customer->userD->save();
+        
+        return redirect()->back()
+            ->with('alert-type', 'success')
+            ->with('alert-msg', "Customer \"{$customer->userD->name}\" has been ". ($customer->userD->blocked ==1 ? 'blocked' : 'unblocked') );
+
+
+    }
+
+    
+
+    public function invertBlock(Customer $customer): RedirectResponse
+    {
+        if (empty($customer)){
+            return redirect()->back()
+            ->with('alert-type', 'danger')
+            ->with('alert-msg', "Customer non-existent");
+        }
+        $customer->user->blocked = $customer->user->blocked == 1 ? 0:1;
+        $customer->user->save();
+        return redirect()->back()
+            ->with('alert-type', 'success')
+            ->with('alert-msg', "Customer \"{$customer->user->name}\" has been ". ($customer->user->blocked ==1 ? 'blocked' : 'unblocked') );
+    }
+
+    
     public function create(): View
     {
         $newCustomer = new Customer();

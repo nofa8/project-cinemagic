@@ -156,6 +156,13 @@ Route::middleware(['auth', 'verified'])->group(function () {
         ->name('customers.photo.destroy')
         ->can('update', 'customer');
 
+    Route::post('customers/deleted/{customer}/block', [CustomerController::class, 'invertBlockTrash'])
+    ->withTrashed()
+    ->name('customers.deleted.invert');
+
+    Route::post('customers/{customer}/block', [CustomerController::class, 'invertBlock'])
+    ->name('customers.invert');
+
     Route::get('customers/deleted', [CustomerController::class, 'indexDeleted'])
     ->withTrashed()
     ->name('customers.deleted');
