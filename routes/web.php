@@ -43,9 +43,10 @@ Route::get('movies/deleted', [MovieController::class, 'indexDeleted'])
 ->withTrashed()->name('movies.deleted');
 Route::patch('movies/deleted/{movie}/save', [MovieController::class, 'save'])
     ->name('movies.save')->withTrashed();
-Route::delete('movies/{movie}/permanent-delete', [TheaterController::class, 'destruction'])
+Route::delete('movies/{movie}/permanent-delete', [MovieController::class, 'destruction'])
     ->name('movies.permanent-delete')->withTrashed();
-
+Route::delete('movies/{movie}/permanent-delete-forced', [MovieController::class, 'destructionForced'])
+->name('movies.permanent-delete-forced')->withTrashed();
 
 
 Route::get('screenings/management', [ScreeningController::class, 'management'])->name('screenings.management');

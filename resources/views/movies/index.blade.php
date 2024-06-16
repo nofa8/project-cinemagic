@@ -12,7 +12,7 @@
             <x-movies.filter-card :filterAction="route('movies.deleted')" :resetUrl="route('movies.deleted')" :genres="$movies->pluck('name', 'genre')->toArray()" :genre="old('name', $filterByGenre)" :tilte="old('title', $filterByName)"
                 class="mb-6" />
             
-            <div class="font-base text-sm text-gray-700 dark:text-gray-300">
+            <div class="font-base text-sm pr-6 mr-6 text-gray-700 dark:text-gray-300">
                 <x-movies.table :movies="$movies" :trash="true" :showView="true"  :showDelete="true" />
             </div>
             

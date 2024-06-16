@@ -73,6 +73,9 @@
             @if($showDelete)
                 <th></th>
             @endif
+            @if($showDelete)
+                <th></th>
+            @endif
         </tr>
         </thead>
         <tbody>
@@ -97,6 +100,42 @@
                         <td>
                             <x-table.icon-delete class="px-0.5"
                             action="{{ route('movies.permanent-delete', ['movie' => $movie]) }}"/>
+                        </td>
+                    @else
+                        <td></td>
+                    @endcan
+                @endif
+                
+                @if($showDelete)
+                    @can('delete', $movie)
+                    <style>
+                        .dangerous-element {
+                            position: relative;
+                        }
+                
+                        .dangerous-text {
+                            opacity: 0;
+                            position: absolute;
+                            transform: translateX(-40%) translateY(10px);
+                            background-color: rgba(0, 0, 0, 0.8);
+                            color: #fff;
+                            padding: 0.5rem 1rem;
+                            border-radius: 0.25rem;
+                            white-space: nowrap;
+                            transition: all 0.1s ease;
+                            font-weight: bold;
+                        }
+                
+                        .dangerous-element:hover .dangerous-text {
+                            opacity: 1;
+                            transform: translateX(-70%) translateY(0.1rem);
+                        }
+                    </style>
+                        <td class="relative">
+                            <div class="dangerous-element inline-block px-0.5 bg-red-600 text-white rounded cursor-pointer hover:bg-red-800">
+                                <x-table.icon-delete action="{{ route('movies.permanent-delete-forced', ['movie' => $movie]) }}" />
+                                <div class="dangerous-text">Will force to delete everything!</div>
+                            </div>
                         </td>
                     @else
                         <td></td>

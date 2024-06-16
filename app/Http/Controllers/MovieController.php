@@ -66,6 +66,76 @@ class MovieController extends Controller
         )->with('tr', "trash");
     }
 
+
+    public function save(Movie $movie): RedirectResponse{
+        if (!$movie->trashed()){
+            return view('theaters.deleted');    
+        }
+        $extra = "";
+        if ($movie->genreRefD->trashed()){
+            $movie->genre_code = Genre::first()->code;
+            $movie->save();
+            $extra = "\n Movie genre changed to ".$movie->genre_code.", please correct it.";
+        }
+        $movie->restore();
+        return redirect()->back()->with('alert-type', 'success')
+        ->with('alert-msg', "Movie \"{$movie->title}\" has been restored.".$extra);;
+    }
+ 
+    public function destructionForced(Movie $movie): RedirectResponse{
+        if (!$movie->trashed()){
+            return redirect()->route('theaters.index')
+                ->with('alert-type', 'error')
+                ->with('alert-msg', "Theater \"{$movie->title}\" is not in the deleted list.");
+        }
+
+        if ($movie?->screenings->count() > 0) {
+            $movie->screenings->each(function ($screening) {
+                $screening?->tickets->each(function ($ticket) {
+                    $ticket?->purchase->each(function ($purchase) {
+                        $purchase->delete(); 
+                    }); 
+                    $ticket->delete(); 
+                  }); 
+
+                $screening->delete(); 
+              });              
+        }
+
+        if ($movie->poster_filename && Storage::exists('public/posters/' . $movie->poster_filename)) {
+            Storage::delete('public/posters/' . $movie->poster_filename);
+        }
+        $name = $movie->title;
+        $movie->forceDelete();
+        return redirect()->route('movies.deleted')
+            ->with('alert-type', 'success')
+            ->with('alert-msg', "Movie \"{$name}\" has been permanently deleted. With its associated screenings, tickets and purchases");
+    }
+
+
+    public function destruction(Movie $movie): RedirectResponse{
+        if (!$movie->trashed()){
+            return redirect()->route('movies.deleted')
+                ->with('alert-type', 'error')
+                ->with('alert-msg', "Movie \"{$movie->title}\" is not in the deleted list.");
+        }
+
+        if ($movie?->screenings->count() > 0) {
+            return redirect()->route('movies.deleted')
+            ->with('alert-type', 'error')
+            ->with('alert-msg', "Movie \"{$movie->title}\" has screenings associated with it, can't be removed normally.");        
+        }
+
+        if ($movie->poster_filename && Storage::exists('public/posters/' . $movie->poster_filename)) {
+            Storage::delete('public/posters/' . $movie->poster_filename);
+        }
+        $name = $movie->title;
+        $movie->forceDelete();
+        return redirect()->route('movies.deleted')
+            ->with('alert-type', 'success')
+            ->with('alert-msg', "Movie \"{$name}\" has been permanently deleted. With its associated screenings, tickets and purchases");
+    }
+
     public function create(): View
     {
         $movie = new Movie();
