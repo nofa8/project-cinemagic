@@ -37,6 +37,7 @@ Route::get('movies/showcase', [MovieController::class, 'showCase'])
     ->can('viewShowCase', Movie::class);
 
 Route::get('movies/create', [MovieController::class, 'create'])->name('movies.create');
+ 
 
 
 Route::get('screenings/management', [ScreeningController::class, 'management'])->name('screenings.management');
