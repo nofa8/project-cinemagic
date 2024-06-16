@@ -164,7 +164,7 @@ class PurchaseController extends Controller
             
 
             $pdff = $this->generatePdfTicket($ticket);
-            $pdfPathh = "ticket_qrcodes/". $ticket->qrcode_url.".pdf";
+            $pdfPathh = "public/ticket_qrcodes/". $ticket->qrcode_url.".pdf";
             
 
             Storage::put($pdfPathh, $pdff->output());
@@ -187,7 +187,7 @@ class PurchaseController extends Controller
         if ($auth) {
             $request->session()->forget('cart');
             //Guardar cenas do pdf receipt no storage
-            $pdfPath = 'pdf_purchases/' . $purchase->id . '.pdf';
+            $pdfPath = 'public/pdf_purchases/' . $purchase->id . '.pdf';
             
             Storage::put($pdfPath, $pdf->output());
             $purchase->receipt_pdf_filename =  $purchase->id . '.pdf';

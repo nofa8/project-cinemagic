@@ -130,7 +130,7 @@
                             <x-menus.submenu-item
                                 content="Customer"
                                 selectable="0"
-                                href="{{ route('customers.index') }}" />
+                                href="{{ route('customers.deleted') }}" />
                             @endcan
                             @can('viewAny', App\Models\User::class)
                             <x-menus.submenu-item

@@ -43,6 +43,69 @@ class CustomerController extends Controller
         );
     }
 
+    public function indexDeleted(Request $request): View
+    {
+        $filterByName = $request->name;
+        $customersQuery = Customer::query()->onlyTrashed()
+            ->join('users', 'users.id', '=', 'customers.id')
+            ->select('customers.*')
+            ->orderBy('users.name');
+
+        if ($filterByName !== null) {
+            $customersQuery
+                ->where('users.name', 'like', "%$filterByName%");
+        }
+
+        $customers = $customersQuery
+            ->with('user')
+            ->paginate(20)
+            ->withQueryString();
+        return view(
+            'customers.index',
+            compact('customers', 'filterByName')
+        )->with('tr', "trash");
+    }
+
+    public function save(Customer $customer): RedirectResponse{
+        if (!$customer->trashed()){
+            return view('customers.deleted')
+                ->with('alert-type', 'error')
+                ->with('alert-msg', "Customer \"{$customer?->user->name}\" is not in the deleted list.");;    
+        }
+        if ($customer->userD->trashed()){
+            $customer->userD->restore();
+        }
+        $customer->restore();
+        return redirect()->back()->with('alert-type', 'success')
+        ->with('alert-msg', "Customer \"{$customer?->user->name}\" has been restored.");;
+    }
+ 
+    public function destruction (Customer $customer): RedirectResponse{
+        if (!$customer->trashed()){
+            return redirect()->route('customers.index')
+                ->with('alert-type', 'error')
+                ->with('alert-msg', "Theater \"{$customer?->user->name}\" is not in the deleted list.");
+        }
+
+        
+        if ($customer->userD->photo_filename && Storage::exists('public/photos/' . $customer->userD->photo_filename)) {
+            Storage::delete('public/photos/' . $customer->userD->photo_filename);
+        }
+        if ($customer->purchases()->count() != 0){
+            $customer->purchases()->each(function ($purchase) {
+                $purchase->customer_id=null;
+                $purchase->save();
+            });
+        }
+        $user = $customer->userD;
+        $customer->forceDelete();
+        $name = $user->name;
+        $user->forceDelete();
+        return redirect()->back()
+            ->with('alert-type', 'success')
+            ->with('alert-msg', "Customer \"{$name}\" has been permanently deleted.");
+    }
+
     public function show(Customer $customer): View
     {
         return view('customers.show')

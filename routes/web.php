@@ -149,6 +149,16 @@ Route::middleware(['auth', 'verified'])->group(function () {
         ->name('customers.photo.destroy')
         ->can('update', 'customer');
 
+    Route::get('customers/deleted', [CustomerController::class, 'indexDeleted'])
+    ->withTrashed()
+    ->name('customers.deleted');
+    Route::patch('customers/deleted/{customer}/save', [CustomerController::class, 'save'])
+    ->name('customers.save')->withTrashed();
+    Route::delete('customers/{customer}/permanent-delete', [CustomerController::class, 'destruction'])
+    ->name('customers.permanent-delete')->withTrashed();
+
+
+    //permanent-delete
     //Customer resource routes are protected by CustomerPolicy on the controller
     Route::resource('customers', CustomerController::class);
 

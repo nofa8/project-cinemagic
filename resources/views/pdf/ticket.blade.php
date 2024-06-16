@@ -30,6 +30,10 @@
                 <span class="font-semibold text-blue-600 dark:text-blue-300">Seat:</span>
                 <span class="text-gray-700 dark:text-gray-300">{{ $ticket->seat->row }}{{ $ticket->seat->seat_number }}</span>
             </li>
+            <li class="mb-2">
+                <span class="font-semibold text-blue-600 dark:text-blue-300">Status:</span>
+                <span class="text-gray-700 dark:text-gray-300">{{ $ticket->status }}</span>
+            </li>
         </ul>
     </div>
 </body>

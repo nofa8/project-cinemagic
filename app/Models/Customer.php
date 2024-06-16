@@ -31,4 +31,8 @@ class Customer extends Model{
             Purchase::class,
         );
     }
+
+    public function userD(): BelongsTo {
+        return $this->belongsTo(User::class, 'id')->withTrashed();
+    }
 }
