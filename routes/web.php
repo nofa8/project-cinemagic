@@ -21,6 +21,7 @@ use App\Http\Controllers\PDFControllerView;
 use App\Http\Controllers\StatisticsController;
 use App\Http\Controllers\ParametersController;
 
+
 /* ----- PUBLIC ROUTES ----- */
 
 Route::get('parameters', [ParametersController::class, 'index'])->name('parameters.index');
@@ -37,13 +38,10 @@ Route::view('/', 'home')->name('home');
 
 Route::get('movies/showcase', [MovieController::class, 'showCase'])
     ->name('movies.showcase');
+Route::get('movies/{movie}', [MovieController::class , 'show'])->name('movies.show');
+//Route::resource('movies', MovieController::class)->only(['show']);
 
 
-
-
-
-
-Route::resource('movies', MovieController::class)->only(['show']);
 
 Route::get('register', [RegisteredUserController::class, 'create'])->name('register');
 Route::post('register', [RegisteredUserController::class, 'store']);
@@ -79,7 +77,10 @@ Route::get('tickets/{ticket}/show', [TicketController::class, 'show'])
 
 Route::get('tickets/ticket/{ticket}', [TicketController::class, 'showTicket'])
     ->name('tickets.ticket');
-Route::resource('tickets', TicketController::class)->except('show');
+Route::get('tickets/all', [TicketController::class, 'everyIndex'])
+    ->name('tickets.all');
+
+Route::resource('tickets', TicketController::class)->except(['show']);
 
 
 Route::get('movies/{movie}/screenings', [MovieController::class, 'showScreenings'])
@@ -89,12 +90,9 @@ Route::get('movies/{movie}/screenings', [MovieController::class, 'showScreenings
 
 Route::delete('theaters/{theater}/seat', [SeatController::class, 'destroyUpdate'])->name('seats.destroyAll');
 
-Route::get('screenings/{screenings}/seats', [SeatController::class, 'show'])
-    ->name('seats.show');
+Route::get('screenings/{screenings}/seats', [SeatController::class, 'show'])->name('seats.show');
 
 
-
-Route::resource('movies', MovieController::class)->only(['show']);
 
 
 
@@ -128,29 +126,22 @@ Route::middleware(['auth', 'verified'])->group(function () {
     //Purchases
     Route::get('purchases/my', [PurchaseController::class, 'myPurchases'])
             ->name('purchases.my');
-    Route::resource('purchases', PurchaseController::class);
+    Route::resource('purchases', PurchaseController::class)->except(['store']);
 
     
 
     // MOVIES
-
     Route::get('movies/create', [MovieController::class, 'create'])->name('movies.create');
+    Route::get('movies/soft/deleted', [MovieController::class, 'indexDeleted'])->name('movies.deleted')->withTrashed();
 
-    Route::get('movies/deleted', [MovieController::class, 'indexDeleted'])
-    ->withTrashed()->name('movies.deleted');
 
-    Route::patch('movies/deleted/{movie}/save', [MovieController::class, 'save'])
-        ->name('movies.save')->withTrashed();
+    Route::patch('movies/deleted/{movie}/save', [MovieController::class, 'save'])->name('movies.save')->withTrashed();
 
-    Route::delete('movies/{movie}/permanent-delete', [MovieController::class, 'destruction'])
-        ->name('movies.permanent-delete')->withTrashed();
+    Route::delete('movies/{movie}/permanent-delete', [MovieController::class, 'destruction'])->name('movies.permanent-delete')->withTrashed();
 
-    Route::delete('movies/{movie}/permanent-delete-forced', [MovieController::class, 'destructionForced'])
-    ->name('movies.permanent-delete-forced')->withTrashed();
+    Route::delete('movies/{movie}/permanent-delete-forced', [MovieController::class, 'destructionForced'])->name('movies.permanent-delete-forced')->withTrashed();
 
-    Route::delete('movies/{movie}/image', [MovieController::class, 'destroyImage'])
-        ->name('movies.image.destroy')
-        ->can('update', Movie::class);
+    Route::delete('movies/{movie}/image', [MovieController::class, 'destroyImage'])->name('movies.image.destroy')->can('update', Movie::class);
     Route::resource('movies', MovieController::class)->except(['show']);
 
 
@@ -163,13 +154,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
         ->withTrashed()
         ->name('genres.deleted');
     Route::resource('genres', GenreController::class);
-    Route::resource('movies', MovieController::class)->except(['show']);
 
 
     
 
     Route::get('screenings/management', [ScreeningController::class, 'management'])->name('screenings.management');
-    Route::resource('screenings', ScreeningController::class)->except('show');
+    Route::resource('screenings', ScreeningController::class)->except(['show']);
 
 
     // CUSTOMERS
@@ -185,8 +175,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         ->withTrashed()
         ->name('customers.deleted.invert');
 
-    Route::post('customers/{customer}/block', [CustomerController::class, 'invertBlock'])
-        ->name('customers.invert');
+    Route::post('customers/{customer}/block', [CustomerController::class, 'invertBlock'])->name('customers.invert');
 
     Route::get('customers/deleted', [CustomerController::class, 'indexDeleted'])
         ->withTrashed()
@@ -199,16 +188,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::resource('customers', CustomerController::class);
 
-    Route::delete('administratives/{administrative}/photo', [AdministrativeController::class, 'destroyPhoto'])
-        ->name('administratives.photo.destroy');//->can('update', 'administrative');
+    Route::delete('administratives/{administrative}/photo', [AdministrativeController::class, 'destroyPhoto'])->name('administratives.photo.destroy');//->can('update', 'administrative');
 
-    Route::patch('administratives/deleted/{administrative}/save', [TheaterController::class, 'save'])
-    ->name('administratives.save')->withTrashed();
-    Route::delete('administratives/{administrative}/permanent-delete', [TheaterController::class, 'destruction'])
-    ->name('administratives.permanent-delete')->withTrashed();
-    Route::get('administratives/deleted', [AdministrativeController::class, 'indexDeleted'])
-    ->withTrashed()
-    ->name('administratives.deleted');
+    Route::patch('administratives/deleted/{administrative}/save', [TheaterController::class, 'save'])->name('administratives.save')->withTrashed();
+    Route::delete('administratives/{administrative}/permanent-delete', [TheaterController::class, 'destruction'])->name('administratives.permanent-delete')->withTrashed();
+    Route::get('administratives/deleted', [AdministrativeController::class, 'indexDeleted'])->withTrashed()->name('administratives.deleted');
     //Admnistrative resource routes are protected by AdministrativePolicy on the controller
     Route::resource('administratives', AdministrativeController::class);
 

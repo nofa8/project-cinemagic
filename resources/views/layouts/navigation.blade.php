@@ -88,7 +88,7 @@
                                 href="{{ route('screenings.management') }}"/>
                             <x-menus.submenu-item
                                 content="Tickets"
-                                href="{{ route('tickets.index') }}"/>
+                                href="{{ route('tickets.all') }}"/>
                             <x-menus.submenu-item
                                 content="Purchases"
                                 href="{{ route('purchases.index') }}"/>
@@ -124,6 +124,7 @@
 
                             <x-menus.submenu-item
                                 content="Movies"
+                                selectable="0"
                                 href="{{ route('movies.deleted') }}"/>
 
                             @can('viewAny', App\Models\Theater::class)

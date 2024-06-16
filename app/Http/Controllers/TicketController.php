@@ -53,6 +53,23 @@ class TicketController extends Controller
         return view('tickets.index')->with('tickets', $tickets);
     }
 
+    public function everyIndex()
+    {
+
+       
+        $tickets =Ticket::with('screening')->with('screening.movie')->with('seat')
+            ->join('purchases', 'tickets.purchase_id', '=', 'purchases.id')
+            ->orderBy('purchases.date','desc')
+            ->orderBy('screening_id','desc')
+            ->orderBy('seat_id', 'desc')
+            ->paginate(20)
+            ->withQueryString();
+
+        // return view('tickets.index', compact('filterByScreening', 'filterBySeat'))
+        //     ->with('tickets', $tickets);
+        return view('tickets.index')->with('tickets', $tickets);
+    }
+
     /**
      * Show the form for creating a new resource.
      */
