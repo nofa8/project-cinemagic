@@ -19,8 +19,13 @@ use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\PurchaseController;
 use App\Http\Controllers\PDFControllerView;
 use App\Http\Controllers\StatisticsController;
+use App\Http\Controllers\ParametersController;
 
 /* ----- PUBLIC ROUTES ----- */
+
+Route::get('parameters', [ParametersController::class, 'index'])->name('parameters.index');
+Route::post('/update-ticket-price', [ParametersController::class, 'updateTicketPrice'])->name('updateTicketPrice');
+Route::post('/update-ticket-discount', [ParametersController::class, 'updateDiscount'])->name('updateDiscount');
 
 Route::get('/generate-pdf', [PDFController::class, 'generatePDF']);
 
@@ -191,7 +196,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     //Admnistrative resource routes are protected by AdministrativePolicy on the controller
     Route::resource('administratives', AdministrativeController::class);
 
-    
+
     // Confirm (store) the cart and save Screenings registration on the database:
     Route::post('cart', [CartController::class, 'confirm'])
         ->name('cart.confirm')
