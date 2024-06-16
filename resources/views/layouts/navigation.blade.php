@@ -25,15 +25,6 @@
                         />
                     @endcan
 
-                    {{-- @can('viewOwn', App\Models\Ticket::class) --}}
-                    <x-menus.menu-item
-                    content="My Tickets"
-                    selectable="1"
-                    href="{{ route('tickets.index') }}"
-                    selected="{{ Route::currentRouteName() == 'tickets.index'}}"
-                    />
-                    {{-- @endcan     --}}
-
                     <!-- Menu Item: Screenings -->
                     {{-- @can('viewScreenings', App\Models\Screening::class) --}}
                     <x-menus.menu-item
@@ -95,6 +86,12 @@
                             <x-menus.submenu-item
                                 content="Screenings"
                                 href="{{ route('screenings.management') }}"/>
+                            <x-menus.submenu-item
+                                content="Tickets"
+                                href="{{ route('tickets.index') }}"/>
+                            <x-menus.submenu-item
+                                content="Purchases"
+                                href="{{ route('purchases.index') }}"/>
 
                     </x-menus.submenu>
 
@@ -177,6 +174,18 @@
                             content="Profile"
                             selectable="0"
                             href="{{ route('profile.edit') }}"/>
+
+                        <x-menus.submenu-item
+                            content="My Tickets"
+                            selectable="0"
+                            href="{{ route('tickets.index') }}"
+                                />
+
+                        <x-menus.submenu-item
+                        content="My Purchases"
+                        selectable="0"
+                        href="{{ route('purchases.my') }}"
+                                />
                         {{-- <x-menus.submenu-item
                             content="Change Password"
                             selectable="0"

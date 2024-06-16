@@ -32,30 +32,16 @@ Route::get('/generate-pdf', [PDFController::class, 'generatePDF']);
 Route::view('/', 'home')->name('home');
 
 
-Route::post('/statistic/chosen', [StatisticsController::class, 'redirectioning'])->name('statistics.day');
-Route::get('statistics', [StatisticsController::class, 'index'])
-    ->name('statistics.index');
-    // ->can('viewStatistics', Movie::class);
 
-Route::post('/export-statistics', [StatisticsController::class, 'exportToExcel'])->name('statistics.export');
+
 
 Route::get('movies/showcase', [MovieController::class, 'showCase'])
-    ->name('movies.showcase')
-    ->can('viewShowCase', Movie::class);
-
-Route::get('movies/create', [MovieController::class, 'create'])->name('movies.create');
-Route::get('movies/deleted', [MovieController::class, 'indexDeleted'])
-->withTrashed()->name('movies.deleted');
-Route::patch('movies/deleted/{movie}/save', [MovieController::class, 'save'])
-    ->name('movies.save')->withTrashed();
-Route::delete('movies/{movie}/permanent-delete', [MovieController::class, 'destruction'])
-    ->name('movies.permanent-delete')->withTrashed();
-Route::delete('movies/{movie}/permanent-delete-forced', [MovieController::class, 'destructionForced'])
-->name('movies.permanent-delete-forced')->withTrashed();
+    ->name('movies.showcase');
 
 
-Route::get('screenings/management', [ScreeningController::class, 'management'])->name('screenings.management');
-Route::resource('screenings', ScreeningController::class);
+
+
+
 
 Route::resource('movies', MovieController::class)->only(['show']);
 
@@ -80,6 +66,7 @@ Route::resource('theaters', TheaterController::class);
 
 
 Route::get('/tickets/ticket_qr_codes', [PDFControllerView::class, 'show'])->name('ticket.pdf');
+Route::get('/receipts/receipt', [PDFControllerView::class, 'receipt'])->name('receipt.pdf');
 
 
 
@@ -92,7 +79,7 @@ Route::get('tickets/{ticket}/show', [TicketController::class, 'show'])
 
 Route::get('tickets/ticket/{ticket}', [TicketController::class, 'showTicket'])
     ->name('tickets.ticket');
-Route::resource('tickets', TicketController::class);
+Route::resource('tickets', TicketController::class)->except('show');
 
 
 Route::get('movies/{movie}/screenings', [MovieController::class, 'showScreenings'])
@@ -131,15 +118,43 @@ Route::middleware(['auth', 'verified'])->group(function () {
         return redirect('movies/showcase');
     })->name('dashboard');
 
+    Route::post('/statistic/chosen', [StatisticsController::class, 'redirectioning'])->name('statistics.day');
+    Route::get('statistics', [StatisticsController::class, 'index'])
+        ->name('statistics.index');
+    // ->can('viewStatistics', User::class);
+    Route::post('/export-statistics', [StatisticsController::class, 'exportToExcel'])->name('statistics.export');
+
+
+    //Purchases
+    Route::get('purchases/my', [PurchaseController::class, 'myPurchases'])
+            ->name('purchases.my');
+    Route::resource('purchases', PurchaseController::class);
+
+    
+
+    // MOVIES
+
+    Route::get('movies/create', [MovieController::class, 'create'])->name('movies.create');
+
+    Route::get('movies/deleted', [MovieController::class, 'indexDeleted'])
+    ->withTrashed()->name('movies.deleted');
+
+    Route::patch('movies/deleted/{movie}/save', [MovieController::class, 'save'])
+        ->name('movies.save')->withTrashed();
+
+    Route::delete('movies/{movie}/permanent-delete', [MovieController::class, 'destruction'])
+        ->name('movies.permanent-delete')->withTrashed();
+
+    Route::delete('movies/{movie}/permanent-delete-forced', [MovieController::class, 'destructionForced'])
+    ->name('movies.permanent-delete-forced')->withTrashed();
 
     Route::delete('movies/{movie}/image', [MovieController::class, 'destroyImage'])
         ->name('movies.image.destroy')
         ->can('update', Movie::class);
-
-    //Movie resource routes are protected by MoviePolicy on the controller
-    // The route 'show' is public (for anonymous user)
     Route::resource('movies', MovieController::class)->except(['show']);
 
+
+    //GENRES
     Route::patch('genres/deleted/{genre}/save', [GenreController::class, 'save'])
     ->name('genres.save')->withTrashed();
     Route::delete('genres/{genre}/permanent-delete', [GenreController::class, 'destruction'])
@@ -150,41 +165,42 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource('genres', GenreController::class);
     Route::resource('movies', MovieController::class)->except(['show']);
 
-    //Screening resource routes are protected by ScreeningPolicy on the controller
-    //Screenings index and show are public
-    Route::resource('screenings', ScreeningController::class)->except(['index', 'show']);
 
-    Route::get('customers/my', [CustomerController::class, 'myCustomers'])
-        ->name('customers.my')
-        ->can('viewMy', Customer::class);
+    
+
+    Route::get('screenings/management', [ScreeningController::class, 'management'])->name('screenings.management');
+    Route::resource('screenings', ScreeningController::class)->except('show');
+
+
+    // CUSTOMERS
+    // Route::get('customers/my', [CustomerController::class, 'myCustomers'])
+    //     ->name('customers.my')
+    //     ->can('viewMy', Customer::class);
 
     Route::delete('customers/{customer}/photo', [CustomerController::class, 'destroyPhoto'])
         ->name('customers.photo.destroy')
         ->can('update', 'customer');
 
     Route::post('customers/deleted/{customer}/block', [CustomerController::class, 'invertBlockTrash'])
-    ->withTrashed()
-    ->name('customers.deleted.invert');
+        ->withTrashed()
+        ->name('customers.deleted.invert');
 
     Route::post('customers/{customer}/block', [CustomerController::class, 'invertBlock'])
-    ->name('customers.invert');
+        ->name('customers.invert');
 
     Route::get('customers/deleted', [CustomerController::class, 'indexDeleted'])
-    ->withTrashed()
-    ->name('customers.deleted');
+        ->withTrashed()
+        ->name('customers.deleted');
     Route::patch('customers/deleted/{customer}/save', [CustomerController::class, 'save'])
-    ->name('customers.save')->withTrashed();
+        ->name('customers.save')->withTrashed();
     Route::delete('customers/{customer}/permanent-delete', [CustomerController::class, 'destruction'])
-    ->name('customers.permanent-delete')->withTrashed();
+        ->name('customers.permanent-delete')
+        ->withTrashed();
 
-
-    //permanent-delete
-    //Customer resource routes are protected by CustomerPolicy on the controller
     Route::resource('customers', CustomerController::class);
 
     Route::delete('administratives/{administrative}/photo', [AdministrativeController::class, 'destroyPhoto'])
         ->name('administratives.photo.destroy');//->can('update', 'administrative');
-
 
     Route::patch('administratives/deleted/{administrative}/save', [TheaterController::class, 'save'])
     ->name('administratives.save')->withTrashed();
