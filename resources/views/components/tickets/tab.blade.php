@@ -33,8 +33,10 @@
                 <td class="px-2 py-2 text-right hidden lg:table-cell">{{ App\Models\Configuration::pluck('ticket_price')[0]}}</td>
                 @if($showView)
                     <td class="px-2 py-2 text-right">
-                        <a href="{{ route('tickets.show', $ticketItem->id) }}" class="text-blue-500">View</a>
+                        <x-table.icon-show class="ps-3 px-0.5" href="{{ route('tickets.show', $ticketItem->id) }}"/>
                     </td>
+                @else
+
                 @endif
             </tr>
         @endforeach
