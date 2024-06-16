@@ -67,4 +67,9 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return $this->hasOne(Customer::class, 'id');
     }
+
+    public function customerD(): HasOne //? maybe take it out
+    {
+        return $this->hasOne(Customer::class, 'id')->withTrashed();
+    }
 }

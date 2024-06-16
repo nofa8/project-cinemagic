@@ -42,6 +42,59 @@ class AdministrativeController extends \Illuminate\Routing\Controller
     }
 
 
+    public function indexDeleted(Request $request): View
+    {
+        $currentAdminId = auth()->id();
+        $administrativesQuery = User::onlyTrashed()->where('type', 'A')->orWhere('type', 'E')->where('id','!=',$currentAdminId)
+            ->orderBy('name');
+
+        $filterByName = $request->query('name');
+        if ($filterByName) {
+            $administrativesQuery->where('name', 'like', "%$filterByName%");
+        }
+        $administratives = $administrativesQuery
+            ->paginate(20)
+            ->withQueryString();
+
+        return view(
+            'administratives.index',
+            compact('administratives', 'filterByName')
+        )->with('tr',"trash");
+    }
+
+    public function save(User $user): RedirectResponse{
+        if (!$user->trashed()){
+            return view('administratives.deleted')
+                ->with('alert-type', 'error')
+                ->with('alert-msg', "User \"{$user->name}\" is not in the deleted list.");;    
+        }
+        if ($user?->customerD->trashed()){
+            $user->customerD->restore();
+        }
+        $user->restore();
+        return redirect()->back()->with('alert-type', 'success')
+        ->with('alert-msg', "User \"{$user->name}\" has been restored.");;
+    }
+ 
+    public function destruction (User $user): RedirectResponse{
+        if (!$user->trashed()){
+            return redirect()->route('administratives.deleted')
+                ->with('alert-type', 'error')
+                ->with('alert-msg', "User \"{$user->name}\" is not in the deleted list.");
+        }
+        if ($user->photo_filename && Storage::exists('public/photos/' . $user->photo_filename)) {
+            Storage::delete('public/photos/' . $user->photo_filename);
+        }
+        if (!empty($user?->customerD)){
+            $user->customerD->forceDelete();
+        }
+        $name = $user->name;
+        $user->forceDelete();
+        return redirect()->back()
+            ->with('alert-type', 'success')
+            ->with('alert-msg', "User \"{$name}\" has been permanently deleted.");
+    }
+
     public function show(User $administrative): View
     {
         return view('administratives.show')->with('administrative', $administrative);
@@ -87,6 +140,7 @@ class AdministrativeController extends \Illuminate\Routing\Controller
             ->with('alert-type', 'success')
             ->with('alert-msg', $htmlMessage);
     }
+
 
     public function edit(User $administrative): View
     {
@@ -142,6 +196,15 @@ class AdministrativeController extends \Illuminate\Routing\Controller
         try {
             $url = route('administratives.show', ['administrative' => $administrative]);
             $fileToDelete = $administrative->photo_filename;
+
+            if ($administrative->customer()->count() != 0){
+                $administrative->customer()->purchases()->each(function ($purchase) {
+                    $purchase->customer_id=null;
+                    $purchase->save();
+                });
+                $administrative->customer->delete();
+            }
+
             $administrative->delete();
             if ($fileToDelete) {
                 if (Storage::fileExists('public/photos/' . $fileToDelete)) {

@@ -136,6 +136,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource('movies', MovieController::class)->except(['show']);
 
     //Department resource routes are protected by DepartmentPolicy on the controller
+    Route::get('genres/deleted', [GenreController::class, 'indexDeleted'])
+        ->withTrashed()
+        ->name('genres.deleted');
     Route::resource('genres', GenreController::class);
     Route::resource('movies', MovieController::class)->except(['show']);
 
@@ -179,9 +182,18 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::delete('administratives/{administrative}/photo', [AdministrativeController::class, 'destroyPhoto'])
         ->name('administratives.photo.destroy');//->can('update', 'administrative');
 
+
+    Route::patch('administratives/deleted/{administrative}/save', [TheaterController::class, 'save'])
+    ->name('administratives.save')->withTrashed();
+    Route::delete('administratives/{administrative}/permanent-delete', [TheaterController::class, 'destruction'])
+    ->name('administratives.permanent-delete')->withTrashed();
+    Route::get('administratives/deleted', [AdministrativeController::class, 'indexDeleted'])
+    ->withTrashed()
+    ->name('administratives.deleted');
     //Admnistrative resource routes are protected by AdministrativePolicy on the controller
     Route::resource('administratives', AdministrativeController::class);
 
+    
     // Confirm (store) the cart and save Screenings registration on the database:
     Route::post('cart', [CartController::class, 'confirm'])
         ->name('cart.confirm')

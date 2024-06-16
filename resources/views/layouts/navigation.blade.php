@@ -25,52 +25,28 @@
                         />
                     @endcan
 
-                    <!-- Menu Item: Curricula -->
-                    @can('viewGenres', App\Models\Genre::class)
-                        <x-menus.submenu-full-width
-                            content="Genres"
-                            selectable="1"
-                            selected="0"
-                            uniqueName="submenu_theaters">
-                            @foreach ($genre as $genre)
-                                <x-menus.submenu-item
-                                :content="$genre->name"
-                                selectable="1"
-                                selected="0"
-                                href="{{ route('genre.curriculum', ['genre' => $genre]) }}"/>
-                            @endforeach
-                        </x-menus.submenu-full-width>
-                    @endcan
+                    {{-- @can('viewOwn', App\Models\Ticket::class) --}}
+                    <x-menus.menu-item
+                    content="My Tickets"
+                    selectable="1"
+                    href="{{ route('tickets.index') }}"
+                    selected="{{ Route::currentRouteName() == 'tickets.index'}}"
+                    />
+                    {{-- @endcan     --}}
+
                     <!-- Menu Item: Screenings -->
-                    @can('viewScreenings', App\Models\Screening::class)
+                    {{-- @can('viewScreenings', App\Models\Screening::class) --}}
                     <x-menus.menu-item
                         content="Screenings"
                         selectable="1"
                         href="{{ route('screenings.index') }}"
                         selected="{{ Route::currentRouteName() == 'screenings.index'}}"
                         />
-                    @endcan
+                    {{-- @endcan --}}
 
-                    <!-- Menu Item: Customers -->
-                    @can('viewAny', App\Models\Customer::class)
-                        <x-menus.menu-item
-                            content="Customers"
-                            selectable="1"
-                            href="{{ route('customers.index') }}"
-                            selected="{{ Route::currentRouteName() == 'customers.index'}}"
-                            />
-                    @endcan
+                    
 
-                    {{-- @can('viewAny', App\Models\Customer::class) --}}
-                        <x-menus.menu-item
-                            content="Administratives & Employees"
-                            selectable="1"
-                            href="{{ route('administratives.index') }}"
-                            selected="{{ Route::currentRouteName() == 'administratives.index'}}"
-                            />
-                    {{-- @endcan     --}}
-
-                    {{-- @can('viewAny', App\Models\Customer::class) --}}
+                    {{-- @can('viewStatistics', App\Models\Customer::class) --}}
                         <x-menus.menu-item
                             content="Statistics"
                             selectable="1"
@@ -89,14 +65,14 @@
                     <x-menus.submenu
                         selectable="0"
                         uniqueName="submenu_others"
-                        content="More">
+                        content="Management">
                             @can('viewAny', App\Models\Customer::class)
                             <x-menus.submenu-item
                                 content="Customer"
                                 selectable="0"
                                 href="{{ route('customers.index') }}" />
                             @endcan
-                            @can('viewAny', App\Models\User::class)
+                            @can('viewAny', App\Models\Theater::class)
                             <x-menus.submenu-item
                                 content="Administratives"
                                 selectable="0"
@@ -111,13 +87,13 @@
                             @endcan
 
                             <x-menus.submenu-item
-                                content="Screenings"
-                                href="{{ route('screenings.index') }}"/>
+                                content="Movies"
+                                href="{{ route('movies.index') }}"/>
                             <x-menus.submenu-item
                                 content="Genres"
                                 href="{{ route('genres.index') }}"/>
                             <x-menus.submenu-item
-                                content="Screenings Management"
+                                content="Screenings"
                                 href="{{ route('screenings.management') }}"/>
 
                     </x-menus.submenu>
@@ -136,7 +112,7 @@
                             <x-menus.submenu-item
                                 content="Administratives"
                                 selectable="0"
-                                href="{{ route('administratives.index') }}" />
+                                href="{{ route('administratives.deleted') }}" />
                             {{-- @endcan --}}
                             <hr>
                             @can('viewAny', App\Models\Theater::class)
@@ -150,6 +126,12 @@
                                 content="Movies"
                                 href="{{ route('movies.deleted') }}"/>
 
+                            @can('viewAny', App\Models\Theater::class)
+                            <x-menus.submenu-item
+                                content="Genres"
+                                selectable="0"
+                                href="{{ route('genres.deleted') }}"/>
+                            @endcan
 
                     </x-menus.submenu>
                     @endif
@@ -182,26 +164,6 @@
                                 {{ Auth::user()->name }}
                             </div>
                         </x-slot>
-
-                        {{-- @can('viewMy', App\Models\Discipline::class)
-                        <x-menus.submenu-item
-                            content="My Disciplines"
-                            selectable="0"
-                            href="{{ route('disciplines.my') }}"/>
-                        @endcan
-                        @can('viewMy', App\Models\Teacher::class)
-                        <x-menus.submenu-item
-                            content="My Teachers"
-                            selectable="0"
-                            href="{{ route('teachers.my') }}"/>
-                        @endcan
-                        @can('viewMy', App\Models\Student::class)
-                            <x-menus.submenu-item
-                                content="My Students"
-                                selectable="0"
-                                href="{{ route('students.my') }}"/>
-                            <hr>
-                        @endcan --}}
                         @auth
                         <hr>
                         {{-- <x-menus.submenu-item

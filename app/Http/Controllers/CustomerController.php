@@ -82,7 +82,7 @@ class CustomerController extends Controller
  
     public function destruction (Customer $customer): RedirectResponse{
         if (!$customer->trashed()){
-            return redirect()->route('customers.index')
+            return redirect()->route('customers.deleted')
                 ->with('alert-type', 'error')
                 ->with('alert-msg', "Theater \"{$customer?->user->name}\" is not in the deleted list.");
         }

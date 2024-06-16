@@ -151,7 +151,9 @@ class MovieController extends Controller
             $newMovie->title = $validatedData['title'];
             $newMovie->genre_code = $validatedData['genre_code'];
             $newMovie->year = $validatedData['year'];
-            $newMovie->poster_filename = $validatedData['poster_filename'];
+            if ( !empty($validatedData['poster_filename'])) {
+                $newMovie->poster_filename = $validatedData['poster_filename'];
+            }
             $newMovie->synopsis = $validatedData['synopsis'];
             $newMovie->trailer_url = $validatedData['trailer_url'];
             $newMovie->save();
@@ -273,6 +275,11 @@ class MovieController extends Controller
             $alertMsg = "It was not possible to delete the movie
                             <a href='$url'><u>{$movie->title}</u></a>
                             because there was an error with the operation!";
+        }
+        if ($alertType == "success"){
+            return redirect()->route('movies.index')
+                ->with('alert-type', $alertType)
+                ->with('alert-msg', $alertMsg);
         }
         return redirect()->back()
             ->with('alert-type', $alertType)

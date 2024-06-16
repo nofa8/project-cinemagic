@@ -165,7 +165,7 @@ class TheaterController extends \Illuminate\Routing\Controller
  
     public function destructionD (Theater $theater): RedirectResponse{
         if (!$theater->trashed()){
-            return redirect()->route('theaters.index')
+            return redirect()->route('theaters.deleted')
                 ->with('alert-type', 'error')
                 ->with('alert-msg', "Theater \"{$theater->name}\" is not in the deleted list.");
         }
