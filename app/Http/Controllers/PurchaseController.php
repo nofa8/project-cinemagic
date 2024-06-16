@@ -22,15 +22,33 @@ use SimpleSoftwareIO\QrCode\Facades\QrCode;
 use App\Models\Screening;
 use App\Services\Payment;
 use Illuminate\Support\Carbon;
+use Illuminate\View\View;
+use Illuminate\Database\Eloquent\Collection;
 
 class PurchaseController extends Controller
 {
     public function index()
     {
-        // Implement logic to retrieve all purchases or paginate results
-        $purchases = Purchase::with('customer')->get(); // Eager load customer data
+        $purchases = Purchase::with('customer.user')->paginate(15)->withQueryString();; 
 
         return view('purchases.index', compact('purchases'));
+    }
+
+    public function myPurchases(Request $request): View
+    {
+        if (!empty($request->user()?->customer)) {
+            $idPurch = $request->user()?->customer?->purchases?->pluck('id')?->toArray();
+            if (empty($idPurch)) {
+                return view('purchases.my')->with('purchases', new Collection);
+            }
+        }else {
+            return view('purchases.my')->with('purchases', new Collection);
+        }
+        $purchases = Purchase::whereIntegerInRaw('id', $idPurch)
+            ->orderBy('created_at', 'desc')
+            ->paginate(20)
+            ->withQueryString();
+        return view('purchases.my', compact('purchases'));
     }
 
 
