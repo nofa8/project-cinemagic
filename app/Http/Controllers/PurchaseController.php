@@ -58,7 +58,9 @@ class PurchaseController extends Controller
             $cart = ($auth) ? session()->get('cart', collect()) : json_decode(Cookie::get('cart'), true) ?? [];
         }
         if (count($cart) == 0){
-            return redirect()->back()->with('danger', 'Cart empty!');
+            return redirect()->back()->with('alert-type', 'danger')
+            ->with('alert-msg',  "Cart empty!");
+            
         }
 
         $customer = $auth ? Customer::find(Auth::user()->id) : [];
@@ -72,7 +74,8 @@ class PurchaseController extends Controller
         } elseif ($request->payment_type === 'VISA') {
             $extra = 'integer|digits:19';
         }else{
-            return redirect()->back()->with('danger', 'Invalid payment type!');
+            return redirect()->back()->with('alert-type', 'danger')
+            ->with('alert-msg',  "Invalid payment type!");
         }
 
         $request->validate([
@@ -87,7 +90,9 @@ class PurchaseController extends Controller
             'VISA'=> $allright= Payment::payWithVisa(substr($request->payment_ref, 0, 16), substr($request->payment_ref, -3))
         };
         if (!$allright){
-            return redirect()->back()->with('danger', 'Payment error!');
+            return redirect()->back()
+            ->with('alert-type', 'danger')
+            ->with('alert-msg',  "Payment Error!");
         }
        
         if (!$auth){

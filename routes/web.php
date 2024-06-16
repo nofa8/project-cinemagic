@@ -26,6 +26,8 @@ Route::get('/generate-pdf', [PDFController::class, 'generatePDF']);
 
 Route::view('/', 'home')->name('home');
 
+
+Route::post('/statistic/chosen', [StatisticsController::class, 'redirectioning'])->name('statistics.day');
 Route::get('statistics', [StatisticsController::class, 'index'])
     ->name('statistics.index');
     // ->can('viewStatistics', Movie::class);
