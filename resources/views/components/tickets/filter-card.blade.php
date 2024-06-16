@@ -2,12 +2,12 @@
     <form method="GET" action="{{ $filterAction }}">
         <div class="flex justify-between space-x-3">
             <div class="grow flex flex-col space-y-2">
-                <div>
-                    <x-field.select name="course" label="Course"
-                        value="{{ $course }}"
-                        :options="$listCourses"/>
-                </div>
-                <div class="flex space-x-3">
+                {{-- <div>
+                    <x-field.select name="screaning_id" label="screaning_id"
+                        value="{{ $ticket }}"
+                        :options="$listTickets"/>
+                </div> --}}
+                {{-- <div class="flex space-x-3">
                     <x-field.select name="year" label="Year"
                         value="{{ $year }}"
                         :options="$listYears"/>
@@ -18,7 +18,7 @@
                 <div>
                     <x-field.input name="teacher" label="Teacher" class="grow"
                         value="{{ $teacher }}"/>
-                </div>
+                </div> --}}
             </div>
             <div class="grow-0 flex flex-col space-y-3 justify-start">
                 <div class="pt-6">
