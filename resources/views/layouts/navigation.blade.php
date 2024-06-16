@@ -35,7 +35,7 @@
                         />
                     {{-- @endcan --}}
 
-                    
+
 
                     {{-- @can('viewStatistics', App\Models\Customer::class) --}}
                         <x-menus.menu-item
@@ -92,6 +92,9 @@
                             <x-menus.submenu-item
                                 content="Purchases"
                                 href="{{ route('purchases.index') }}"/>
+                            <x-menus.submenu-item
+                                content="Configuration Parameters"
+                                href="{{ route('parameters.index') }}"/>
 
                     </x-menus.submenu>
 
@@ -223,9 +226,8 @@
                         </svg>
                     </label>
                 </div>
-                
+
             </div>
         </div>
     </nav>
 
-    
