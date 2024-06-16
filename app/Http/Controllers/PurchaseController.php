@@ -21,6 +21,7 @@ use Illuminate\Support\Str;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 use App\Models\Screening;
 use App\Services\Payment;
+use Illuminate\Support\Carbon;
 
 class PurchaseController extends Controller
 {
@@ -141,13 +142,24 @@ class PurchaseController extends Controller
         $fails = [];
         $failes = false;
         foreach ($cart as $cartData) {
-
+            $screening = Screening::find($cartData['screening_id']);
             if (Ticket::where('seat_id', $cartData['seat_id'])->where('screening_id', $cartData['screening_id'])->exists()) {
-                $scr = Screening::find($cartData['screening_id']);
                 $seaat = Seat::find($cartData['seat_id']);
-                $fails[] = "Screening: ".$scr?->movie?->title.' '.$scr?->date.' '.$scr?->start_time.', Seat: '.$seaat?->row.' '.$seaat?->seat_number;
+                $fails[] = "Screening: ".$screening?->movie?->title.' '.$screening?->date.' '.$screening?->start_time.', Seat: '.$seaat?->row.' '.$seaat?->seat_number;
                 $failes = true;
                 continue;
+            }
+            
+            if ( empty($screening) || Carbon::parse($screening->date)->lessThan(now()->startofDay())){
+                $fails[] = "Screening: ".$screening?->movie?->title.' '.$screening?->date.' '.$screening?->start_time;
+                $failes = true;
+                continue;
+            }elseif(Carbon::parse(Screening::find($cartData['screening_id'])->date)->equalTo(now()->startOfDay())){
+                if (Carbon::parse($screening->start_time)->addMinutes(5)->lessThan(now())){
+                    $fails[] = "Screening: ".$screening?->movie?->title.' '.$screening?->date.' '.$screening?->start_time;
+                    $failes = true;
+                    continue;
+                }
             }
             if ($failes){
                 continue; //optimize when found problem
@@ -170,12 +182,13 @@ class PurchaseController extends Controller
             Storage::put($pdfPathh, $pdff->output());
             $tickets[] = $ticket;
         } 
-
+        
         if ($failes){
             return redirect()->route('cart.show')
                 ->with('alert-type', 'danger')
                 ->with('alert-msg',  "Erro ao comprar os tickets: ".implode(',',$fails)."\nJá não estão disponíveis");
         }
+        
         foreach($tickets as $ticket){
             $ticket->save();
         }

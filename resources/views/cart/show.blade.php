@@ -87,7 +87,7 @@
 
                                 <x-input-label for="payment_total" :value="__('Total To Pay')" />
                                 <x-text-input id="pay_value" name="Total_pay" type="text" class="mt-3 block w-full "
-                                    value="{{ $many * App\Models\Configuration::pluck('ticket_price')[0] }}"
+                                    value="{{ $many * (App\Models\Configuration::pluck('ticket_price')[0] - (Auth::check() ? App\Models\Configuration::pluck('registered_customer_ticket_discount')[0]: 0)) }}" 
                                     :readonly="true" />
 
 

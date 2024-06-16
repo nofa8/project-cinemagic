@@ -36,7 +36,7 @@
                 <td class="px-2 py-2 text-right hidden md:table-cell">{{ $screening->start_time }}</td>
                 <td class="px-2 py-2 text-right hidden lg:table-cell">{{ $seat->row }}</td>
                 <td class="px-2 py-2 text-right hidden lg:table-cell">{{ $seat->seat_number }}</td>
-                <td class="px-2 py-2 text-right hidden lg:table-cell">{{ App\Models\Configuration::pluck('ticket_price')[0]}}</td>
+                <td class="px-2 py-2 text-right hidden lg:table-cell">{{ (App\Models\Configuration::pluck('ticket_price')[0] - (Auth::check() ? App\Models\Configuration::pluck('registered_customer_ticket_discount')[0]: 0)) }}</td>
                 @if($showView)
                     <td class="px-2 py-2 text-right">
                         <a href="{{ route('cart.view', $cartItem->id) }}" class="text-blue-500">View</a>

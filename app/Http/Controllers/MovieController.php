@@ -188,7 +188,13 @@ class MovieController extends Controller
         $movies = $moviesQuery
             ->with('genreRef')
             ->join('screenings', 'movies.id', '=', 'screenings.movie_id')
-            ->whereBetween('screenings.date', [now(), now()->addDays(14)])
+            ->where(function ($query) {
+                $query->where('date', '>', now()->startOfDay())
+                    ->orWhere(function ($query) {
+                        $query->where('date', '=', now()->startOfDay())
+                            ->where('start_time', '>', now()->format('H:i:s'));
+                    });
+            })
             ->select('movies.*') // Ensure only movie columns are selected
             ->distinct() // Ensure unique movies in case of multiple screenings within 14 days
             ->paginate(20)

@@ -17,12 +17,55 @@ class GenreController extends Controller
             ->with('genres', Genre::orderBy('name')->paginate(20));
     }
 
+
+    public function indexDeleted(): View
+    {
+        return view('genres.index')
+            ->with('genres', Genre::orderBy('name')->onlyTrashed()->paginate(20))->with('tr', "trash");
+    }
+
     public function create(): View
     {
         $newGenre = new Genre();
         return view('genres.create')
             ->with('genre', $newGenre);
     }
+
+
+    public function save(Genre $genre): RedirectResponse{
+        if (!$genre->trashed()){
+            return view('genres.deleted');    
+        }
+        $genre->restore();
+        return redirect()->back()->with('alert-type', 'success')
+        ->with('alert-msg', "Genre \"{$genre->name}\" has been restored.");;
+    }
+ 
+    public function destruction (genre $genre): RedirectResponse{
+        if (!$genre->trashed()){
+            return redirect()->route('genres.deleted')
+                ->with('alert-type', 'error')
+                ->with('alert-msg', "genre \"{$genre->name}\" is not in the deleted list.");
+        }
+        $many = 0;
+        if ($genre?->movies()->withTrashed()->count() > 0) {
+            $genre->movies()->withTrashed()->each(function ($many) {
+                $many++;
+              });              
+        }
+
+        if ($many != 0) {
+            return redirect()->route('genres.deleted')
+                ->with('alert-type', 'error')
+                ->with('alert-msg', "genre \"{$genre->name}\" has ".$many." movies.");
+        }
+        $name = $genre->name;
+        $genre->forceDelete();
+        return redirect()->route('genres.deleted')
+            ->with('alert-type', 'success')
+            ->with('alert-msg', "Genre \"{$name}\" has been permanently deleted.");
+    }
+
 
     public function store(GenreFormRequest $request): RedirectResponse
     {

@@ -135,17 +135,15 @@ Route::middleware(['auth', 'verified'])->group(function () {
     // The route 'show' is public (for anonymous user)
     Route::resource('movies', MovieController::class)->except(['show']);
 
-    //Department resource routes are protected by DepartmentPolicy on the controller
+    Route::patch('genres/deleted/{genre}/save', [GenreController::class, 'save'])
+    ->name('genres.save')->withTrashed();
+    Route::delete('genres/{genre}/permanent-delete', [GenreController::class, 'destruction'])
+    ->name('genres.permanent-delete')->withTrashed();
     Route::get('genres/deleted', [GenreController::class, 'indexDeleted'])
         ->withTrashed()
         ->name('genres.deleted');
     Route::resource('genres', GenreController::class);
     Route::resource('movies', MovieController::class)->except(['show']);
-
-
-    Route::get('screenings/my', [ScreeningController::class, 'myScreenings'])
-        ->name('screenings.my')
-        ->can('viewMy', Screening::class);
 
     //Screening resource routes are protected by ScreeningPolicy on the controller
     //Screenings index and show are public

@@ -26,8 +26,7 @@ class ScreeningController extends Controller
 
     public function index(): View
     {
-        $allScreens = Screening::where('date', '>=', now()->startOfDay())
-            ->where('date', '<=', now()->addDays(14)->endOfDay())
+        $allScreens = Screening::where('date', '<=', now()->addDays(14)->endOfDay())
             ->where(function ($query) {
                 $query->where('date', '>', now()->startOfDay())
                     ->orWhere(function ($query) {
@@ -36,6 +35,7 @@ class ScreeningController extends Controller
                     });
             })
             ->orderBy('date', 'asc')
+            ->orderBy('start_time', 'asc')
             ->paginate(20)
             ->withQueryString();
 
@@ -71,7 +71,7 @@ class ScreeningController extends Controller
             $newScreening = new Screening();
             $newScreening->movie_id = $validatedData['movie_id'];
             $newScreening->theater_id = $validatedData['theater_id'];
-            $newScreening->date = $validatedData['date'];
+            $newScreening->date = Carbon::parse($validatedData['date'])->format('Y-m-d');
             $newScreening->start_time = $validatedData['start_time'];
             $newScreening->save();
             return $newScreening;

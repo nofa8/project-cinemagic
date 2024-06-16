@@ -39,7 +39,13 @@
         <div class="font-light text-gray-700 dark:text-gray-300">
             <strong>Next 3 Screenings:</strong>
             <div class="mt-1">
-                @foreach ($movie->screenings()->whereBetween('date', [now(), now()->addDays(14)])->orderBy('date')->take(3)->get() as $screening)
+                @foreach ($movie->screenings()->where(function ($query) {
+                    $query->where('date', '>', now()->startOfDay())
+                        ->orWhere(function ($query) {
+                            $query->where('date', '=', now()->startOfDay())
+                                ->where('start_time', '>', now()->format('H:i:s'));
+                        });
+                })->orderBy('date')->take(3)->get() as $screening)
                     @php
                         // Concatenate date and time strings
                         $dateTimeString = $screening->date . ' ' . $screening->start_time;
