@@ -29,7 +29,7 @@ class PurchaseController extends Controller
 {
     public function index()
     {
-        $purchases = Purchase::with('customer.user')->paginate(15)->withQueryString();; 
+        $purchases = Purchase::with('customer.user')->orderBy('date','desc')->paginate(15)->withQueryString();; 
 
         return view('purchases.index', compact('purchases'));
     }

@@ -26,33 +26,31 @@ class TicketController extends Controller
      */
     public function index(Request $request)
     {
-        $filterByScreening = $request->query('screening_id');
-        $filterBySeat = $request->query('seat_id');
+        // $filterByScreening = $request->query('screening_id');
+        // $filterBySeat = $request->query('seat_id');
         $userId = auth()->id(); // Obter o ID do usuário autenticado
 
         // Iniciar a consulta do Ticket com um join na tabela 'purchases'
         $ticketQuery = Ticket::query()
             ->join('purchases', 'tickets.purchase_id', '=', 'purchases.id')
-            ->where('purchases.customer_id', $userId) // Filtrar tickets pelo customer_id associado ao usuário autenticado
-            ->select('tickets.*'); // Garantir que apenas as colunas da tabela 'tickets' sejam selecionadas
-
-        if ($filterByScreening !== null) {
-            $ticketQuery->where('tickets.screening_id', $filterByScreening);
-        }
-        if ($filterBySeat !== null) {
-            $ticketQuery->where('tickets.seat_id', $filterBySeat);
-        }
+            ->where('purchases.customer_id', $userId); // Filtrar tickets pelo customer_id associado ao usuário autenticado
+        // if ($filterByScreening !== null) {
+        //     $ticketQuery->where('tickets.screening_id', $filterByScreening);
+        // }
+        // if ($filterBySeat !== null) {
+        //     $ticketQuery->where('tickets.seat_id', $filterBySeat);
+        // }
 
         $tickets = $ticketQuery
             ->with('screening')
-            ->orderBy('tickets.seat_id')
-            ->orderBy('tickets.price')
-            ->orderBy('tickets.status')
+            ->orderBy('purchases.date', 'desc')
+            ->orderBy('tickets.seat_id','desc')
             ->paginate(20)
             ->withQueryString();
 
-        return view('tickets.index', compact('filterByScreening', 'filterBySeat'))
-            ->with('tickets', $tickets);
+        // return view('tickets.index', compact('filterByScreening', 'filterBySeat'))
+        //     ->with('tickets', $tickets);
+        return view('tickets.index')->with('tickets', $tickets);
     }
 
     /**
