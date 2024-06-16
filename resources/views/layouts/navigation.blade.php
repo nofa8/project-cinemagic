@@ -132,12 +132,12 @@
                                 selectable="0"
                                 href="{{ route('customers.deleted') }}" />
                             @endcan
-                            @can('viewAny', App\Models\User::class)
+                            {{-- @can('viewAny', App\Models\User::class) --}}
                             <x-menus.submenu-item
                                 content="Administratives"
                                 selectable="0"
                                 href="{{ route('administratives.index') }}" />
-                            @endcan
+                            {{-- @endcan --}}
                             <hr>
                             @can('viewAny', App\Models\Theater::class)
                             <x-menus.submenu-item
@@ -147,8 +147,8 @@
                             @endcan
 
                             <x-menus.submenu-item
-                                content="Screenings"
-                                href="{{ route('screenings.index') }}"/>
+                                content="Movies"
+                                href="{{ route('movies.deleted') }}"/>
 
 
                     </x-menus.submenu>

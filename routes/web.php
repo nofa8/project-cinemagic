@@ -39,7 +39,13 @@ Route::get('movies/showcase', [MovieController::class, 'showCase'])
     ->can('viewShowCase', Movie::class);
 
 Route::get('movies/create', [MovieController::class, 'create'])->name('movies.create');
- 
+Route::get('movies/deleted', [MovieController::class, 'indexDeleted'])
+->withTrashed()->name('movies.deleted');
+Route::patch('movies/deleted/{movie}/save', [MovieController::class, 'save'])
+    ->name('movies.save')->withTrashed();
+Route::delete('movies/{movie}/permanent-delete', [TheaterController::class, 'destruction'])
+    ->name('movies.permanent-delete')->withTrashed();
+
 
 
 Route::get('screenings/management', [ScreeningController::class, 'management'])->name('screenings.management');

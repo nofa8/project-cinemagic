@@ -42,7 +42,10 @@ class Movie extends Model
     }
 
 
-
+    public function genreRefD(): BelongsTo
+    {
+        return $this->BelongsTo(Genre::class, 'genre_code', 'code')->withTrashed();
+    }
     
     public function screenings()
     {

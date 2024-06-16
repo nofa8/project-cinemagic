@@ -40,6 +40,32 @@ class MovieController extends Controller
         );
     }
 
+    public function indexDeleted(Request $request): View
+    {
+        $filterByGenre = $request->Genre;
+        $filterByName = $request->Title;
+        $moviesQuery = Movie::query()->onlyTrashed();
+
+
+        if ($filterByGenre !== null) {
+            $moviesQuery->where('genre_code', $filterByGenre);
+        }
+
+        if ($filterByName !== null) {
+            $moviesQuery->where('movies.title', 'like', "%$filterByName%");
+        }
+
+        $movies = $moviesQuery
+            ->with('genreRefD')
+            ->paginate(20)
+            ->withQueryString();
+
+        return view(
+            'movies.index',
+            compact( 'movies', 'filterByGenre', 'filterByName')
+        )->with('tr', "trash");
+    }
+
     public function create(): View
     {
         $movie = new Movie();
