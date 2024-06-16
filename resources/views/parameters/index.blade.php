@@ -38,7 +38,7 @@
                 @csrf
                 <label for="ticketPrice" class="block text-sm font-medium text-gray-700 dark:text-gray-200">Update Ticket Price</label>
                 <input type="number" name="ticketPrice" id="ticketPrice" class="mt-1 p-2 bg-white border shadow-sm border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 block w-full rounded-md" placeholder="Enter new ticket price">
-                <button type="submit" class="mt-4 px-4 py-2 bg-indigo-500 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded">Update Price</button>
+                <button type="submit" class="mt-4 px-4 py-2 bg-indigo-500 hover:bg-indigo-700 text-white font-bold rounded">Update Price</button>
             </form>
         </div>
     </div>
@@ -48,7 +48,7 @@
                 @csrf
                 <label for="ticketDiscount" class="block text-sm font-medium text-gray-700 dark:text-gray-200">Update Ticket Discount</label>
                 <input type="number" name="ticketDiscount" id="ticketDiscount" class="mt-1 p-2 bg-white border shadow-sm border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 block w-full rounded-md" placeholder="Enter new ticket discount">
-                <button type="submit" class="mt-4 px-4 py-2 bg-indigo-500 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded">Update Discount</button>
+                <button type="submit" class="mt-4 px-4 py-2 bg-indigo-500 hover:bg-indigo-700 text-white font-bold rounded">Update Discount</button>
             </form>
         </div>
     </div>
