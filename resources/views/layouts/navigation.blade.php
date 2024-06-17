@@ -25,7 +25,7 @@
                         />
                     @endcan
                 @can('viewBusinessRelated', App\Models\User::class)
-                    
+
                     <x-menus.menu-item
                         content="Screenings"
                         selectable="1"
@@ -133,9 +133,7 @@
                             <div class="pe-1">
 
                                 <img src="{{ Auth::user()?->photo_filename ? Auth::user()->photoFullUrl : Vite::asset('/resources/img/photos/default.png')}}" class="w-11 h-11 min-w-11 min-h-11 rounded-full">
-                                {{-- <img src="{{ Auth::user()->photoFullUrl}}" class="w-11 h-11 min-w-11 min-h-11 rounded-full"> --}}
                             </div>
-                            {{-- ATENÇÃO - ALTERAR FORMULA DE CALCULO DAS LARGURAS MÁXIMAS QUANDO O MENU FOR ALTERADO --}}
                             <div class="ps-1 sm:max-w-[calc(100vw-39rem)] md:max-w-[calc(100vw-41rem)] lg:max-w-[calc(100vw-46rem)] xl:max-w-[34rem] truncate">
                                 {{ Auth::user()->name }}
                             </div>

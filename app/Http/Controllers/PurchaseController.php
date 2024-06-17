@@ -5,10 +5,10 @@ namespace App\Http\Controllers;
 use App\Http\Requests\PurchaseFormRequest;
 use App\Models\Purchase;
 use App\Models\Customer;
-use App\Models\Seat; 
-use App\Models\Ticket; 
+use App\Models\Seat;
+use App\Models\Ticket;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator; 
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Storage;
@@ -16,7 +16,7 @@ use App\Mail\PurchaseReceiptMail;
 use App\Http\Controllers\PDFController;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Mail;
-use Barryvdh\DomPDF\Facade\PDF; 
+use Barryvdh\DomPDF\Facade\PDF;
 use Illuminate\Support\Str;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 use App\Models\Screening;
@@ -30,7 +30,7 @@ class PurchaseController extends Controller
 {
     public function index()
     {
-        $purchases = Purchase::with('customer.user')->orderBy('date','desc')->paginate(15)->withQueryString();; 
+        $purchases = Purchase::with('customer.user')->orderBy('date','desc')->paginate(15)->withQueryString();;
 
         return view('purchases.index', compact('purchases'));
     }
@@ -47,7 +47,7 @@ class PurchaseController extends Controller
             ->orderBy('created_at', 'desc')
             ->paginate(20)
             ->withQueryString();
-        
+
         return view('purchases.my', compact('purchases'));
     }
 
@@ -69,7 +69,6 @@ class PurchaseController extends Controller
     public function store(Request $request)
     {
         //Had to install imagick because of QrCode and dependencies
-        //dd(phpinfo());
         $auth = Auth::check();
         if ($auth && empty(session()->get('cart'))){
             $cart = [];
@@ -79,11 +78,11 @@ class PurchaseController extends Controller
         if (count($cart) == 0){
             return redirect()->back()->with('alert-type', 'danger')
             ->with('alert-msg',  "Cart empty!");
-            
+
         }
 
         $customer = $auth ? Customer::find(Auth::user()->id) : [];
-        
+
 
         $extra = "";
         if ($request->payment_type === 'PAYPAL') {
@@ -113,15 +112,15 @@ class PurchaseController extends Controller
             ->with('alert-type', 'danger')
             ->with('alert-msg',  "Payment Error!");
         }
-       
+
         if (!$auth){
-            
+
             $request->validate([
                 'name' => 'required|string|max:255',
                 'email' => 'required|string|email|max:255|unique:users|lowercase',
-                'nif' => 'sometimes|integer|digits:9|nullable', 
+                'nif' => 'sometimes|integer|digits:9|nullable',
             ]);
-            
+
 
             $customer = [
                 'id'=>null,
@@ -143,7 +142,7 @@ class PurchaseController extends Controller
             $customer->save();
             $customer = $customer->user->toArray();
         }
-        
+
         $purchases = [
             'customer_name' => $customer['name'],
             'customer_email' => $customer['email'],
@@ -167,7 +166,7 @@ class PurchaseController extends Controller
                 $failes = true;
                 continue;
             }
-            
+
             if ( empty($screening) || Carbon::parse($screening->date)->lessThan(now()->startofDay())){
                 $fails[] = "Screening: ".$screening?->movie?->title.' '.$screening?->date.' '.$screening?->start_time;
                 $failes = true;
@@ -191,26 +190,25 @@ class PurchaseController extends Controller
             ]);
             $lsss = Str::random(40);
             $ticket->qrcode_url = $ticket->id ."".$lsss ;
-            
+
 
             $pdff = $this->generatePdfTicket($ticket);
             $pdfPathh = "public/ticket_qrcodes/". $ticket->qrcode_url.".pdf";
-            
+
 
             Storage::put($pdfPathh, $pdff->output());
             $tickets[] = $ticket;
-        } 
-        
+        }
+
         if ($failes){
             return redirect()->route('cart.show')
                 ->with('alert-type', 'danger')
                 ->with('alert-msg',  "Erro ao comprar os tickets: ".implode(',',$fails)."\nJá não estão disponíveis");
         }
-        
+
         foreach($tickets as $ticket){
             $ticket->save();
         }
-        //dd($purchase->tickets);
         //The receipt PDF file also includes all the tickets – tickets will not generate their own PDF files.
         $pdf = $this->generatePdfReceipt($purchase, $tickets);
         Mail::to($customer['email'])->send(new PurchaseReceiptMail($purchase, $tickets, $pdf->output()));
@@ -219,22 +217,22 @@ class PurchaseController extends Controller
             $request->session()->forget('cart');
             //Guardar cenas do pdf receipt no storage
             $pdfPath = 'public/pdf_purchases/' . $purchase->id . '.pdf';
-            
+
             Storage::put($pdfPath, $pdf->output());
             $purchase->receipt_pdf_filename =  $purchase->id . '.pdf';
             $purchase->save();
         }else{
-            
+
             Cookie::queue(Cookie::forget('cart'));
-            
+
         }
-        
+
         return redirect()->route('cart.show')->with('success', 'Purchase created successfully!');
     }
 
     public function show(Purchase $purchase)
     {
-        $purchase->load('customer', 'tickets.seat'); // Eager load customer and ticket data with seat
+        $purchase->load('customer', 'tickets.seat');
 
         return view('purchases.show', compact('purchase'));
     }

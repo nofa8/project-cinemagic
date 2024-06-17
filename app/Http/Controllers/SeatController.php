@@ -14,13 +14,11 @@ class SeatController extends Controller
 {
     public function create(): View
     {
-        // You may need other data here depending on your application requirements
         return view('seats.create');
     }
 
     public function index(): View
     {
-        //
         return view('seats.index');
     }
 
@@ -41,7 +39,7 @@ class SeatController extends Controller
         $success = [];
         $failure = [];
         $seat = $request->get('seats');
-        
+
         foreach ($seat as $id) {
             $the_seat = Seat::find($id);
             $val = $the_seat?->tickets()->whereHas('screening', function ($query) {

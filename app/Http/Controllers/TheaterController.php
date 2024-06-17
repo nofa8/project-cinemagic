@@ -37,17 +37,17 @@ class TheaterController extends \Illuminate\Routing\Controller
 
     public function store(Request $request): RedirectResponse
     {
-        
+
         $request->validate([
             'name' => 'required|string|max:255',
-            'photo_filename' => 'sometimes|image|max:4096', 
+            'photo_filename' => 'sometimes|image|max:4096',
         ]);
         $newTheater = [
             'name' => $request->get('name'),
         ];
 
         if ($request->hasFile('photo_filename')) {
-            
+
             $path = $request->photo_filename->store('public/photos');
             $newTheater['photo_filename'] = basename($path);
         }
@@ -59,12 +59,12 @@ class TheaterController extends \Illuminate\Routing\Controller
             return redirect()->route('theaters.index');
         }
 
-        
+
         $seats = [
             'row' => array_map('chr', range(ord('A'), ord($request->get('row')))),
             'seat_number' => range(1, $request->get('seat_number')),
         ];
-        
+
         $seatDataArray = [];
         foreach ($seats['row'] as $seatData) {
             foreach($seats['seat_number'] as $seatNumber){
@@ -79,7 +79,7 @@ class TheaterController extends \Illuminate\Routing\Controller
         $url = route('theaters.show', ['theater' => $theater]);
         $htmlMessage = "Theater <a href='{$url}'>{$theater->name}</a> has been created successfully!";
         Seat::insert($seatDataArray);
-            
+
 
         return redirect()->route('theaters.index')
             ->with('alert-type', 'success')
@@ -131,15 +131,10 @@ class TheaterController extends \Illuminate\Routing\Controller
                 ->with('alert-msg', $htmlMessage);
         }
 
-        // Delete the associated photo if it exists
-        // if ($theater->photo_filename && Storage::exists('public/photos/' . $theater->photo_filename)) {
-        //     Storage::delete('public/photos/' . $theater->photo_filename);
-        // }
-
         // Delete the theater from the database
         $theater->seats()->each(function ($seat) {
             $seat->delete();
-        });     
+        });
         $theater->delete();
 
         // Redirect with a success message
@@ -156,13 +151,13 @@ class TheaterController extends \Illuminate\Routing\Controller
 
     public function saveD(Theater $theater): RedirectResponse{
         if (!$theater->trashed()){
-            return view('theaters.deleted');    
+            return view('theaters.deleted');
         }
         $theater->restore();
         return redirect()->back()->with('alert-type', 'success')
         ->with('alert-msg', "Theater \"{$theater->name}\" has been restored.");;
     }
- 
+
     public function destructionD (Theater $theater): RedirectResponse{
         if (!$theater->trashed()){
             return redirect()->route('theaters.deleted')
@@ -173,7 +168,7 @@ class TheaterController extends \Illuminate\Routing\Controller
         if ($theater?->seats()->withTrashed()->count() > 0) {
             $theater->seats()->withTrashed()->each(function ($seat) {
                 $seat->forceDelete();
-              });              
+              });
         }
 
         if ($theater->photo_filename && Storage::exists('public/photos/' . $theater->photo_filename)) {

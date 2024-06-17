@@ -1,8 +1,4 @@
 @if($show)
-    {{--<x-button
-        href="{{ $url }}"
-        text="See trailer"
-        type="success"/>--}}
     <div class="bg-grey-950 text-grey p-4 h-96 sm:h-112 md:h-128 lg:h-144">
         <iframe
             class="h-full w-full rounded-lg"

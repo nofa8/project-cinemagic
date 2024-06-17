@@ -24,7 +24,6 @@ class Ticket extends Model
         if ($this->qrcode_url) {
             return asset("storage/ticket_qrcodes/{$this->qrcode_url}");
         } else {
-            // To be changed eventually
             return null;
         }
     }
