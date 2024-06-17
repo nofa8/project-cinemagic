@@ -43,6 +43,7 @@ class TicketController extends Controller
 
         $tickets = $ticketQuery
             ->with('screening')
+            ->with('screening.movie')
             ->orderBy('purchases.date', 'desc')
             ->orderBy('tickets.seat_id','desc')
             ->paginate(20)
@@ -62,6 +63,8 @@ class TicketController extends Controller
             ->orderBy('purchases.date','desc')
             ->orderBy('screening_id','desc')
             ->orderBy('seat_id', 'desc')
+            ->with('screening')
+            ->with('screening.movie')
             ->paginate(20)
             ->withQueryString();
 

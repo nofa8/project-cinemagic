@@ -27,9 +27,10 @@ class AdministrativePolicy
         return $user->type == 'A';
     }
 
+    
     public function create(User $user): bool
     {
-        return false;
+        return true;
     }
 
     public function update(User $user, User $administrative): bool

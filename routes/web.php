@@ -25,61 +25,42 @@ use App\Http\Controllers\ParametersController;
 /* ----- PUBLIC ROUTES ----- */
 
 
-Route::get('/generate-pdf', [PDFController::class, 'generatePDF']);
+//Route::get('/generate-pdf', [PDFController::class, 'generatePDF']);
 
 Route::view('/', 'home')->name('home');
 
 
-
-
-
 Route::get('movies/showcase', [MovieController::class, 'showCase'])
     ->name('movies.showcase');
-// Route::get('movies/{movie}', [MovieController::class , 'show'])->name('movies.show');
 
 
 
 Route::get('register', [RegisteredUserController::class, 'create'])->name('register');
 Route::post('register', [RegisteredUserController::class, 'store']);
 
-Route::post('/tickets/verify/{screening}', [TicketController::class, 'verify'])->name('tickets.verify');
-Route::post('/tickets/validate/{ticket}', [TicketController::class, 'validate'])->name('tickets.validate');
-
-Route::get('theaters/deleted', [TheaterController::class, 'deleted'])
-    ->name('theaters.deleted');
-Route::patch('theaters/deleted/{theater}/save', [TheaterController::class, 'saveD'])
-    ->name('theaters.save')->withTrashed();
-Route::delete('theaters/{theater}/permanent-delete', [TheaterController::class, 'destructionD'])
-    ->name('theaters.permanent-delete')->withTrashed();
-Route::delete('theater/{theater}/image', [TheaterController::class, 'destroyImage'])
-    ->name('theaters.image.destroy')
-    ->can('update', Movie::class);
-
-Route::resource('theaters', TheaterController::class);
 
 
 
+
+//Purchases and Pdfs
 Route::get('/tickets/ticket_qr_codes', [PDFControllerView::class, 'show'])->name('ticket.pdf');
 Route::get('/receipts/receipt', [PDFControllerView::class, 'receipt'])->name('receipt.pdf');
-
-
 
 Route::post('purchases/store', [PurchaseController::class,'store'])->name('purchases.store');
 
 
-
+//Tickets
 Route::get('tickets/{ticket}/show', [TicketController::class, 'show'])
     ->name('tickets.show');
 
 Route::get('tickets/ticket/{ticket}', [TicketController::class, 'showTicket'])
     ->name('tickets.ticket');
-Route::get('tickets/all', [TicketController::class, 'everyIndex'])
-    ->name('tickets.all');
-
-Route::resource('tickets', TicketController::class)->except(['show']);
 
 
+Route::resource('tickets', TicketController::class)->only(['index']);
 
+
+//Screenings
 Route::get('screenings/{screenings}/seats', [SeatController::class, 'show'])->name('seats.show');
 
 
@@ -119,7 +100,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
             ->name('purchases.my');
     Route::resource('purchases', PurchaseController::class)->except(['store']);
 
-    
+    //Tickets
+    Route::get('tickets/all', [TicketController::class, 'everyIndex'])->name('tickets.all');
+    Route::post('/tickets/verify/{screening}', [TicketController::class, 'verify'])->name('tickets.verify');
+    Route::post('/tickets/validate/{ticket}', [TicketController::class, 'validate'])->name('tickets.validate');
 
     // MOVIES
     Route::get('movies/create', [MovieController::class, 'create'])->name('movies.create');
@@ -146,7 +130,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     //Screenings
     Route::get('screenings/management', [ScreeningController::class, 'management'])->name('screenings.management');
-    Route::resource('screenings', ScreeningController::class)->except(['show']);
+    Route::resource('screenings', ScreeningController::class);//->except(['show']);
 
 
     // CUSTOMERS
@@ -192,7 +176,16 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     //Theaters
     Route::delete('theaters/{theater}/seat', [SeatController::class, 'destroyUpdate'])->name('seats.destroyAll');
-
+    Route::get('theaters/deleted', [TheaterController::class, 'deleted'])
+        ->name('theaters.deleted');
+    Route::patch('theaters/deleted/{theater}/save', [TheaterController::class, 'saveD'])
+        ->name('theaters.save')->withTrashed();
+    Route::delete('theaters/{theater}/permanent-delete', [TheaterController::class, 'destructionD'])
+        ->name('theaters.permanent-delete')->withTrashed();
+    Route::delete('theater/{theater}/image', [TheaterController::class, 'destroyImage'])
+        ->name('theaters.image.destroy')
+        ->can('update', Movie::class);
+    Route::resource('theaters', TheaterController::class);
 
 
 
@@ -214,8 +207,9 @@ Route::middleware('can:use-cart')->group(function () {
     Route::delete('cart', [CartController::class, 'destroy'])->name('cart.destroy');
 });
 
-//Screenings index and show are public
-Route::resource('screenings', ScreeningController::class)->only(['index', 'show']);
+//Screenings 
+//Route::resource('screenings', ScreeningController::class)->only(['show']);
+//Movies
 Route::resource('movies', MovieController::class)->only(['show']);
 
 require __DIR__ . '/auth.php';

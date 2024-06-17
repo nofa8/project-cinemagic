@@ -15,13 +15,16 @@
         </tr>
         </thead>
         <tbody>
+            @php
+            $value = App\Models\Configuration::pluck('ticket_price')[0]
+            @endphp
         @foreach ($tickets as $ticketItem)
             @php
 
-                $screening = \App\Models\Screening::findOrFail($ticketItem['screening_id']);
+                $screening = $ticketItem->screening;
                 $movie = $screening->movie;
                 $theater = $screening->theater;
-                $seat = \App\Models\Seat::find($ticketItem['seat_id']);
+                $seat = $ticketItem->seat;
             @endphp
             <tr class="border-b border-b-gray-400 dark:border-b-gray-500">
                 <td class="px-2 py-2 text-left hidden sm:table-cell">{{ $movie->title }}</td>
@@ -30,7 +33,7 @@
                 <td class="px-2 py-2 text-right hidden md:table-cell">{{ $screening->start_time }}</td>
                 <td class="px-2 py-2 text-right hidden lg:table-cell">{{ $seat->row }}</td>
                 <td class="px-2 py-2 text-right hidden lg:table-cell">{{ $seat->seat_number }}</td>
-                <td class="px-2 py-2 text-right hidden lg:table-cell">{{ App\Models\Configuration::pluck('ticket_price')[0]}}</td>
+                <td class="px-2 py-2 text-right hidden lg:table-cell">{{ $value}}</td>
                 @if($showView)
                     <td class="px-2 py-2 text-right">
                         <x-table.icon-show class="ps-3 px-0.5" href="{{ route('tickets.show', $ticketItem->id) }}"/>

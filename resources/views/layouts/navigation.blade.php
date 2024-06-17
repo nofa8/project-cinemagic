@@ -24,35 +24,24 @@
                             selected="{{ Route::currentRouteName() == 'movies.showcase'}}"
                         />
                     @endcan
-
-                    <!-- Menu Item: Screenings -->
-                    {{-- @can('viewScreenings', App\Models\Screening::class) --}}
+                @can('viewBusinessRelated', App\Models\User::class)
+                    
                     <x-menus.menu-item
                         content="Screenings"
                         selectable="1"
                         href="{{ route('screenings.index') }}"
                         selected="{{ Route::currentRouteName() == 'screenings.index'}}"
                         />
-                    {{-- @endcan --}}
 
 
-
-                    {{-- @can('viewStatistics', App\Models\Customer::class) --}}
-                        <x-menus.menu-item
+                    @can('viewAdminRelated', App\Models\User::class)
+                    <x-menus.menu-item
                             content="Statistics"
                             selectable="1"
                             href="{{ route('statistics.index') }}"
                             selected="{{ Route::currentRouteName() == 'statistics.index'}}"
                         />
-                    {{-- @endcan     --}}
 
-                    @if(
-                        Gate::check('viewAny', App\Models\Customer::class) ||
-                        Gate::check('viewAny', App\Models\User::class) ||
-                        Gate::check('viewAny', App\Models\Theater::class) ||
-                        Gate::check('viewAny', App\Models\Screening::class)
-                        )
-                    <!-- Menu Item: Others -->
                     <x-menus.submenu
                         selectable="0"
                         uniqueName="submenu_others"
@@ -135,8 +124,8 @@
                             @endcan
 
                     </x-menus.submenu>
-                    @endif
-
+                    @endcan
+                @endcan
                     <div class="grow"></div>
                     @php
                         $ls = (Auth::check()) ? count(session()->get('cart') ?? []) : ( Cookie::get('cart') != null ? count(json_decode(Cookie::get('cart'), true) ?? []) : 0);
@@ -157,7 +146,7 @@
                         <x-slot:content>
                             <div class="pe-1">
 
-                                <img src="{{ Auth::user()?->photo_filename ? Auth::user()->photoFullUrl : Vite::asset('resources/img/photos/default.png')}}" class="w-11 h-11 min-w-11 min-h-11 rounded-full">
+                                <img src="{{ Auth::user()?->photo_filename ? Auth::user()->photoFullUrl : Vite::asset('/resources/img/photos/default.png')}}" class="w-11 h-11 min-w-11 min-h-11 rounded-full">
                                 {{-- <img src="{{ Auth::user()->photoFullUrl}}" class="w-11 h-11 min-w-11 min-h-11 rounded-full"> --}}
                             </div>
                             {{-- ATENÇÃO - ALTERAR FORMULA DE CALCULO DAS LARGURAS MÁXIMAS QUANDO O MENU FOR ALTERADO --}}

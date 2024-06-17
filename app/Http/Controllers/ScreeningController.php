@@ -36,6 +36,7 @@ class ScreeningController extends Controller
             })
             ->orderBy('date', 'asc')
             ->orderBy('start_time', 'asc')
+            ->with('movie')
             ->paginate(20)
             ->withQueryString();
 
@@ -50,6 +51,7 @@ class ScreeningController extends Controller
     {
         $allScreens = Screening::
             orderBy('date', 'desc')
+            ->with('movie')
             ->paginate(21)
             ->withQueryString();
         return view('screenings.management')->with('screenings',$allScreens);
