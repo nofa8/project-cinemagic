@@ -48,15 +48,7 @@ Route::get('/receipts/receipt', [PDFControllerView::class, 'receipt'])->name('re
 Route::post('purchases/store', [PurchaseController::class,'store'])->name('purchases.store');
 
 
-//Tickets
-Route::get('tickets/{ticket}/show', [TicketController::class, 'show'])
-    ->name('tickets.show');
 
-Route::get('tickets/ticket/{ticket}', [TicketController::class, 'showTicket'])
-    ->name('tickets.ticket');
-
-
-Route::resource('tickets', TicketController::class)->only(['index']);
 
 
 //Screenings
@@ -109,7 +101,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         //Purchases
         Route::resource('purchases', PurchaseController::class)->except(['store']);
         //Tickets
-        Route::get('tickets/all', [TicketController::class, 'everyIndex'])->name('tickets.all');
+        Route::get('tickets//all', [TicketController::class, 'everyIndex'])->name('tickets.all');
 
 
         // MOVIES
@@ -220,6 +212,13 @@ Route::middleware('can:use-cart')->group(function () {
         ->name('cart.add');
 });
 
+//Tickets
+Route::get('tickets/{ticket}', [TicketController::class, 'show'])
+    ->name('tickets.show');
+
+Route::get('tickets/ticket/{ticket}', [TicketController::class, 'showTicket'])->name('tickets.ticket');
+
+Route::get('tickets/', [TicketController::class, 'index'])->name('tickets.index');
 //Movies
 Route::resource('movies', MovieController::class)->only(['show']);
 

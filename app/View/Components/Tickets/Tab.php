@@ -2,6 +2,7 @@
 
 namespace App\View\Components\Tickets;
 
+use App\Models\Ticket;
 use Closure;
 use Illuminate\Contracts\View\View;
 use Illuminate\Database\Eloquent\Collection;

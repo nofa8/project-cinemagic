@@ -10,6 +10,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Database\Eloquent\Collection;
 use App\Http\Requests\TicketFormRequest;
+use App\Models\Purchase;
 use Illuminate\Support\Facades\DB;
 
 class TicketController extends Controller
@@ -28,8 +29,9 @@ class TicketController extends Controller
     {
         $userId = auth()->id(); // Obter o ID do usuário autenticado
 
+        $purchase_id = Purchase::where('customer_id', $userId)->value('id');
         // Iniciar a consulta do Ticket com um join na tabela 'purchases'
-        $ticketQuery = Ticket::query()
+        $ticketQuery = Ticket::query()->select('tickets.*')
             ->join('purchases', 'tickets.purchase_id', '=', 'purchases.id')
             ->where('purchases.customer_id', $userId); // Filtrar tickets pelo customer_id associado ao usuário autenticado
 
@@ -48,7 +50,7 @@ class TicketController extends Controller
     {
 
 
-        $tickets =Ticket::with('screening')->with('screening.movie')->with('seat')
+        $tickets =Ticket::with('screening')->with('screening.movie')->with('seat')->select('tickets.*')
             ->join('purchases', 'tickets.purchase_id', '=', 'purchases.id')
             ->orderBy('purchases.date','desc')
             ->orderBy('screening_id','desc')
@@ -87,9 +89,13 @@ class TicketController extends Controller
      * Display the specified resource.
      */
 
-    public function show(Ticket $ticket)
+    public function show(Request $request)
     {
-        return view('tickets.show', ['ticket' => $ticket]);
+        
+        if (empty($request->ticket)){
+            return redirect()->back();
+        }
+        return view('tickets.show', ['ticket' => Ticket::findOrFail($request->ticket)]);
     }
     public function showTicket(Ticket $ticket)
     {
