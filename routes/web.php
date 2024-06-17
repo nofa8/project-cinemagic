@@ -101,9 +101,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     // Confirm (store) the cart and save Screenings registration on the database:
     Route::post('cart', [CartController::class, 'confirm'])
-        ->name('cart.confirm')
-        ->can('confirm-cart');
-    
+        ->name('cart.confirm');    
     
     
 
@@ -126,7 +124,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
         Route::delete('movies/{movie}/permanent-delete-forced', [MovieController::class, 'destructionForced'])->name('movies.permanent-delete-forced')->withTrashed();
 
-        Route::delete('movies/{movie}/image', [MovieController::class, 'destroyImage'])->name('movies.image.destroy')->can('update', Movie::class);
+        Route::delete('movies/{movie}/image', [MovieController::class, 'destroyImage'])->name('movies.image.destroy');
         Route::resource('movies', MovieController::class)->except(['show']);
 
 
@@ -145,8 +143,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
         // CUSTOMERS
         Route::delete('customers/{customer}/photo', [CustomerController::class, 'destroyPhoto'])
-        ->name('customers.photo.destroy')
-        ->can('update', 'customer');
+            ->name('customers.photo.destroy');        
         Route::post('customers/deleted/{customer}/block', [CustomerController::class, 'invertBlockTrash'])
             ->withTrashed()
             ->name('customers.deleted.invert');
@@ -163,7 +160,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::resource('customers', CustomerController::class);
 
         //Administratives
-        Route::delete('administratives/{administrative}/photo', [AdministrativeController::class, 'destroyPhoto'])->name('administratives.photo.destroy');//->can('update', 'administrative');
+        Route::delete('administratives/{administrative}/photo', [AdministrativeController::class, 'destroyPhoto'])->name('administratives.photo.destroy');
 
         Route::patch('administratives/deleted/{user}/save', [AdministrativeController::class, 'save'])->withTrashed()->name('administratives.save');
         Route::delete('administratives/{user}/permanent-delete', [AdministrativeController::class, 'destruction'])->withTrashed()->name('administratives.permanent-delete');
@@ -177,7 +174,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::post('/statistic/chosen', [StatisticsController::class, 'redirectioning'])->name('statistics.day');
         Route::get('statistics', [StatisticsController::class, 'index'])
             ->name('statistics.index');
-        // ->can('viewStatistics', User::class);
         Route::post('/export-statistics', [StatisticsController::class, 'exportToExcel'])->name('statistics.export');
 
 
@@ -195,8 +191,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::delete('theaters/{theater}/permanent-delete', [TheaterController::class, 'destructionD'])
             ->name('theaters.permanent-delete')->withTrashed();
         Route::delete('theater/{theater}/image', [TheaterController::class, 'destroyImage'])
-            ->name('theaters.image.destroy')
-            ->can('update', Movie::class);
+            ->name('theaters.image.destroy');        
         Route::resource('theaters', TheaterController::class);
 
 

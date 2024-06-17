@@ -3,9 +3,10 @@
         <thead>
         <tr class="border-b-2 border-b-gray-400 dark:border-b-gray-500 bg-gray-100 dark:bg-gray-800">
             @if($showCustomer)
-            <th class="px-2 py-2 text-center">Name</th>
+                <th class="px-2 py-2 text-center">Name</th>
             @endif
-            <th class="px-2 py-2 text-left hidden lg:table-cell">Date</th>
+
+            <th class="px-2 py-2 text-center">Date</th>
             <th class="px-2 py-2 text-center">Total Price</th>
             <th class="px-2 py-2 text-center">Number of Tickets</th>
             <th class="px-2 py-2 text-center">Receipt</th>
@@ -39,7 +40,7 @@
                 <td class="px-2 py-2 text-center">{{ $purchase->tickets->count() }}</td>
                 <td>
                     @if( !empty($purchase->receipt_pdf_filename))
-                    <x-table.icon-show class="ps-3 px-0.5 "
+                    <x-table.icon-show class="ps-3 px-0.5 flex justify-center "
                         href="{{ route('receipt.pdf', ['file' => $purchase->receipt_pdf_filename]) }}"/>
                     @else
                     <p class="px-2 text-left">Unavailable</p>
@@ -50,34 +51,22 @@
                 <td class="px-2 py-2 text-center">{{ $purchase->payment_ref}}</td>
                 @endif
                 @if($showView)
-                    {{-- @can('view', $purchase) --}}
                         <td>
                             <x-table.icon-show class="ps-3 px-0.5"
                                 href="{{ route('purchases.show', ['purchase' => $purchase]) }}"/>
                         </td>
-                    {{-- @else --}}
-                        <td></td>
-                    {{-- @endcan --}}
                 @endif
                 @if($showEdit)
-                    {{-- @can('update', $purchase) --}}
-                        <td>
-                            <x-table.icon-edit class="px-0.5"
-                                href="{{ route('purchases.edit', ['purchase' => $purchase]) }}"/>
-                        </td>
-                    {{-- @else --}}
-                        <td></td>
-                    {{-- @endcan --}}
+                    <td>
+                        <x-table.icon-edit class="px-0.5"
+                            href="{{ route('purchases.edit', ['purchase' => $purchase]) }}"/>
+                    </td>
                 @endif
                 @if($showDelete)
-                    {{-- @can('delete', $purchase) --}}
-                        <td>
-                            <x-table.icon-delete class="px-0.5"
-                                action="{{ route('purchases.destroy', ['purchase' => $purchase]) }}"/>
-                        </td>
-                    {{-- @else --}}
-                        <td></td>
-                    {{-- @endcan --}}
+                    <td>
+                        <x-table.icon-delete class="px-0.5"
+                            action="{{ route('purchases.destroy', ['purchase' => $purchase]) }}"/>
+                    </td>
                 @endif
             </tr>
         @endforeach

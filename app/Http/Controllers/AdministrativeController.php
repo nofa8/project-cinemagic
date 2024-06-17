@@ -120,10 +120,6 @@ class AdministrativeController extends \Illuminate\Routing\Controller
 
         $newAdministrative->type = $validatedData['type'];
 
-        // $newAdministrative->type = $request->user()?->can('createAdmin', User::class)
-        // ? 'A'
-        // : 'C';
-
         // Initial password is always 123
         $newAdministrative->password = bcrypt('123');
         $newAdministrative->save();
@@ -157,9 +153,8 @@ class AdministrativeController extends \Illuminate\Routing\Controller
         // Only updates admin field if it has permission  to do it.
         // Otherwise, do not change it (ignore it)
 
-        // if ($request->user()?->can('updateAdmin', $administrative)) {
-            $administrative->type = $validatedData['type'];
-        // }
+        $administrative->type = $validatedData['type'];
+        
 
         $administrative->save();
         if ($request->hasFile('photo_file')) {

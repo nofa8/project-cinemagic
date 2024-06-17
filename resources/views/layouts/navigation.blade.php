@@ -46,25 +46,19 @@
                         selectable="0"
                         uniqueName="submenu_others"
                         content="Management">
-                            @can('viewAny', App\Models\Customer::class)
                             <x-menus.submenu-item
                                 content="Customer"
                                 selectable="0"
                                 href="{{ route('customers.index') }}" />
-                            @endcan
-                            @can('viewAny', App\Models\Theater::class)
                             <x-menus.submenu-item
                                 content="Administratives"
                                 selectable="0"
                                 href="{{ route('administratives.index') }}" />
-                            @endcan
                             <hr>
-                            @can('viewAny', App\Models\Theater::class)
                             <x-menus.submenu-item
                                 content="Theaters"
                                 selectable="0"
                                 href="{{ route('theaters.index') }}"/>
-                            @endcan
 
                             <x-menus.submenu-item
                                 content="Movies"
@@ -91,37 +85,29 @@
                         selectable="0"
                         uniqueName="submenu_others"
                         content="Deleted">
-                            @can('viewAny', App\Models\Customer::class)
                             <x-menus.submenu-item
                                 content="Customer"
                                 selectable="0"
                                 href="{{ route('customers.deleted') }}" />
-                            @endcan
-                            {{-- @can('viewAny', App\Models\User::class) --}}
                             <x-menus.submenu-item
                                 content="Administratives"
                                 selectable="0"
                                 href="{{ route('administratives.deleted') }}" />
-                            {{-- @endcan --}}
                             <hr>
-                            @can('viewAny', App\Models\Theater::class)
                             <x-menus.submenu-item
                                 content="Theaters"
                                 selectable="0"
                                 href="{{ route('theaters.deleted') }}"/>
-                            @endcan
 
                             <x-menus.submenu-item
                                 content="Movies"
                                 selectable="0"
                                 href="{{ route('movies.deleted') }}"/>
 
-                            @can('viewAny', App\Models\Theater::class)
                             <x-menus.submenu-item
                                 content="Genres"
                                 selectable="0"
                                 href="{{ route('genres.deleted') }}"/>
-                            @endcan
 
                     </x-menus.submenu>
                     @endcan
@@ -156,13 +142,6 @@
                         </x-slot>
                         @auth
                         <hr>
-                        {{-- <x-menus.submenu-item
-                            content="Profile"
-                            selectable="0"
-                            :href="match(Auth::user()->type) {
-                                'A' => route('administratives.edit', ['administrative' => Auth::user()]),
-                                default => route('customers.edit', ['customer' => Auth::user()->customer]),
-                            }"/> --}}
                         <x-menus.submenu-item
                             content="Profile"
                             selectable="0"
@@ -179,10 +158,6 @@
                         selectable="0"
                         href="{{ route('purchases.my') }}"
                                 />
-                        {{-- <x-menus.submenu-item
-                            content="Change Password"
-                            selectable="0"
-                            href="{{ route('profile.edit.password') }}"/> --}}
                         @endauth
                         <hr>
                         <form id="form_to_logout_from_menu" method="POST" action="{{ route('logout') }}" class="hidden">

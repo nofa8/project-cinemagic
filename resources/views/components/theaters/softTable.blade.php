@@ -19,24 +19,20 @@
                 <td class="px-2 py-2 text-center">{{ $theater->seats->count() }}</td>
 
                 @if($showEdit)
-                    @can('delete', $theater)
-                        <td>
-                            <x-table.icon-save class="px-0.5"
-                            action="{{ route('theaters.save', ['theater' => $theater]) }}"/>
-                        </td>
-                    @else
-                        <td></td>
-                    @endcan
+                    <td>
+                        <x-table.icon-save class="px-0.5"
+                        action="{{ route('theaters.save', ['theater' => $theater]) }}"/>
+                    </td>
+                @else
+                    <td></td>
                 @endif
                 @if($showDelete)
-                    @can('delete', $theater)
-                        <td>
-                            <x-table.icon-delete class="px-0.5"
-                                action="{{ route('theaters.permanent-delete', ['theater' => $theater]) }}"/>
-                        </td>
-                    @else
-                        <td></td>
-                    @endcan
+                    <td>
+                        <x-table.icon-delete class="px-0.5"
+                            action="{{ route('theaters.permanent-delete', ['theater' => $theater]) }}"/>
+                    </td>
+                @else
+                    <td></td>
                 @endif
             </tr>
         @endforeach
