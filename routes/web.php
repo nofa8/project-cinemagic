@@ -98,6 +98,7 @@ Route::get('screenings/{screenings}/seats', [SeatController::class, 'show'])->na
 
 
 
+
 /* ----- Non-Verified users ----- */
 Route::middleware('auth')->group(function () {
     Route::get('/password', [ProfileController::class, 'editPassword'])->name('profile.edit.password');
