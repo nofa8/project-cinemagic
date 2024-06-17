@@ -47,7 +47,7 @@
                         uniqueName="submenu_others"
                         content="Management">
                             <x-menus.submenu-item
-                                content="Customer"
+                                content="Customers"
                                 selectable="0"
                                 href="{{ route('customers.index') }}" />
                             <x-menus.submenu-item
@@ -86,7 +86,7 @@
                         uniqueName="submenu_others"
                         content="Deleted">
                             <x-menus.submenu-item
-                                content="Customer"
+                                content="Customers"
                                 selectable="0"
                                 href="{{ route('customers.deleted') }}" />
                             <x-menus.submenu-item
