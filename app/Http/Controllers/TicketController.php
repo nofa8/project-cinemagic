@@ -177,9 +177,6 @@ class TicketController extends Controller
     {
         $isValid = false;
         $ticket = null;
-
-
-
         if ($request->filled('ticket_id')) {
             $ticketCount = Ticket::where('id', $request->ticket_id)
                 ->where('screening_id', $screening->id)
@@ -208,13 +205,19 @@ class TicketController extends Controller
     }
     public function validate(Request $request, Ticket $ticket)
     {
+        
         $screening = $ticket->screening;
         $ticket->status = 'invalid';
-
         $ticketUpdated = $ticket->update($ticket->toArray());
 
+        if($request->val == 0){
+            return redirect()->route('screenings.show', ['screening' => $screening])
+                ->with('alert-type', 'success')
+                ->with('alert-msg', 'Ticket has been invalidated!');
+        }
+
         $url = route('tickets.show', ['ticket' => $ticket]);
-        $htmlMessage = "Ticket <a href='$url'><u>{$ticket->id}</u></a> ({$ticket->price}) has been updated successfully!";
+        $htmlMessage = "Ticket <a href='$url'><u>{$ticket->id}</u></a> ({$ticket->price}) has been validated successfully!";
         return redirect()->route('screenings.show', ['screening' => $screening])
             ->with('alert-type', 'success')
             ->with('alert-msg', $htmlMessage);

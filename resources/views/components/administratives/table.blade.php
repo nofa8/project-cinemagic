@@ -24,7 +24,7 @@
                     {{-- @can('update', $administrative) --}}
                         <td>
                             <x-table.icon-save class="px-0.5"
-                            action="{{ route('administratives.save', ['administrative' => $administrative]) }}"/>
+                            action="{{ route('administratives.save', ['user' => $administrative]) }}"/>
                         </td>
                     @else
                         <td></td>
@@ -34,7 +34,7 @@
                 {{-- @can('delete', $administrative) --}}
                     <td>
                         <x-table.icon-delete class="px-0.5"
-                            action="{{ route('administratives.permanent-delete', ['administrative' => $administrative]) }}"/>
+                            action="{{ route('administratives.permanent-delete', ['user' => $administrative]) }}"/>
                     </td>
                 {{-- @endcan --}}
                 @else

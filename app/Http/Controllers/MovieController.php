@@ -133,7 +133,7 @@ class MovieController extends Controller
         $movie->forceDelete();
         return redirect()->route('movies.deleted')
             ->with('alert-type', 'success')
-            ->with('alert-msg', "Movie \"{$name}\" has been permanently deleted. With its associated screenings, tickets and purchases");
+            ->with('alert-msg', "Movie \"{$name}\" has been permanently deleted.");
     }
 
     public function create(): View
@@ -208,10 +208,6 @@ class MovieController extends Controller
 
 
         #return view('movies.showcase')->with('movies', $allMovies);;
-    }
-    public function showScreenings(Movie $mov): View
-    {
-        return view('movies.curriculum')->with('movie', $mov);
     }
 
     public function edit(Movie $movie): View

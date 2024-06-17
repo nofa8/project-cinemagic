@@ -38,18 +38,18 @@ class Movie extends Model
 
     public function genreRef(): BelongsTo
     {
-        return $this->BelongsTo(Genre::class, 'genre_code', 'code');
+        return $this->belongsTo(Genre::class, 'genre_code', 'code');
     }
 
 
     public function genreRefD(): BelongsTo
     {
-        return $this->BelongsTo(Genre::class, 'genre_code', 'code')->withTrashed();
+        return $this->belongsTo(Genre::class, 'genre_code', 'code')->withTrashed();
     }
     
     public function screenings()
     {
-        return $this->hasMany(Screening::class);
+        return $this->hasMany(Screening::class, 'movie_id');
     }
 }
 

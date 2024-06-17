@@ -32,7 +32,7 @@ class Screening extends Model
     public function movie(): BelongsTo
     {
         return $this->belongsTo(
-            Movie::class
+            Movie::class,'movie_id'
         );
     }
 }

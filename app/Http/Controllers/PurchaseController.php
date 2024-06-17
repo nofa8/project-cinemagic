@@ -24,6 +24,7 @@ use App\Services\Payment;
 use Illuminate\Support\Carbon;
 use Illuminate\View\View;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class PurchaseController extends Controller
 {
@@ -38,16 +39,15 @@ class PurchaseController extends Controller
     {
         if (!empty($request->user()?->customer)) {
             $idPurch = $request->user()?->customer?->purchases?->pluck('id')?->toArray();
-            if (empty($idPurch)) {
-                return view('purchases.my')->with('purchases', new Collection);
-            }
         }else {
-            return view('purchases.my')->with('purchases', new Collection);
+            $purchases =new LengthAwarePaginator([],0,10);
+            return view('purchases.my')->with('purchases', $purchases);
         }
         $purchases = Purchase::whereIntegerInRaw('id', $idPurch)
             ->orderBy('created_at', 'desc')
             ->paginate(20)
             ->withQueryString();
+        
         return view('purchases.my', compact('purchases'));
     }
 

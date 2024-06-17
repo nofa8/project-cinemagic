@@ -24,9 +24,6 @@ use App\Http\Controllers\ParametersController;
 
 /* ----- PUBLIC ROUTES ----- */
 
-Route::get('parameters', [ParametersController::class, 'index'])->name('parameters.index');
-Route::post('/update-ticket-price', [ParametersController::class, 'updateTicketPrice'])->name('updateTicketPrice');
-Route::post('/update-ticket-discount', [ParametersController::class, 'updateDiscount'])->name('updateDiscount');
 
 Route::get('/generate-pdf', [PDFController::class, 'generatePDF']);
 
@@ -38,8 +35,7 @@ Route::view('/', 'home')->name('home');
 
 Route::get('movies/showcase', [MovieController::class, 'showCase'])
     ->name('movies.showcase');
-Route::get('movies/{movie}', [MovieController::class , 'show'])->name('movies.show');
-//Route::resource('movies', MovieController::class)->only(['show']);
+// Route::get('movies/{movie}', [MovieController::class , 'show'])->name('movies.show');
 
 
 
@@ -83,12 +79,6 @@ Route::get('tickets/all', [TicketController::class, 'everyIndex'])
 Route::resource('tickets', TicketController::class)->except(['show']);
 
 
-Route::get('movies/{movie}/screenings', [MovieController::class, 'showScreenings'])
-    ->name('movies.screenings');
-    //->can('viewCurriculum', Movie::class);
-
-
-Route::delete('theaters/{theater}/seat', [SeatController::class, 'destroyUpdate'])->name('seats.destroyAll');
 
 Route::get('screenings/{screenings}/seats', [SeatController::class, 'show'])->name('seats.show');
 
@@ -133,8 +123,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     // MOVIES
     Route::get('movies/create', [MovieController::class, 'create'])->name('movies.create');
-    Route::get('movies/soft/deleted', [MovieController::class, 'indexDeleted'])->name('movies.deleted')->withTrashed();
-
+    Route::get('movies/deleted', [MovieController::class, 'indexDeleted'])->name('movies.deleted')->withTrashed();
 
     Route::patch('movies/deleted/{movie}/save', [MovieController::class, 'save'])->name('movies.save')->withTrashed();
 
@@ -148,36 +137,26 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     //GENRES
     Route::patch('genres/deleted/{genre}/save', [GenreController::class, 'save'])
-    ->name('genres.save')->withTrashed();
+        ->name('genres.save')->withTrashed();
     Route::delete('genres/{genre}/permanent-delete', [GenreController::class, 'destruction'])
-    ->name('genres.permanent-delete')->withTrashed();
+        ->name('genres.permanent-delete')->withTrashed();
     Route::get('genres/deleted', [GenreController::class, 'indexDeleted'])
-        ->withTrashed()
-        ->name('genres.deleted');
+        ->withTrashed()->name('genres.deleted');
     Route::resource('genres', GenreController::class);
 
-
-    
-
+    //Screenings
     Route::get('screenings/management', [ScreeningController::class, 'management'])->name('screenings.management');
     Route::resource('screenings', ScreeningController::class)->except(['show']);
 
 
     // CUSTOMERS
-    // Route::get('customers/my', [CustomerController::class, 'myCustomers'])
-    //     ->name('customers.my')
-    //     ->can('viewMy', Customer::class);
-
     Route::delete('customers/{customer}/photo', [CustomerController::class, 'destroyPhoto'])
         ->name('customers.photo.destroy')
         ->can('update', 'customer');
-
     Route::post('customers/deleted/{customer}/block', [CustomerController::class, 'invertBlockTrash'])
         ->withTrashed()
         ->name('customers.deleted.invert');
-
     Route::post('customers/{customer}/block', [CustomerController::class, 'invertBlock'])->name('customers.invert');
-
     Route::get('customers/deleted', [CustomerController::class, 'indexDeleted'])
         ->withTrashed()
         ->name('customers.deleted');
@@ -189,10 +168,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::resource('customers', CustomerController::class);
 
+    //Administratives
     Route::delete('administratives/{administrative}/photo', [AdministrativeController::class, 'destroyPhoto'])->name('administratives.photo.destroy');//->can('update', 'administrative');
 
-    Route::patch('administratives/deleted/{administrative}/save', [TheaterController::class, 'save'])->name('administratives.save')->withTrashed();
-    Route::delete('administratives/{administrative}/permanent-delete', [TheaterController::class, 'destruction'])->name('administratives.permanent-delete')->withTrashed();
+    Route::patch('administratives/deleted/{user}/save', [AdministrativeController::class, 'save'])->withTrashed()->name('administratives.save');
+    Route::delete('administratives/{user}/permanent-delete', [AdministrativeController::class, 'destruction'])->withTrashed()->name('administratives.permanent-delete');
     Route::get('administratives/deleted', [AdministrativeController::class, 'indexDeleted'])->withTrashed()->name('administratives.deleted');
     //Admnistrative resource routes are protected by AdministrativePolicy on the controller
     Route::resource('administratives', AdministrativeController::class);
@@ -202,6 +182,20 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('cart', [CartController::class, 'confirm'])
         ->name('cart.confirm')
         ->can('confirm-cart');
+
+    //Configurations
+    Route::get('parameters', [ParametersController::class, 'index'])->name('parameters.index');
+    Route::post('/update-ticket-price', [ParametersController::class, 'updateTicketPrice'])->name('updateTicketPrice');
+    Route::post('/update-ticket-discount', [ParametersController::class, 'updateDiscount'])->name('updateDiscount');
+        
+
+
+    //Theaters
+    Route::delete('theaters/{theater}/seat', [SeatController::class, 'destroyUpdate'])->name('seats.destroyAll');
+
+
+
+
 });
 
 /* ----- OTHER PUBLIC ROUTES ----- */
@@ -222,5 +216,6 @@ Route::middleware('can:use-cart')->group(function () {
 
 //Screenings index and show are public
 Route::resource('screenings', ScreeningController::class)->only(['index', 'show']);
+Route::resource('movies', MovieController::class)->only(['show']);
 
 require __DIR__ . '/auth.php';

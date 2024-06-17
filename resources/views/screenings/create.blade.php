@@ -25,6 +25,8 @@
                             <x-field.input name="date" label="Date" :readonly="false" value="{{ $screening->date }}" />
                             <x-field.input name="start_time" label="Start Time" :readonly="false"
                                 value="{{ $screening->start_time }}" />
+                            <x-field.input name="custom" label="Repeated Followed Days" :readonly="false"
+                                value="{{ $screening->custom }}" />
                             <x-field.select name="theater_id" label="Theater" value="" :options="\App\Models\Theater::all()->pluck('name','id')->toArray()" />
 
                             

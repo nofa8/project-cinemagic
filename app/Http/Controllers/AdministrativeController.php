@@ -44,10 +44,10 @@ class AdministrativeController extends \Illuminate\Routing\Controller
 
     public function indexDeleted(Request $request): View
     {
-        $currentAdminId = auth()->id();
-        $administrativesQuery = User::onlyTrashed()->where('type', 'A')->orWhere('type', 'E')->where('id','!=',$currentAdminId)
-            ->orderBy('name');
 
+        $administrativesQuery = User::onlyTrashed()
+                    ->where('type','!=', 'C')
+                    ->orderBy('name');       
         $filterByName = $request->query('name');
         if ($filterByName) {
             $administrativesQuery->where('name', 'like', "%$filterByName%");
@@ -55,7 +55,7 @@ class AdministrativeController extends \Illuminate\Routing\Controller
         $administratives = $administrativesQuery
             ->paginate(20)
             ->withQueryString();
-
+        
         return view(
             'administratives.index',
             compact('administratives', 'filterByName')
@@ -64,11 +64,11 @@ class AdministrativeController extends \Illuminate\Routing\Controller
 
     public function save(User $user): RedirectResponse{
         if (!$user->trashed()){
-            return view('administratives.deleted')
+            return redirect()->back()
                 ->with('alert-type', 'error')
                 ->with('alert-msg', "User \"{$user->name}\" is not in the deleted list.");;    
         }
-        if ($user?->customerD->trashed()){
+        if ($user?->customerD?->trashed()){
             $user->customerD->restore();
         }
         $user->restore();

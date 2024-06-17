@@ -13,9 +13,11 @@
                 :showDelete="false"
                 />
             </div>
+            <div class="mt-4">
+                {{ $purchases?->links() }}
+            </div>
         </div>
-        <div class="mt-4">
-            {{ $purchases->links() }}
-        </div>
+        
     </div>
+    
 @endsection

@@ -38,8 +38,12 @@
                 <td class="px-2 py-2 text-center">{{ $purchase->total_price }}</td>
                 <td class="px-2 py-2 text-center">{{ $purchase->tickets->count() }}</td>
                 <td>
-                    <x-table.icon-show class="ps-3 px-0.5"
+                    @if( !empty($purchase->receipt_pdf_filename))
+                    <x-table.icon-show class="ps-3 px-0.5 "
                         href="{{ route('receipt.pdf', ['file' => $purchase->receipt_pdf_filename]) }}"/>
+                    @else
+                    <p class="px-2 text-left">Unavailable</p>
+                    @endif
                 </td>
                 @if($showPayment)
                 <td class="px-2 py-2 text-center">{{ $purchase->payment_type}}</td>

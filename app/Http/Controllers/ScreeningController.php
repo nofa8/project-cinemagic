@@ -67,20 +67,42 @@ class ScreeningController extends Controller
     {
         
         $validatedData = $request->validated();
-        $newScreening = DB::transaction(function () use ($validatedData) {
-            $newScreening = new Screening();
-            $newScreening->movie_id = $validatedData['movie_id'];
-            $newScreening->theater_id = $validatedData['theater_id'];
-            $newScreening->date = Carbon::parse($validatedData['date'])->format('Y-m-d');
-            $newScreening->start_time = $validatedData['start_time'];
-            $newScreening->save();
-            return $newScreening;
-        });
+        
+        if (!empty($request->custom)){
+            $request->validate([
+                'custom' => 'integer|min:1|max:14'
+            ]);
+
+            for($i = 0; $i < $request->custom; $i++){
+                $daters = Carbon::parse($validatedData['date'])->addDays($i)->format('Y-m-d');
+                $newScreening = DB::transaction(function () use ($validatedData,$daters) {
+                    $newScreening = new Screening();
+                    $newScreening->movie_id = $validatedData['movie_id'];
+                    $newScreening->theater_id = $validatedData['theater_id'];
+                    $newScreening->date = $daters ;
+                    $newScreening->start_time = $validatedData['start_time'];
+                    $newScreening->save();
+                    return $newScreening;
+                });
+            }   
+
+        }else{
+            $newScreening = DB::transaction(function () use ($validatedData) {
+                $newScreening = new Screening();
+                $newScreening->movie_id = $validatedData['movie_id'];
+                $newScreening->theater_id = $validatedData['theater_id'];
+                $newScreening->date = Carbon::parse($validatedData['date'])->format('Y-m-d');
+                $newScreening->start_time = $validatedData['start_time'];
+                $newScreening->save();
+                return $newScreening;
+            });
+        }
+        
 
 
         $url = route('screenings.management');
         $htmlMessage = "Screening <a href='$url'><u>{$newScreening->id}</u></a> ({$newScreening->date}) has been created successfully!";
-        $newScreening->save();
+        //$newScreening->save();
         return redirect()->route('screenings.management')
             ->with('alert-type', 'success')
             ->with('alert-msg', $htmlMessage);
