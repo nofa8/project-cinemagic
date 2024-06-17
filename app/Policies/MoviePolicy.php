@@ -3,7 +3,6 @@
 namespace App\Policies;
 
 use App\Models\User;
-use App\Models\Course;
 use App\Models\Movie;
 
 class MoviePolicy
