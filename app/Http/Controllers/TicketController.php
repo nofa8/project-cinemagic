@@ -29,7 +29,6 @@ class TicketController extends Controller
     {
         $userId = auth()->id(); // Obter o ID do usuário autenticado
 
-        $purchase_id = Purchase::where('customer_id', $userId)->value('id');
         // Iniciar a consulta do Ticket com um join na tabela 'purchases'
         $ticketQuery = Ticket::query()->select('tickets.*')
             ->join('purchases', 'tickets.purchase_id', '=', 'purchases.id')
