@@ -25,7 +25,6 @@ use App\Http\Middleware\CheckUserTypeAdvanced;
 
 /* ----- PUBLIC ROUTES ----- */
 
-//Route::get('/generate-pdf', [PDFController::class, 'generatePDF']);
 
 Route::view('/', 'home')->name('home');
 
@@ -88,21 +87,21 @@ Route::middleware(['auth', 'verified'])->group(function () {
         return redirect('movies/showcase');
     })->name('dashboard');
 
-    
+
 
     //Purchases
     Route::get('purchases/my', [PurchaseController::class, 'myPurchases'])
             ->name('purchases.my');
-    
 
-    
+
+
 
 
     // Confirm (store) the cart and save Screenings registration on the database:
     Route::post('cart', [CartController::class, 'confirm'])
-        ->name('cart.confirm');    
-    
-    
+        ->name('cart.confirm');
+
+
 
 
     Route::middleware([CheckUserTypeAdvanced::class])->group(function () {
@@ -142,7 +141,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
         // CUSTOMERS
         Route::delete('customers/{customer}/photo', [CustomerController::class, 'destroyPhoto'])
-            ->name('customers.photo.destroy');        
+            ->name('customers.photo.destroy');
         Route::post('customers/deleted/{customer}/block', [CustomerController::class, 'invertBlockTrash'])
             ->withTrashed()
             ->name('customers.deleted.invert');
@@ -190,7 +189,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::delete('theaters/{theater}/permanent-delete', [TheaterController::class, 'destructionD'])
             ->name('theaters.permanent-delete')->withTrashed();
         Route::delete('theater/{theater}/image', [TheaterController::class, 'destroyImage'])
-            ->name('theaters.image.destroy');        
+            ->name('theaters.image.destroy');
         Route::resource('theaters', TheaterController::class);
 
 
@@ -204,7 +203,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::resource('screenings', ScreeningController::class)->only(['index','show']);
 
     });
-    
+
 
 });
 
@@ -212,22 +211,15 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
 // Use Cart routes should be accessible to the public
 Route::middleware('can:use-cart')->group(function () {
-    // Add a Screening to the cart:
-    
-    
+
     // Show the cart:
     Route::get('cart', [CartController::class, 'show'])->name('cart.show');
     // Clear the cart:
     Route::delete('cart', [CartController::class, 'destroy'])->name('cart.destroy');
     Route::post('cart/{screening}', [CartController::class, 'addToCart'])
         ->name('cart.add');
-    // Remove a Screening from the cart:
-    // Route::delete('cart/{screening}', [CartController::class, 'removeFromCart'])
-    //     ->name('cart.remove');
 });
 
-//Screenings 
-//Route::resource('screenings', ScreeningController::class)->only(['show']);
 //Movies
 Route::resource('movies', MovieController::class)->only(['show']);
 

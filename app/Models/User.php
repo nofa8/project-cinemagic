@@ -58,17 +58,16 @@ class User extends Authenticatable implements MustVerifyEmail
         if ($this->photo_filename && Storage::exists("public/photos/{$this->photo_filename}")) {
             return asset("storage/photos/{$this->photo_filename}");
         } else {
-            // To be changed eventually
             return asset("storage/photos/default.png");
         }
     }
 
-    public function customer(): HasOne //? maybe take it out
+    public function customer(): HasOne
     {
         return $this->hasOne(Customer::class, 'id');
     }
 
-    public function customerD(): HasOne //? maybe take it out
+    public function customerD(): HasOne
     {
         return $this->hasOne(Customer::class, 'id')->withTrashed();
     }

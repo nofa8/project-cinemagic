@@ -26,20 +26,12 @@ class TicketController extends Controller
      */
     public function index(Request $request)
     {
-        // $filterByScreening = $request->query('screening_id');
-        // $filterBySeat = $request->query('seat_id');
         $userId = auth()->id(); // Obter o ID do usuário autenticado
 
         // Iniciar a consulta do Ticket com um join na tabela 'purchases'
         $ticketQuery = Ticket::query()
             ->join('purchases', 'tickets.purchase_id', '=', 'purchases.id')
             ->where('purchases.customer_id', $userId); // Filtrar tickets pelo customer_id associado ao usuário autenticado
-        // if ($filterByScreening !== null) {
-        //     $ticketQuery->where('tickets.screening_id', $filterByScreening);
-        // }
-        // if ($filterBySeat !== null) {
-        //     $ticketQuery->where('tickets.seat_id', $filterBySeat);
-        // }
 
         $tickets = $ticketQuery
             ->with('screening')
@@ -49,15 +41,13 @@ class TicketController extends Controller
             ->paginate(20)
             ->withQueryString();
 
-        // return view('tickets.index', compact('filterByScreening', 'filterBySeat'))
-        //     ->with('tickets', $tickets);
         return view('tickets.index')->with('tickets', $tickets);
     }
 
     public function everyIndex()
     {
 
-       
+
         $tickets =Ticket::with('screening')->with('screening.movie')->with('seat')
             ->join('purchases', 'tickets.purchase_id', '=', 'purchases.id')
             ->orderBy('purchases.date','desc')
@@ -68,8 +58,6 @@ class TicketController extends Controller
             ->paginate(20)
             ->withQueryString();
 
-        // return view('tickets.index', compact('filterByScreening', 'filterBySeat'))
-        //     ->with('tickets', $tickets);
         return view('tickets.index')->with('tickets', $tickets);
     }
 
@@ -145,11 +133,6 @@ class TicketController extends Controller
         try {
             $url = route('tickets.show', ['ticket' => $ticket]);
             $totalTickets = $ticket->purchases()->customers()->count();
-            // $totalTickets = DB::table('purchases')
-            // ->join('customers', 'purchases.customer_id', '=', 'customers.id')
-            // ->where('purchases.ticket_id', $ticket->id)
-            // ->distinct('customers.id')
-            // ->count('customers.id');
             if ($totalTickets == 0) {
                 $ticket->delete();
                 $alertType = 'success';
@@ -208,7 +191,7 @@ class TicketController extends Controller
     }
     public function validate(Request $request, Ticket $ticket)
     {
-        
+
         $screening = $ticket->screening;
         $ticket->status = 'invalid';
         $ticketUpdated = $ticket->update($ticket->toArray());

@@ -7,19 +7,14 @@
         <div class="max-full">
             <section>
                 <div class="flex flex-wrap justify-end items-center gap-4 mb-4">
-                    {{-- @can('create', App\Models\Theater::class) --}}
                     <x-button
                         href="{{ route('theaters.create') }}"
                         text="New"
                         type="success"/>
-                    {{-- @endcan --}}
-                    {{-- @can('update', $theater) --}}
                     <x-button
                         href="{{ route('theaters.edit', ['theater' => $theater]) }}"
                         text="Edit"
                         type="primary"/>
-                    {{-- @endcan --}}
-                    {{-- @can('delete', $theater) --}}
                     <form method="POST" action="{{ route('theaters.destroy', ['theater' => $theater]) }}">
                         @csrf
                         @method('DELETE')
@@ -27,9 +22,7 @@
                             element="submit"
                             text="Delete"
                             type="danger"/>
-                    </form>                    
-
-                    {{-- @endcan --}}
+                    </form>
                 </div>
                 <header>
                     <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">

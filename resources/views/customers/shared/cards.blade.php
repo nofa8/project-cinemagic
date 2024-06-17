@@ -15,30 +15,6 @@
                 </a>
 
                 <div class="flex flex-col justify-center w-full">
-                    {{-- @if (!empty($customers->nif))
-                        <div class="font-light text-gray-700 dark:text-gray-300 mb-2">
-                            NIF: {{ $customers->nif }}
-                        </div>
-                    @endif
-
-                    @if (!empty($customers->payment_type))
-                        <div class="font-light text-gray-700 dark:text-gray-300 mb-2 inline">
-                            Payment Type: {{ $customers->payment_type }}
-                        </div>
-                    @endif
-
-                    @if (!empty($customers->payment_ref))
-                        <div class="font-light text-gray-700 dark:text-gray-300 mb-2 inline">
-                            Payment Reference: {{ $customers->payment_ref }}
-                        </div>
-                    @endif
-
-                    @if (!empty($customers->user->email))
-                        <div class="font-light text-gray-700 dark:text-gray-300 mb-2 inline">
-                            Email: {{ $customers->user->email }}
-                        </div>
-                    @endif --}}
-
                     @if ($customers->user->blocked == 0)
                     <div class="flex items-center space-x-4 mb-2">
                         <span class="font-light text-gray-700 dark:text-gray-300">Not Blocked</span>
@@ -78,30 +54,6 @@
                 </a>
 
                 <div class="flex flex-col justify-center w-full">
-                    {{-- @if (!empty($customers->nif))
-                        <div class="font-light text-gray-700 dark:text-gray-300 mb-2">
-                            NIF: {{ $customers->nif }}
-                        </div>
-                    @endif
-
-                    @if (!empty($customers->payment_type))
-                        <div class="font-light text-gray-700 dark:text-gray-300 mb-2 inline">
-                            Payment Type: {{ $customers->payment_type }}
-                        </div>
-                    @endif
-
-                    @if (!empty($customers->payment_ref))
-                        <div class="font-light text-gray-700 dark:text-gray-300 mb-2 inline">
-                            Payment Reference: {{ $customers->payment_ref }}
-                        </div>
-                    @endif
-
-                    @if (!empty($customers->userD->email))
-                        <div class="font-light text-gray-700 dark:text-gray-300 mb-2 inline">
-                            Email: {{ $customers->userD->email }}
-                        </div>
-                    @endif --}}
-
                     @if ($customers->userD->blocked == 0)
                         <div class="flex items-center space-x-4 mb-2">
                             <span class="font-light text-gray-700 dark:text-gray-300">Not Blocked</span>

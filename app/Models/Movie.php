@@ -27,7 +27,6 @@ class Movie extends Model
         if ($this->poster_filename && Storage::exists("public/posters/{$this->poster_filename}")) {
             return asset("storage/posters/{$this->poster_filename}");
         } else {
-            // To be changed eventually
             return asset("storage/posters/_no_poster_2.png");
         }
     }
@@ -46,7 +45,7 @@ class Movie extends Model
     {
         return $this->belongsTo(Genre::class, 'genre_code', 'code')->withTrashed();
     }
-    
+
     public function screenings()
     {
         return $this->hasMany(Screening::class, 'movie_id');

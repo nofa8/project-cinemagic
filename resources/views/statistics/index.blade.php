@@ -159,11 +159,8 @@
             }]
         ];
         ticketsTheater.forEach(function(theater) {
-            // Adding some default colors for bars, you can customize as needed
             theaterData.push([theater.theater_name, theater.total_tickets, 'color: #76A7FA']);
         });
-
-        console.log(theaterData); // Debugging data
 
         var data = google.visualization.arrayToDataTable(theaterData);
 
