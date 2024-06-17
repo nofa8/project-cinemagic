@@ -25,7 +25,6 @@ use App\Http\Middleware\CheckUserTypeAdvanced;
 
 /* ----- PUBLIC ROUTES ----- */
 
-
 //Route::get('/generate-pdf', [PDFController::class, 'generatePDF']);
 
 Route::view('/', 'home')->name('home');
